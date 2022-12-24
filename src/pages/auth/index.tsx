@@ -3,6 +3,7 @@ import Card from '../../components/UI/Card';
 import styles from './auth.module.scss';
 import type { NextPage } from 'next';
 import AuthForm from '../../components/Auth/AuthForm';
+import Avatar from '../../components/UI/Avatar';
 
 const AuthPage: NextPage = () => {
 	const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -24,9 +25,8 @@ const AuthPage: NextPage = () => {
 		<div className={styles.wrapper}>
 			<Card className={styles['auth-container']}>
 				<div className={styles['avatar-wrapper']}>
-
-          {/* <Avatar /> */}
-        </div>
+					<Avatar slug='auth' />
+				</div>
 				<div className={styles['actions-wrapper']}>
 					<div className={styles['actions-switch']}>
 						<span onClick={loginTabHandler} className={loginStyleClass}>

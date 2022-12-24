@@ -1,22 +1,26 @@
 import React, { Fragment } from 'react';
 
 interface InputProps {
-	className?: string;
-	placeholder?: string;
-	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	style?: React.CSSProperties;
-	helperText?: string;
-	helperTextClass?: string;
-	id?: string;
-  type?:string;
+	helperProps: { helperText?: string; helperTextClass?: string };
+	inputProps: {
+		className?: string;
+		placeholder?: string;
+		onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+		style?: React.CSSProperties;
+		id?: string;
+		type?: string;
+	};
 }
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	(props: InputProps, ref) => {
+		const { helperProps, inputProps, ...restProps } = props;
 		return (
 			<Fragment>
-				<input {...props} ref={ref} id={props.id} />
+				<input {...inputProps} {...restProps} ref={ref} />
 				<br />
-				<small className={props.helperTextClass}>{props.helperText}</small>
+				<small className={helperProps.helperTextClass}>
+					{helperProps.helperText}
+				</small>
 			</Fragment>
 		);
 	},

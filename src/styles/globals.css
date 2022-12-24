@@ -31,6 +31,12 @@ body {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in;
 }
+.avatar{
+  height:80px;
+  width: 80px;
+  margin: auto;
+  border-radius: 50%;
+}
 
 .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
