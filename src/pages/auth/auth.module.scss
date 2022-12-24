@@ -1,62 +1,82 @@
 .wrapper {
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
+	height: 100vh;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	// Auth Container styles
+	.auth-container {
+		margin: auto;
+		max-width: 390px;
+		padding: 30px;
+		width: 50vw;
+		min-width: 300px;
 
-    // Auth Container styles
-    .auth-container {
-        margin: auto;
-        max-width: 500px;
+		height: max-content;
+		// margin-top: 200px;
 
-        width: 50vw;
+		// Avatar wrapper styles
 
-        // Avatar wrapper styles
+		.avatar-wrapper {
+			min-height: 100px;
+		}
 
-        .avatar-wrapper {
-            min-height: 100px;
-        }
+		.actions-wrapper {
+			position: relative;
 
-        .actions-wrapper {
-            position: relative;
+			.actions-switch {
+				display: flex;
+				justify-content: space-between;
 
-            .actions-switch {
-                display: flex;
-                justify-content: space-between;
+				.login,
+				.signup {
+					text-align: center;
+					flex-basis: 50%;
+					font-weight: 400;
+					font-size: 16px;
+					cursor: pointer;
 
-                .login,
-                .signup {
-                    text-align: center;
-                    flex-basis: 50%;
-                    font-weight: 400;
-                    font-size: 16px;
+					&.active {
+						font-weight: 700;
+					}
+				}
+			}
 
-                    &.active {
-                        font-weight: 700;
-                    }
-                }
-            }
+			.activeTab {
+				display: block;
+				height: 5px;
+				background-color: #ad1fea;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				border-radius: 5px;
+				width: 50%;
+				transition: left 0.1s ease-in;
 
-            .activeTab {
-                display: block;
-                height: 5px;
-                background-color: #ad1fea;
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 50%;
-                transition: left 0.1s ease-in;
+				&.isSignUp {
+					left: 50%;
+				}
+			}
 
-                &.isSignUp {
-                    left: 50%;
-                }
-            }
-
-            hr {
-                margin-top: 20px;
-                border: none;
-                border-top: 2px solid #d1d3e1;
-            }
-        }
-    }
+			hr {
+				margin-top: 20px;
+				border: none;
+				border-top: 5px solid #d1d3e1;
+				opacity: 0.5;
+				border-radius: 5px;
+			}
+		}
+	}
 }
+
+// @media screen and (max-height: 850px) {
+// 	.wrapper {
+// 		margin-bottom: 200px;
+// 	}
+// }
+
+// @media screen and (max-height: 500px) {
+// 	.wrapper {
+// 		margin-bottom: unset;
+// 	}
+// }
