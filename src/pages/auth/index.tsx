@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Card from '../../components/UI/Card';
-import styles from './auth.module.scss';
-import type { NextPage } from 'next';
+import styles from '../../styles/auth.module.scss';
+import type { GetServerSideProps, NextPage } from 'next';
 import AuthForm from '../../components/Auth/AuthForm';
 import Avatar from '../../components/UI/Avatar';
+import { getSession } from 'next-auth/react';
 
 const AuthPage: NextPage = () => {
 	const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -43,6 +44,21 @@ const AuthPage: NextPage = () => {
 			</Card>
 		</div>
 	);
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const session = await getSession(context);
+	if (!session) {
+		return {
+			props: {},
+		};
+	}
+	return {
+		redirect: {
+			destination: '/',
+			permanent: false,
+		},
+	};
 };
 
 export default AuthPage;

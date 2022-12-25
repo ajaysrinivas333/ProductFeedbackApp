@@ -9,9 +9,7 @@
 		margin: auto;
 		max-width: 390px;
 		padding: 30px;
-		width: 50vw;
 		min-width: 300px;
-
 		height: max-content;
 		// margin-top: 200px;
 
@@ -82,3 +80,15 @@
 // 		margin-bottom: unset;
 // 	}
 // }
+
+@media screen and (min-width: 400px) {
+	.auth-container {
+		width: 390px;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.auth-container {
+		width: 50vw;
+	}
+}
