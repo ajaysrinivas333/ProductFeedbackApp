@@ -2,9 +2,11 @@ import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '../../UI/Button';
 import Input from '../../UI/Input';
-import styles from './AuthForm.module.scss';
+import styles from '../../../styles/authform.module.scss';
 import { VALIDATORS } from './constants';
 import { getFields } from './helper';
+import router from 'next/router';
+import { signIn } from 'next-auth/react';
 
 interface FormData {
 	username?: string | null;
@@ -39,17 +41,21 @@ const AuthForm = (props: AuthFormProps) => {
 		reset();
 	}, [reset, isLogin]);
 
-
-	const submitHandler = (data:FormData) => {
+	const submitHandler = async (data: FormData) => {
 		// TODO: Call signup or signin api accordingly
-		console.log(data);
-	}
+
+		if (isLogin) {
+			const res = await signIn('credentials', {
+				email: data.email,
+				password: data.password,
+				redirect: false,
+			});
+			!res?.error ? router.replace('/') : console.log(res?.error);
+		}
+	};
 
 	return (
-		<form
-			className={styles.authForm}
-			onSubmit={handleSubmit((data) => console.log({ data }))}
-		>
+		<form className={styles.authForm} onSubmit={handleSubmit(submitHandler)}>
 			{formFields.map((field) => (
 				<div key={field.id} className={styles.inputWrapper}>
 					<label htmlFor={field.id}>{field.label}</label>
