@@ -23,7 +23,7 @@ body {
 }
 
 
-.card {
+.card , .custom-menu{
   padding: 10px;
   background-color: white;
   width: max-content;
@@ -68,4 +68,44 @@ body {
      
 .userRunDownDetails .userTextDetails span:nth-of-type(2) {
         color: rgba(255, 255, 255, 0.8);
+}
+
+
+
+.custom-menu-container {
+  width: max-content;
+  position: relative;
+}
+
+.custom-menu {
+  cursor: pointer;
+  text-align: center;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column !important;
+  border-radius: 5px;
+  transform: scale(0);
+  transition: transform 0.2s ease-in, opacity 0.2s ease-in;
+  translate: -50%;
+  text-align: left;
+}
+
+.custom-menu span {
+  border-bottom: 1px solid rgba(0, 0, 255, 0.142);
+  padding: 4px 22px;
+}
+.custom-menu span:last-child {
+  border-bottom: none;
+}
+.custom-menu:focus-visible{
+  border: none;
+  outline:none;
+}
+
+
+.custom-menu.open {
+  transform: scale(1);
 }

@@ -36,4 +36,15 @@
 			}
 		}
 	}
+	.moreOptionsMenu {
+		display: inline;
+		align-self: flex-start;
+
+		.optionIcon {
+			width: 20px;
+			height: 20px;
+			cursor: pointer;
+			border-radius: 50%;
+		}
+	}
 }

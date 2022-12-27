@@ -1,12 +1,42 @@
 .navbarHome {
+	list-style-type: none;
+	color: white;
 	background-color: #373f68;
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	padding: 20px;
+	border-radius: 10px;
 	gap: 40px;
-	font-weight: 700;
+	font-weight: 600;
+	font-size: 16px;
+	align-items: center;
+
+	li {
+		display: flex;
+	}
+
+	.dropDownMenu {
+		color: #373f68;
+		.dropDownButton {
+			color: white;
+		}
+	}
+
+	.addProjectButton {
+		background-color: #ad1fea;
+		padding: 10px 0px;
+		border: none;
+		border-radius: 10px;
+		color: #ffffff;
+		cursor: pointer;
+		font-size: 16px;
+		font-weight: 600;
+		outline: none;
+		transition: background-color 0.2s ease-in-out;
+		width: 30%;
+
+		font-family: var(--globalFont);
+	}
 }
-.ul {
-	list-style-type: none;
-}
+// #ad1fea

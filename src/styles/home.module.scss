@@ -1,7 +1,7 @@
 .mainLayout {
 	height: 100vh;
 	width: max(700px, 940px);
-	border: 5px solid red;
+	// border: 5px solid red;
 	margin: auto;
 	display: flex;
 	gap: 20px;
@@ -11,8 +11,11 @@
 	display: flex;
 	flex-direction: column;
 	gap: 30px;
-	border: 2px solid black;
+	// border: 2px solid black;
 	flex-basis: 20%;
+	position: sticky;
+	top: 100px;
+	align-self: start;
 
 	.box {
 		width: 275px;
@@ -33,7 +36,6 @@
 			);
 			color: #fff;
 
-			
 			.boardTitle {
 				margin-top: auto;
 				p {
@@ -68,5 +70,6 @@
 
 .contentLayout {
 	flex-basis: 80%;
-	border: 2px solid blueviolet;
+	margin-top: 100px;
+	// border: 2px solid blueviolet;
 }

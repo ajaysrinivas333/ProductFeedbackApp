@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { NextPage } from 'next';
 import styles from '../../styles/home.module.scss';
 import Card from '../../components/UI/Card';
-import Avatar from '../../components/UI/Avatar';
 import ProductCard from '../../components/Product/ProductCard';
 import Navbar from '../../components/Navbar/Navbar';
 import UserRunDown from '../../components/User/UserRunDown';
@@ -62,10 +61,7 @@ const HomePage: NextPage = () => {
 			</aside>
 
 			<section className={styles.contentLayout}>
-				<Card>
-					<Navbar />
-				</Card>
-
+				<Navbar />
 				<ProductCard
 					user={{
 						avatarId: Date.now().toString(),
