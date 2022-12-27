@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const avatarUrl = 'https://avatars.dicebear.com/api/bottts';
 
-interface AvatarProps {
+export interface AvatarProps {
 	slug: string;
 	height:number;
 	width:number;

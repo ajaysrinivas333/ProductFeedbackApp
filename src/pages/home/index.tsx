@@ -1,36 +1,85 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { NextPage } from 'next';
 import styles from '../../styles/home.module.scss';
 import Card from '../../components/UI/Card';
 import Avatar from '../../components/UI/Avatar';
+import ProductCard from '../../components/Product/ProductCard';
+import Navbar from '../../components/Navbar/Navbar';
+import UserRunDown from '../../components/User/UserRunDown';
+
+const categories = [
+	'All',
+	'Productivity',
+	'Shopping',
+	'Communication',
+	'Music & audio',
+	'Entertainment',
+	'Business',
+	'Social',
+	'Finance',
+];
+
+// This should accept prop to identify the active category and functionlity
+const CategoryItems = () => {
+	return (
+		<Fragment>
+			{categories.map((category, i) => {
+				return (
+					<span
+						className={`${styles.category} ${i === 0 ? styles.active : ''}`}
+						key={category}
+					>
+						{category}
+					</span>
+				);
+			})}
+		</Fragment>
+	);
+};
 
 const HomePage: NextPage = () => {
 	return (
 		<main className={styles.mainLayout}>
 			<aside className={styles.sideLayout}>
 				<Card className={styles.box}>
-					<div className={styles.userDetails}>
-						<Avatar height={45} width={45} slug={Date.now().toString()} />
-						<div className={styles.userNames}>
-							<span>John Doe</span>
-							<span>@johndoe</span>
-						</div>
-					</div>
+					<UserRunDown
+						height={45}
+						width={45}
+						slug={Date.now().toString()}
+						username={'John Doe'}
+						subText={'@john_doe'}
+					/>
+
 					<div className={styles.boardTitle}>
-						<p>Frontend Mentor</p>
+						<h4>Frontend Mentor</h4>
 						<p>Feedback board</p>
 					</div>
 				</Card>
-				<Card className={styles.box}>Category</Card>
-				<Card className={styles.box}>Roadmap</Card>
+				<Card className={styles.box}>
+					<CategoryItems />
+				</Card>
+				{/* <Card className={styles.box}>Roadmap</Card> */}
 			</aside>
 
 			<section className={styles.contentLayout}>
-				<Card>Some content</Card>
+				<Card>
+					<Navbar />
+				</Card>
 
-				<Card>Some content</Card>
-
-				<Card>Some content</Card>
+				<ProductCard
+					user={{
+						avatarId: Date.now().toString(),
+						displayName: 'John Doe',
+					}}
+					createdAt={'14 Sept,2021'}
+					product={{
+						name: 'Spotify!',
+						description:
+							'Listen to your favorite music from anywhere around the world...',
+						category: 'Music & Audio',
+						feedbackCount: 390,
+					}}
+				/>
 			</section>
 		</main>
 	);
