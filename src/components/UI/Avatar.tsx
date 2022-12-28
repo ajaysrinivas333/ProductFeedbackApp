@@ -5,8 +5,8 @@ const avatarUrl = 'https://avatars.dicebear.com/api/bottts';
 
 export interface AvatarProps {
 	slug: string;
-	height:number;
-	width:number;
+	height: number;
+	width: number;
 }
 
 const Avatar = (props: AvatarProps) => {

@@ -44,7 +44,7 @@ const HomePage: NextPage = () => {
 					<UserRunDown
 						height={45}
 						width={45}
-						slug={Date.now().toString()}
+						slug={`johndoe`}
 						username={'John Doe'}
 						subText={'@john_doe'}
 					/>
@@ -57,14 +57,13 @@ const HomePage: NextPage = () => {
 				<Card className={styles.box}>
 					<CategoryItems />
 				</Card>
-				{/* <Card className={styles.box}>Roadmap</Card> */}
 			</aside>
 
 			<section className={styles.contentLayout}>
 				<Navbar />
 				<ProductCard
 					user={{
-						avatarId: Date.now().toString(),
+						avatarId: `johndoe`,
 						displayName: 'John Doe',
 					}}
 					createdAt={'14 Sept,2021'}

@@ -5,7 +5,7 @@ import Button from '../UI/Button';
 import { MenuContainer, Menu, MenuItem } from '../UI/Menu';
 import { BsChevronDown } from 'react-icons/bs';
 const Navbar = () => {
-	const { open, toggleMenu, closeMenu } = useMenu();
+	const { open, openMenu, closeMenu } = useMenu();
 
 	return (
 		<nav>
@@ -18,7 +18,7 @@ const Navbar = () => {
 						<span
 							role={'button'}
 							className={styles.dropDownButton}
-							onClick={toggleMenu}
+							onClick={openMenu}
 						>
 							Most Upvotes <BsChevronDown />
 						</span>

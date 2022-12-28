@@ -2,7 +2,7 @@ import React from 'react';
 import Card from './../UI/Card';
 import styles from '../../styles/product-card.module.scss';
 import UserRunDown from './../User/UserRunDown';
-import { AiOutlineMore } from 'react-icons/ai';
+import { AiOutlineMore as OptionIcon } from 'react-icons/ai';
 import { Menu, MenuContainer, MenuItem } from '../UI/Menu';
 import useMenu from './../../hooks/use-menu';
 
@@ -43,7 +43,7 @@ const ProductDetails = (props: ProductDetailProps) => {
 };
 
 const ProductCard = ({ product, user, createdAt }: ProductCardProps) => {
-	const { open, toggleMenu, closeMenu } = useMenu();
+	const { open, openMenu, closeMenu } = useMenu();
 
 	return (
 		<Card className={styles.productCard}>
@@ -63,7 +63,7 @@ const ProductCard = ({ product, user, createdAt }: ProductCardProps) => {
 				<ProductDetails product={product} />
 			</div>
 			<MenuContainer className={styles.moreOptionsMenu}>
-				<AiOutlineMore className={styles.optionIcon} onClick={toggleMenu} />
+				<OptionIcon className={styles.optionIcon} onClick={openMenu} />
 				<Menu open={open} onBlur={closeMenu}>
 					<MenuItem>Edit</MenuItem>
 					<MenuItem>Delete</MenuItem>

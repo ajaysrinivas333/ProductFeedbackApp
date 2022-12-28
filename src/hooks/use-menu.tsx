@@ -1,17 +1,15 @@
 import { useState, useCallback } from 'react';
+import { withDelay } from '../lib';
 const useMenu = () => {
 	const [open, setOpen] = useState<boolean>(false);
-	const toggleMenu = useCallback(() => {
-		setTimeout(() => setOpen(!open), 200);
-	}, [open]);
 	const openMenu = useCallback(() => {
-		setTimeout(() => setOpen(true), 100);
+		setOpen(true);
 	}, []);
 	const closeMenu = useCallback(() => {
-		setTimeout(() => setOpen(false), 100);
+		withDelay(() => setOpen(false));
 	}, []);
 
-	return { open, toggleMenu, openMenu, closeMenu };
+	return { open, openMenu, closeMenu };
 };
 
 export default useMenu;

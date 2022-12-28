@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 
 interface MenuGenericProps {
 	className?: string;
@@ -32,20 +32,31 @@ export const Menu: React.FC<MenuProps> = ({
 	open,
 	onBlur,
 }: MenuProps) => {
-	const classes = `custom-menu ${open ? 'open' : ''} ${className ?? ''}`;
+	const MENU_CLOSE_CLASS: string = useMemo<string>(
+		() => `custom-menu ${className ?? ''}`,
+		[className],
+	);
+
+	const MENU_OPEN_CLASS: string = useMemo<string>(
+		() => `custom-menu ${className ?? ''} ${open ? 'open' : ''}`,
+		[className, open],
+	);
+
+	const [menuClass, setMenuClass] = useState<string>(MENU_CLOSE_CLASS);
 
 	const menuRef = useRef<HTMLDivElement | null>(null);
 
-	const { current } = menuRef;
-
 	useEffect(() => {
-		if (current) {
+		const { current } = menuRef;
+		if (open && current) {
 			current?.focus();
+			setMenuClass(() => MENU_OPEN_CLASS);
 		}
-	}, [current, open]);
+		return () => setMenuClass(() => MENU_CLOSE_CLASS);
+	}, [open, MENU_CLOSE_CLASS, MENU_OPEN_CLASS]);
 
 	return (
-		<div ref={menuRef} onBlur={onBlur} tabIndex={0} className={classes}>
+		<div ref={menuRef} onBlur={onBlur} tabIndex={0} className={menuClass}>
 			{children}
 		</div>
 	);
