@@ -1,10 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
 
-const avatarUrl = 'https://avatars.dicebear.com/api/avataaars';
+const avatarUrl = 'https://avatars.dicebear.com/api/bottts';
 
-interface AvatarProps {
+export interface AvatarProps {
 	slug: string;
+	height: number;
+	width: number;
 }
 
 const Avatar = (props: AvatarProps) => {
@@ -13,8 +15,8 @@ const Avatar = (props: AvatarProps) => {
 			src={`${avatarUrl}/${props.slug}.svg`}
 			className='avatar'
 			alt='Avatar'
-			height={85}
-			width={85}
+			height={props.height}
+			width={props.width}
 			priority
 		/>
 	);

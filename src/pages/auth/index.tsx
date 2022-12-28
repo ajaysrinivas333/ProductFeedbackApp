@@ -26,7 +26,7 @@ const AuthPage: NextPage = () => {
 		<div className={styles.wrapper}>
 			<Card className={styles['auth-container']}>
 				<div className={styles['avatar-wrapper']}>
-					<Avatar slug='auth' />
+					<Avatar slug='aut' height={80} width={80} />
 				</div>
 				<div className={styles['actions-wrapper']}>
 					<div className={styles['actions-switch']}>

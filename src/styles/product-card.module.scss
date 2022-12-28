@@ -1,0 +1,64 @@
+@import './variables';
+
+.productCard {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	padding: 20px;
+	margin: 20px 0;
+	.detailsWrapper {
+		flex-basis: 90%;
+		margin-left: 25px;
+
+		.productDetails {
+			margin: 10px 5px;
+			width: 100%;
+			word-break: break-word;
+			overflow-wrap: break-word;
+
+			.category {
+				margin-top: 15px;
+				background-color: #f2f4ff;
+				color: #4661e6;
+				border-radius: 6px;
+				padding: 5px 10px;
+				font-weight: 500;
+				font-size: 13px;
+				display: inline-block;
+			}
+
+			.feedbackCount {
+				margin-left: 20px;
+				background: #eceefb;
+				padding: 5px;
+				border-radius: 7px;
+				font-size: 13px;
+				font-weight: 500;
+				letter-spacing: 0.15px;
+				color: goldenrod;
+			}
+		}
+	}
+	.moreOptionsMenu {
+		display: inline;
+		align-self: flex-start;
+
+		.optionIcon {
+			width: 20px;
+			height: 20px;
+			cursor: pointer;
+			border-radius: 50%;
+		}
+	}
+}
+
+@media screen and (max-width: $mobileScreenWidth) {
+	.productCard {
+		width: 94%;
+		margin: 20px 0;
+		margin-left: 3%;
+		.detailsWrapper {
+			margin-left: 0;
+		}
+	}
+}

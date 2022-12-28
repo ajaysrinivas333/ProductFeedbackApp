@@ -1,0 +1,87 @@
+@import './variables.scss';
+
+.navbarHome {
+	border-radius: 10px;
+	color: white;
+	background-color: #373f68;
+	width: 100%;
+	font-weight: 600;
+
+	.listItems {
+		list-style-type: none;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		padding: 20px;
+		gap: 40px;
+		font-size: 16px;
+		align-items: center;
+
+		li {
+			display: flex;
+		}
+		.sortBy {
+			font-weight: 300;
+		}
+		.dropDownMenu {
+			margin-left: 4px;
+			.menu {
+				margin-top: 20px;
+				color: #373f68;
+				font-weight: 500;
+			}
+			.dropDownButton {
+				display: flex;
+				gap: 5px;
+				align-items: center;
+				cursor: pointer;
+				color: white;
+
+				svg {
+					margin-top: 4px;
+				}
+			}
+		}
+
+		.addProjectButton {
+			background-color: #ad1fea;
+			padding: 10px 0px;
+			border: none;
+			border-radius: 10px;
+			color: #ffffff;
+			cursor: pointer;
+			font-size: 16px;
+			font-weight: 600;
+			outline: none;
+			transition: background-color 0.2s ease-in-out;
+			width: 30%;
+
+			font-family: var(--globalFont);
+		}
+	}
+}
+
+@media screen and (max-width: $mobileScreenWidth) {
+	.navbarHome {
+		font-size: 13px;
+		border-radius: 0;
+		position: sticky;
+		top: 100px;
+		z-index: 3;
+		.listItems {
+			padding: 13px;
+			font-size: min(3.6vw, 16px);
+			li {
+				&:nth-of-type(1) {
+					display: none;
+				}
+				flex-basis: 64%;
+			}
+
+			.addProjectButton {
+				font-size: 13px;
+				width: 150px;
+			}
+		}
+	}
+}
