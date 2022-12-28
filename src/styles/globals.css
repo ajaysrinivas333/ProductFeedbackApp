@@ -1,5 +1,6 @@
 @import "https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700;800;900&display=swap";
 
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -12,6 +13,7 @@
       Helvetica,
       Arial,
       sans-serif;
+      
 }
 
 html,
@@ -29,8 +31,12 @@ body {
   width: max-content;
   border-radius: 15px;
   border: 1px solid white;
-  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in;
+}
+
+.custom-menu{
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+
 }
 
 .shadow{
@@ -42,9 +48,9 @@ body {
   border-radius: 50%;
 }
 
-.shadow:hover , .card:hover {
+/* .shadow:hover , .card:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-}
+} */
 
 .userRunDownDetails {
   display: flex;
@@ -100,7 +106,7 @@ body {
 .custom-menu span:last-child {
   border-bottom: none;
 }
-.custom-menu:focus-visible{
+.custom-menu:focus-visible , .custom-drawer:focus-visible{
   border: none;
   outline:none;
 }
@@ -108,4 +114,29 @@ body {
 
 .custom-menu.open {
   transform: scale(1);
+}
+
+
+
+
+.custom-drawer {
+  height: 100vh;
+  position: fixed;
+  right: -100%;
+  top: 100px;
+  padding: 20px;
+  width: 80vw;
+  transition: right 0.3s cubic-bezier(0.39, 0.01, 0.39, 0.94);
+  background-color: white;
+  z-index: 5;
+}
+
+.custom-drawer.open {
+  right: 0;
+}
+
+
+
+::-webkit-scrollbar{
+  display:none;
 }

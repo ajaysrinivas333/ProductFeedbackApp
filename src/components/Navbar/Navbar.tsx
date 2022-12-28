@@ -4,15 +4,18 @@ import styles from '../../styles/navbar.module.scss';
 import Button from '../UI/Button';
 import { MenuContainer, Menu, MenuItem } from '../UI/Menu';
 import { BsChevronDown } from 'react-icons/bs';
+import SuggestionIcon from '../UI/SuggestionIcon';
 const Navbar = () => {
 	const { open, openMenu, closeMenu } = useMenu();
 
 	return (
-		<nav>
-			<ul className={styles.navbarHome}>
-				<li>50 Feedbacks</li>
+		<nav className={styles.navbarHome}>
+			<ul className={styles.listItems}>
 				<li>
-					<span>Sort by: </span>
+					<SuggestionIcon /> 50 Feedbacks
+				</li>
+				<li>
+					<span className={styles.sortBy}>Sort by: </span>
 
 					<MenuContainer className={styles.dropDownMenu}>
 						<span
@@ -20,10 +23,9 @@ const Navbar = () => {
 							className={styles.dropDownButton}
 							onClick={openMenu}
 						>
-							Most Upvotes <BsChevronDown />
+							<span> Most Upvotes</span> <BsChevronDown />
 						</span>
-
-						<Menu open={open} onBlur={closeMenu}>
+						<Menu className={styles.menu} open={open} onBlur={closeMenu}>
 							<MenuItem>Most Upvotes</MenuItem>
 							<MenuItem>Least Upvotes</MenuItem>
 							<MenuItem>Most Comments </MenuItem>
@@ -31,7 +33,7 @@ const Navbar = () => {
 						</Menu>
 					</MenuContainer>
 				</li>
-				<Button className={styles.addProjectButton} text='+Add Product' />
+				<Button className={styles.addProjectButton} text='Add Product' />
 			</ul>
 		</nav>
 	);

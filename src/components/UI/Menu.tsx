@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 
-interface MenuGenericProps {
+export interface GenericProps {
 	className?: string;
 	children: React.ReactNode;
 	style?: React.CSSProperties;
 }
 
-interface MenuContainerProps extends MenuGenericProps {}
+interface MenuContainerProps extends GenericProps {}
 
 export const MenuContainer: React.FC<MenuContainerProps> = ({
 	children,
@@ -21,7 +21,7 @@ export const MenuContainer: React.FC<MenuContainerProps> = ({
 	);
 };
 
-interface MenuProps extends MenuGenericProps {
+interface MenuProps extends GenericProps {
 	open: boolean;
 	onBlur?: () => void;
 }
@@ -62,7 +62,7 @@ export const Menu: React.FC<MenuProps> = ({
 	);
 };
 
-interface MenuItemProps extends MenuGenericProps {}
+interface MenuItemProps extends GenericProps {}
 
 export const MenuItem: React.FC<MenuItemProps> = ({
 	children,
