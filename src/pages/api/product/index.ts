@@ -64,8 +64,14 @@ export default async function handler(
 		}
 
 		case 'GET': {
-			// TODO: Add get all products api here;
-			res.status(401).json({ ok: false, message: 'Method not allowed' });
+			try {
+				await connectDb();
+				const products = await Product.find({});
+				res.status(200).json({ ok: true, products });
+			} catch (err: any) {
+				res.status(400).json({ ok: false, message: err.message });
+			}
+			break;
 		}
 
 		default:
