@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PRODUCT_CATEGORIES } from '../../../../backend/constants';
-import connectDb from '../../../../backend/db/connection';
-import { isAuthenticated, isEmpty } from '../../../../backend/helpers';
-import { ProductResponse } from '../../../../backend/types';
-import Product from './../../../../backend/models/product';
+import { PRODUCT_CATEGORIES } from '@api/constants';
+import connectDb from '@api/db/connection';
+import { isAuthenticated, isEmpty } from '@api/helpers';
+import { ProductResponse } from '@api/types';
+import Product from '@api/models/product';
 
 export default async function handler(
 	req: NextApiRequest,

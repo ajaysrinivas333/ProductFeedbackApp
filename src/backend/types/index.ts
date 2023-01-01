@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { PRODUCT_CATEGORIES } from '../constants';
+import { PRODUCT_CATEGORIES } from '@api/constants';
 
 export interface APIResponse {
 	ok: boolean;

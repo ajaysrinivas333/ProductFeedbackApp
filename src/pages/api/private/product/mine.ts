@@ -1,12 +1,8 @@
 import mongoose from 'mongoose';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import connectDb from '../../../../backend/db/connection';
-import {
-	findProductsWithUserDetails,
-	isAuthenticated,
-} from '../../../../backend/helpers';
-import Product from '../../../../backend/models/product';
-import { ProductResponse } from '../../../../backend/types';
+import connectDb from '@api/db/connection';
+import { findProductsWithUserDetails, isAuthenticated } from '@api/helpers';
+import { ProductResponse } from '@api/types';
 
 export default async function handler(
 	req: NextApiRequest,

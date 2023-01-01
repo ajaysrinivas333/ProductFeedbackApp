@@ -1,5 +1,5 @@
 import mongoose, { models, Schema, model } from 'mongoose';
-import { PRODUCT_CATEGORIES } from '../constants';
+import { PRODUCT_CATEGORIES } from '@api/constants';
 
 const productSchema = new Schema(
 	{

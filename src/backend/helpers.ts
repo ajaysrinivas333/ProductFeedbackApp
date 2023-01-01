@@ -1,6 +1,6 @@
 import { NextApiRequest } from 'next';
 import { getToken } from 'next-auth/jwt';
-import Product from './models/product';
+import Product from '@api/models/product';
 
 export const isAuthenticated = async (
 	req: NextApiRequest,

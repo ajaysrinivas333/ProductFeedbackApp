@@ -1,10 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PRODUCT_CATEGORIES } from '../../../../backend/constants';
-import connectDb from '../../../../backend/db/connection';
-import { hasKey, isEmpty, isAuthenticated } from '../../../../backend/helpers';
-import Product from '../../../../backend/models/product';
-import { APIResponse } from '../../../../backend/types';
+import { PRODUCT_CATEGORIES } from '@api/constants';
+import connectDb from '@api/db/connection';
+import { hasKey, isEmpty, isAuthenticated } from '@api/helpers';
+import Product from '@api/models/product';
+import { APIResponse } from '@api/types';
 
 export default async function handler(
 	req: NextApiRequest,
