@@ -1,22 +1,8 @@
+import mongoose from 'mongoose';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PRODUCT_CATEGORIES } from '../../../backend/constants';
-import connectDb from '../../../backend/db/connection';
-import { isAuthenticated, isEmpty } from '../../../backend/helpers';
-import Product from '../../../backend/models/product';
-
-type Product = {
-	name: string;
-	description: string;
-	link?: string;
-	userId: string;
-	category: keyof typeof PRODUCT_CATEGORIES;
-};
-
-type ProductResponse = {
-	ok: boolean;
-	message?: string;
-	products?: Product[];
-};
+import connectDb from '@api/db/connection';
+import { findProductsWithUserDetails, isAuthenticated } from '@api/helpers';
+import { ProductResponse } from '@api/types';
 
 export default async function handler(
 	req: NextApiRequest,
@@ -30,8 +16,10 @@ export default async function handler(
 				if (!userId) throw new Error(`Authentication failed`);
 
 				await connectDb();
-				
-				const products = await Product.find({ userId });
+
+				const products = await findProductsWithUserDetails({
+					userId: new mongoose.Types.ObjectId(userId),
+				});
 
 				res.status(200).json({ ok: true, products });
 			} catch (err: any) {
