@@ -22,9 +22,14 @@ interface ProductDetailProps {
 	product: Product;
 }
 
-interface ProductCardProps extends ProductDetailProps {
-	user: User;
+interface ProductCardProps {
 	createdAt: string;
+	avatarId: User['avatarId'];
+	displayName: User['displayName'];
+	name: Product['name'];
+	description: Product['description'];
+	category: Product['category'];
+	feedbackCount: Product['feedbackCount'];
 }
 
 const ProductDetails = (props: ProductDetailProps) => {
@@ -42,8 +47,23 @@ const ProductDetails = (props: ProductDetailProps) => {
 	);
 };
 
-const ProductCard = ({ product, user, createdAt }: ProductCardProps) => {
+const ProductCard = ({
+	createdAt,
+	avatarId,
+	displayName,
+	name,
+	description,
+	category,
+	feedbackCount,
+}: ProductCardProps) => {
 	const { open, openMenu, closeMenu } = useMenu();
+
+	const product = {
+		name,
+		description,
+		category,
+		feedbackCount,
+	};
 
 	return (
 		<Card className={styles.productCard}>
@@ -51,8 +71,8 @@ const ProductCard = ({ product, user, createdAt }: ProductCardProps) => {
 				<UserRunDown
 					height={45}
 					width={45}
-					slug={user.avatarId}
-					username={user.displayName}
+					slug={avatarId}
+					username={displayName}
 					subText={createdAt}
 					subTextStyles={{
 						color: 'grey',
@@ -73,4 +93,4 @@ const ProductCard = ({ product, user, createdAt }: ProductCardProps) => {
 	);
 };
 
-export default ProductCard;
+export default React.memo(ProductCard);
