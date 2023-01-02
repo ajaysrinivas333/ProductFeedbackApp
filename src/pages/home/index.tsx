@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { NextPage } from 'next';
+import React, { Fragment, useState, useEffect } from 'react';
+import { GetServerSideProps, NextPage } from 'next';
 import styles from '../../styles/home.module.scss';
 import Card from '../../components/UI/Card';
 import ProductCard from '../../components/Product/ProductCard';
@@ -10,6 +10,10 @@ import useMenu from './../../hooks/use-menu';
 import Avatar from '../../components/UI/Avatar';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { VscChromeClose } from 'react-icons/vsc';
+import { formatDate } from '../../lib';
+import connectDb from '@api/db/connection';
+import { findProductsWithUserDetails } from '@api/helpers';
+import { Product } from '@api/types';
 
 const categories = [
 	'All',
@@ -41,8 +45,15 @@ const CategoryItems = () => {
 	);
 };
 
-const HomePage: NextPage = () => {
+type HomePageProps = {
+	products: Product[];
+};
+
+const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
+	const { products } = props;
 	const { open, openMenu, closeMenu } = useMenu();
+	const [productData, setProductData] = useState<Product[]>(products);
+
 	return (
 		<main className={styles.mainLayout}>
 			<aside className={styles.sideLayout}>
@@ -77,91 +88,23 @@ const HomePage: NextPage = () => {
 
 			<section className={styles.contentLayout}>
 				<Navbar />
-				<ProductCard
-					user={{
-						avatarId: `joshndoe`,
-						displayName: 'John Doe',
-					}}
-					createdAt={'14 Sept,2021'}
-					product={{
-						name: 'Spotify!',
-						description:
-							'Listen to your favorite music from anywhere around the world...',
-						category: 'Music & Audio',
-						feedbackCount: 390,
-					}}
-				/>
 
-				<ProductCard
-					user={{
-						avatarId: `johndoe`,
-						displayName: 'John Doe',
-					}}
-					createdAt={'14 Sept,2021'}
-					product={{
-						name: 'Spotify!',
-						description:
-							'Listen to your favorite music from anywhere around the world...',
-						category: 'Music & Audio',
-						feedbackCount: 390,
-					}}
-				/>
-				<ProductCard
-					user={{
-						avatarId: `johndoe`,
-						displayName: 'John Doe',
-					}}
-					createdAt={'14 Sept,2021'}
-					product={{
-						name: 'Spotify!',
-						description:
-							'Listen to your favorite music from anywhere around the world...',
-						category: 'Music & Audio',
-						feedbackCount: 390,
-					}}
-				/>
-				<ProductCard
-					user={{
-						avatarId: `johndoe`,
-						displayName: 'John Doe',
-					}}
-					createdAt={'14 Sept,2021'}
-					product={{
-						name: 'Spotify!',
-						description:
-							'Listen to your favorite music from anywhere around the world...',
-						category: 'Music & Audio',
-						feedbackCount: 390,
-					}}
-				/>
-				<ProductCard
-					user={{
-						avatarId: `johndoe`,
-						displayName: 'John Doe',
-					}}
-					createdAt={'14 Sept,2021'}
-					product={{
-						name: 'Spotify!',
-						description:
-							'Listen to your favorite music from anywhere around the world...',
-						category: 'Music & Audio',
-						feedbackCount: 390,
-					}}
-				/>
-				<ProductCard
-					user={{
-						avatarId: `johndoe`,
-						displayName: 'John Doe',
-					}}
-					createdAt={'14 Sept,2021'}
-					product={{
-						name: 'Spotify!',
-						description:
-							'Listen to your favorite music from anywhere around the world...',
-						category: 'Music & Audio',
-						feedbackCount: 390,
-					}}
-				/>
+				{productData.map((product) => (
+					<ProductCard
+						key={product?._id as string}
+						user={{
+							avatarId: product?.userId,
+							displayName: product?.user[0].username,
+						}}
+						createdAt={formatDate(product?.createdAt)}
+						product={{
+							name: product?.name,
+							description: product?.description,
+							category: product?.category,
+							feedbackCount: 390,
+						}}
+					/>
+				))}
 			</section>
 			<Drawer className={styles.drawer} open={open} onBlur={closeMenu}>
 				<h3>Filter by Categories</h3>
@@ -173,4 +116,21 @@ const HomePage: NextPage = () => {
 	);
 };
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	try {
+		await connectDb();
+		const products = await findProductsWithUserDetails();
+		return {
+			props: {
+				products: JSON.parse(JSON.stringify(products)),
+			},
+		};
+	} catch (e) {
+		return {
+			props: {
+				products: [],
+			},
+		};
+	}
+};
 export default HomePage;
