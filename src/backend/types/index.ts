@@ -13,12 +13,15 @@ export interface User {
 }
 
 export interface Product {
+	_id: string | mongoose.Types.ObjectId;
 	name: string;
 	description: string;
-	link?: string;
 	userId: string;
+	createdAt: string | Date;
+	updatedAt: string | Date;
+	link?: string;
 	category: keyof typeof PRODUCT_CATEGORIES;
-	user?: User;
+	user: User[];
 }
 
 export interface ProductResponse extends APIResponse {
