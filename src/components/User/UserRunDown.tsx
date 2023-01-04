@@ -21,4 +21,4 @@ const UserRunDown = (props: UserRunDownProps) => {
 	);
 };
 
-export default UserRunDown;
+export default React.memo(UserRunDown);

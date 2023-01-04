@@ -20,21 +20,30 @@ const categories = [
 	'Productivity',
 	'Shopping',
 	'Communication',
-	'Music & audio',
+	'Music & Audio',
 	'Entertainment',
 	'Business',
 	'Social',
 	'Finance',
 ];
 
+type CategoryItemsProps = {
+	categories: string[];
+	onClick: (v: string) => void;
+	activeCategory: string;
+};
+
 // This should accept prop to identify the active category and functionlity
-const CategoryItems = () => {
+const CategoryItems = (props: CategoryItemsProps) => {
 	return (
 		<Fragment>
-			{categories.map((category, i) => {
+			{props.categories?.map((category, i) => {
 				return (
 					<span
-						className={`${styles.category} ${i === 0 ? styles.active : ''}`}
+						onClick={() => props.onClick(category)}
+						className={`${styles.category} ${
+							category === props.activeCategory ? styles.active : ''
+						}`}
 						key={category}
 					>
 						{category}
@@ -53,6 +62,39 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	const { products } = props;
 	const { open, openMenu, closeMenu } = useMenu();
 	const [productData, setProductData] = useState<Product[]>(products);
+
+	const [activeCategory, setActiveCategory] = useState<string>('All');
+
+	const changeActiveCategory = (value: string) => {
+		setActiveCategory(value);
+	};
+
+	/*
+		Approach 1
+
+		- in this comp. activeCategory - state.var ✔️
+		- changeActiveCategory -> (value) -> sets value as active category ✔️
+		- pass activeCategory as a props to category Items ✔️
+		- in categoryItems comp. check if arr.value category equals activeCategory ✔️
+		- whenever activeCategory changes filter products upon the category
+
+		Approach 2
+
+		- Set up a product filter context
+		- Wrap _app with Filter Context
+		- set up active category state.var in ctx
+		- whenever activeCategory changes filter products upon the category
+		- 
+
+	*/
+
+	useEffect(() => {
+		activeCategory === 'All'
+			? setProductData(products)
+			: setProductData((_) =>
+					products.filter((product) => product.category === activeCategory),
+			  );
+	}, [activeCategory, products]);
 
 	return (
 		<main className={styles.mainLayout}>
@@ -82,7 +124,11 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 					</div>
 				</Card>
 				<Card className={styles.box}>
-					<CategoryItems />
+					<CategoryItems
+						categories={categories}
+						onClick={changeActiveCategory}
+						activeCategory={activeCategory}
+					/>
 				</Card>
 			</aside>
 
@@ -92,24 +138,24 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 				{productData.map((product) => (
 					<ProductCard
 						key={product?._id as string}
-						user={{
-							avatarId: product?.userId,
-							displayName: product?.user[0].username,
-						}}
 						createdAt={formatDate(product?.createdAt)}
-						product={{
-							name: product?.name,
-							description: product?.description,
-							category: product?.category,
-							feedbackCount: 390,
-						}}
+						avatarId={product?.userId}
+						displayName={product?.user[0].username}
+						name={product?.name}
+						description={product?.description}
+						category={product?.category}
+						feedbackCount={390}
 					/>
 				))}
 			</section>
 			<Drawer className={styles.drawer} open={open} onBlur={closeMenu}>
 				<h3>Filter by Categories</h3>
 				<Card className={`shadow ${styles.drawerCategoryItems}`}>
-					<CategoryItems />
+					<CategoryItems
+						categories={categories}
+						onClick={changeActiveCategory}
+						activeCategory={activeCategory}
+					/>
 				</Card>
 			</Drawer>
 		</main>
