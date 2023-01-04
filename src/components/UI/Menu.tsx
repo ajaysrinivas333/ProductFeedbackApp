@@ -52,7 +52,11 @@ export const Menu: React.FC<MenuProps> = ({
 			current?.focus();
 			setMenuClass(() => MENU_OPEN_CLASS);
 		}
-		return () => setMenuClass(() => MENU_CLOSE_CLASS);
+		return () => {
+			if (open && current) {
+				setMenuClass(() => MENU_CLOSE_CLASS);
+			}
+		};
 	}, [open, MENU_CLOSE_CLASS, MENU_OPEN_CLASS]);
 
 	return (
@@ -62,12 +66,19 @@ export const Menu: React.FC<MenuProps> = ({
 	);
 };
 
-interface MenuItemProps extends GenericProps {}
+interface MenuItemProps extends GenericProps {
+	onClick?: () => void;
+}
 
 export const MenuItem: React.FC<MenuItemProps> = ({
 	children,
 	className,
+	onClick,
 }: MenuItemProps) => {
 	const classes = `custom-menu-item ${className ?? ''}`;
-	return <span className={classes}>{children}</span>;
+	return (
+		<span onClick={onClick} className={classes}>
+			{children}
+		</span>
+	);
 };

@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import useMenu from '../../hooks/use-menu';
 import styles from '../../styles/navbar.module.scss';
 import Button from '../UI/Button';
 import { MenuContainer, Menu, MenuItem } from '../UI/Menu';
 import { BsChevronDown } from 'react-icons/bs';
 import SuggestionIcon from '../UI/SuggestionIcon';
-const Navbar = () => {
+import { TiTick } from 'react-icons/ti';
+
+const productSortOptions: string[] = ['Most Feedbacks', 'Least Feedbacks'];
+
+type NavbarProps = {
+	onSortBy:(v:string) => void;
+}
+
+const Navbar = ({onSortBy}:NavbarProps) => {
 	const { open, openMenu, closeMenu } = useMenu();
+	const [sortByOption, setSortByOption] = useState<string>(
+		productSortOptions[0],
+	);
+
+	const sortProduct = (value: string) => {
+		setSortByOption(value);
+		onSortBy(value)
+	}
+	
 
 	return (
 		<nav className={styles.navbarHome}>
@@ -23,13 +40,18 @@ const Navbar = () => {
 							className={styles.dropDownButton}
 							onClick={openMenu}
 						>
-							<span> Most Upvotes</span> <BsChevronDown />
+							<span>{sortByOption}</span>
+							<BsChevronDown />
 						</span>
 						<Menu className={styles.menu} open={open} onBlur={closeMenu}>
-							<MenuItem>Most Upvotes</MenuItem>
-							<MenuItem>Least Upvotes</MenuItem>
-							<MenuItem>Most Comments </MenuItem>
-							<MenuItem>Least Comments</MenuItem>
+							{productSortOptions.map((option) => (
+								<MenuItem onClick={() => sortProduct(option)} key={option}>
+									{option}
+									<span className={'icon'}>
+										{sortByOption === option ? <TiTick /> : ''}
+									</span>
+								</MenuItem>
+							))}
 						</Menu>
 					</MenuContainer>
 				</li>
