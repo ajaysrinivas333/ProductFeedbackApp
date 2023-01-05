@@ -10,20 +10,27 @@ import { TiTick } from 'react-icons/ti';
 const productSortOptions: string[] = ['Most Feedbacks', 'Least Feedbacks'];
 
 type NavbarProps = {
-	onSortBy:(v:string) => void;
-}
+	onSortBy: (v: string) => void;
+};
 
-const Navbar = ({onSortBy}:NavbarProps) => {
+const Navbar = ({ onSortBy }: NavbarProps) => {
 	const { open, openMenu, closeMenu } = useMenu();
 	const [sortByOption, setSortByOption] = useState<string>(
 		productSortOptions[0],
 	);
+	const [closedWithMenuItem, setClosedWithMenuItem] = useState<boolean>(false);
 
 	const sortProduct = (value: string) => {
 		setSortByOption(value);
-		onSortBy(value)
-	}
-	
+		onSortBy(value);
+		setClosedWithMenuItem(true);
+		closeMenu();
+	};
+
+	const onDropdownClick = () => {
+		setClosedWithMenuItem(false);
+		openMenu();
+	};
 
 	return (
 		<nav className={styles.navbarHome}>
@@ -38,12 +45,17 @@ const Navbar = ({onSortBy}:NavbarProps) => {
 						<span
 							role={'button'}
 							className={styles.dropDownButton}
-							onClick={openMenu}
+							onClick={onDropdownClick}
 						>
 							<span>{sortByOption}</span>
 							<BsChevronDown />
 						</span>
-						<Menu className={styles.menu} open={open} onBlur={closeMenu}>
+						<Menu
+							className={styles.menu}
+							open={open}
+							onBlur={closeMenu}
+							closedWithMenuItem={closedWithMenuItem}
+						>
 							{productSortOptions.map((option) => (
 								<MenuItem onClick={() => sortProduct(option)} key={option}>
 									{option}
