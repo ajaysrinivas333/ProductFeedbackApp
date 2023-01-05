@@ -103,6 +103,11 @@ body {
   border-bottom: 1px solid rgba(0, 0, 255, 0.142);
   padding: 4px 22px;
 }
+
+.custom-menu span.icon{
+  margin-left:30px;
+  padding: 0;
+}
 .custom-menu span:last-child {
   border-bottom: none;
 }

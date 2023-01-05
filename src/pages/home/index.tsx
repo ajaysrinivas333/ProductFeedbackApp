@@ -69,24 +69,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 		setActiveCategory(value);
 	};
 
-	/*
-		Approach 1
-
-		- in this comp. activeCategory - state.var ✔️
-		- changeActiveCategory -> (value) -> sets value as active category ✔️
-		- pass activeCategory as a props to category Items ✔️
-		- in categoryItems comp. check if arr.value category equals activeCategory ✔️
-		- whenever activeCategory changes filter products upon the category
-
-		Approach 2
-
-		- Set up a product filter context
-		- Wrap _app with Filter Context
-		- set up active category state.var in ctx
-		- whenever activeCategory changes filter products upon the category
-		- 
-
-	*/
+	
 
 	useEffect(() => {
 		activeCategory === 'All'
@@ -95,6 +78,15 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 					products.filter((product) => product.category === activeCategory),
 			  );
 	}, [activeCategory, products]);
+
+	const handleSort = (filter: string) => {
+		const sortFunc = (a:Record<string,any>, b:Record<string,any>) => filter === 'Most Feedbacks' ?  a['name'].localeCompare(b['name']) : b['name'].localeCompare(a['name']);
+		 setProductData((p) => {
+			const cp = [...p];
+			cp.sort(sortFunc);
+			return cp;
+		})
+	};
 
 	return (
 		<main className={styles.mainLayout}>
@@ -133,7 +125,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 			</aside>
 
 			<section className={styles.contentLayout}>
-				<Navbar />
+				<Navbar onSortBy={handleSort} />
 
 				{productData.map((product) => (
 					<ProductCard

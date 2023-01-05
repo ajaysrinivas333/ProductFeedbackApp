@@ -24,6 +24,7 @@ export const MenuContainer: React.FC<MenuContainerProps> = ({
 interface MenuProps extends GenericProps {
 	open: boolean;
 	onBlur?: () => void;
+	closedWithMenuItem?: boolean;
 }
 
 export const Menu: React.FC<MenuProps> = ({
@@ -31,6 +32,7 @@ export const Menu: React.FC<MenuProps> = ({
 	className,
 	open,
 	onBlur,
+	closedWithMenuItem,
 }: MenuProps) => {
 	const MENU_CLOSE_CLASS: string = useMemo<string>(
 		() => `custom-menu ${className ?? ''}`,
@@ -52,22 +54,44 @@ export const Menu: React.FC<MenuProps> = ({
 			current?.focus();
 			setMenuClass(() => MENU_OPEN_CLASS);
 		}
-		return () => setMenuClass(() => MENU_CLOSE_CLASS);
-	}, [open, MENU_CLOSE_CLASS, MENU_OPEN_CLASS]);
+		// *only triggers when the menu is closed by clicking menu item
+		if (closedWithMenuItem) setMenuClass(MENU_CLOSE_CLASS);
+
+
+		// !This was causing problems with menuclick close will be removed after monitoring for while.
+		// return () => {
+		// 	if (open && current) {
+		// 		setMenuClass(() => MENU_CLOSE_CLASS);
+		// 	}
+		// };
+	}, [open, MENU_CLOSE_CLASS, MENU_OPEN_CLASS, closedWithMenuItem]);
+
+	// *only triggers when the clicked outside of menu component.
+	const onBlurFn = () => {
+		setMenuClass(MENU_CLOSE_CLASS);
+		onBlur?.();
+	};
 
 	return (
-		<div ref={menuRef} onBlur={onBlur} tabIndex={0} className={menuClass}>
+		<div ref={menuRef} onBlur={onBlurFn} tabIndex={0} className={menuClass}>
 			{children}
 		</div>
 	);
 };
 
-interface MenuItemProps extends GenericProps {}
+interface MenuItemProps extends GenericProps {
+	onClick?: () => void;
+}
 
 export const MenuItem: React.FC<MenuItemProps> = ({
 	children,
 	className,
+	onClick,
 }: MenuItemProps) => {
 	const classes = `custom-menu-item ${className ?? ''}`;
-	return <span className={classes}>{children}</span>;
+	return (
+		<span onClick={onClick} className={classes}>
+			{children}
+		</span>
+	);
 };
