@@ -62,14 +62,12 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	const { products } = props;
 	const { open, openMenu, closeMenu } = useMenu();
 	const [productData, setProductData] = useState<Product[]>(products);
-
+	const [myProductView,setMyProductView] = useState<boolean>(false)
 	const [activeCategory, setActiveCategory] = useState<string>('All');
 
 	const changeActiveCategory = (value: string) => {
 		setActiveCategory(value);
 	};
-
-	
 
 	useEffect(() => {
 		activeCategory === 'All'
@@ -80,12 +78,15 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	}, [activeCategory, products]);
 
 	const handleSort = (filter: string) => {
-		const sortFunc = (a:Record<string,any>, b:Record<string,any>) => filter === 'Most Feedbacks' ?  a['name'].localeCompare(b['name']) : b['name'].localeCompare(a['name']);
-		 setProductData((p) => {
+		const sortFunc = (a: Record<string, any>, b: Record<string, any>) =>
+			filter === 'Most Feedbacks'
+				? a['name'].localeCompare(b['name'])
+				: b['name'].localeCompare(a['name']);
+		setProductData((p) => {
 			const cp = [...p];
 			cp.sort(sortFunc);
 			return cp;
-		})
+		});
 	};
 
 	return (
@@ -126,7 +127,16 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 
 			<section className={styles.contentLayout}>
 				<Navbar onSortBy={handleSort} />
-
+				<div className={styles.productSwitchTabContainer}>
+					<div className={styles.productSwitchTabWrapper}>
+						<span onClick={() => setMyProductView(true)} className={`${styles.tab} ${myProductView ? styles.active : ''}`}>
+							My Products
+						</span>
+						<span onClick={() => setMyProductView(false)} className={`${styles.tab} ${!myProductView ? styles.active : ''}`}> All Products</span>
+					</div>
+					<span className={`${styles.slider} ${myProductView ? styles.myProductView : ''}`}></span>
+					<hr />
+				</div>
 				{productData.map((product) => (
 					<ProductCard
 						key={product?._id as string}
