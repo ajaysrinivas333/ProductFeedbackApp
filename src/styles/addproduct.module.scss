@@ -2,11 +2,20 @@
   height: 100vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
+
   align-items: center;
   justify-content: center;
+  .innerContainer {
+    max-width: min(80vw, 600px);
+    min-width: 290px;
+    height: 100%;
+  }
 
   .addProductCard {
-    margin-top: 100px;
+    position: relative;
+    width: 100%;
+    margin-top: 50px;
     border-radius: 10px;
     .addProductWrapper {
       padding: 30px;
@@ -37,6 +46,7 @@
         font-size: 14px;
         font-weight: 400;
         width: 100%;
+        min-height: 80px;
         height: 80px;
         background-color: #f7f8fd;
         padding: 7px;
@@ -44,7 +54,6 @@
         border: 2px solid #f7f8fd;
         outline: none;
         padding: 5 10px;
-        transition: all 0.2s ease-in-out;
 
         margin-bottom: 10px;
         &:focus {
@@ -61,8 +70,8 @@
       }
 
       .dropdown {
-        color: #3a4374;
         font-family: var(--globalFont);
+        color: #3a4374;
         font-size: 14px;
         font-weight: 400;
         width: 100%;
@@ -117,13 +126,15 @@
       }
     }
     .buttonLayout {
-      text-align: right;
+      display: flex;
+      gap: 10px;
       width: 100%;
-      padding: 0;
-      margin-top: 10px;
+
+      margin-top: 40px;
+      justify-content: flex-end;
       .submitButton {
         background-color: #ad1fea;
-        padding: 10px 0px;
+        padding: 10px;
         border: none;
         border-radius: 10px;
         color: #ffffff;
@@ -132,14 +143,49 @@
         font-weight: 600;
         outline: none;
         transition: background-color 0.2s ease-in-out;
-        width: 30%;
+
         font-family: var(--globalFont);
       }
       .cancelButton {
         @extend .submitButton;
-        margin: 0 10px;
+
         background-color: #3a4374;
       }
+    }
+    .plusButton {
+      font-size: 40px;
+
+      color: rgb(175, 59, 224);
+      position: absolute;
+      top: -22px;
+      left: 38px;
+    }
+  }
+
+  .backButtonWrapper {
+    display: flex;
+    align-items: center;
+    .backButton {
+      text-align: left;
+      width: 100%;
+      padding: 0;
+
+      background-color: inherit;
+      padding: 10px 0px;
+      border: none;
+      border-radius: 10px;
+      color: #3a4374;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      outline: none;
+      transition: background-color 0.2s ease-in-out;
+      width: 30%;
+      font-family: var(--globalFont);
+    }
+    .backIcon {
+      font-size: 25px;
+      color: #4661e6;
     }
   }
 }
