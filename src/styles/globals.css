@@ -97,6 +97,7 @@ body {
   transition: transform 0.2s ease-in, opacity 0.2s ease-in;
   translate: -50%;
   text-align: left;
+  z-index:2;
 }
 
 .custom-menu span {

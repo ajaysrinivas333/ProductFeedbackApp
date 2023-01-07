@@ -34,7 +34,7 @@
 	// border: 2px solid black;
 	flex-basis: 20%;
 	position: sticky;
-	top: 65px;
+	top: 59px;
 	align-self: start;
 
 	.box {
@@ -80,7 +80,56 @@
 .contentLayout {
 	flex-basis: 80%;
 	margin-top: 60px;
-	// border: 2px solid blueviolet;
+
+	
+
+	.productSwitchTabContainer {
+		position: relative;
+
+
+		hr {
+		margin-top: 7px;
+		border: none;
+		border-top: 5px solid #d1d3e1;
+		opacity: 0.5;
+		border-radius: 5px;
+		}
+
+		.productSwitchTabWrapper {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			gap: 20px;
+
+			padding: 5px;
+			margin-top: 20px;
+
+			.tab {
+				flex-basis: 50%;
+				text-align: center;
+				cursor: pointer;
+				font-size: 18px;
+
+				&.active {
+					font-weight: 700;
+				}
+			}
+		}
+		.slider {
+			min-height: 5px;
+			background-color: #ad1fea;
+			display: block;
+			border-radius: 5px;
+			width: 50%;
+			transition: left 0.1s ease-in;
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			&.myProductView {
+				left: 0;
+			}
+		}
+	}
 }
 
 //  Tablet screen styles

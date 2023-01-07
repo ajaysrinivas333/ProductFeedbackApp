@@ -37,7 +37,7 @@ export default NextAuth({
 					return {
 						id: user._id.toString(),
 						email: user.email,
-						name: user.userName,
+						name: user.username,
 					};
 				} catch (err) {
 					throw err;
