@@ -6,6 +6,7 @@ import { MenuContainer, Menu, MenuItem } from '../UI/Menu';
 import { BsChevronDown } from 'react-icons/bs';
 import SuggestionIcon from '../UI/SuggestionIcon';
 import { TiTick } from 'react-icons/ti';
+import Link from 'next/link';
 
 const productSortOptions: string[] = ['Most Feedbacks', 'Least Feedbacks'];
 
@@ -67,7 +68,9 @@ const Navbar = ({ onSortBy }: NavbarProps) => {
 						</Menu>
 					</MenuContainer>
 				</li>
-				<Button className={styles.addProjectButton} text='Add Product' />
+				<Link href={'/add-product'}>
+					<Button className={styles.addProjectButton} text='Add Product' />
+				</Link>
 			</ul>
 		</nav>
 	);

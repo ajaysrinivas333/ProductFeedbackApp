@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 
 interface InputProps {
-	helperProps: { helperText?: string; helperTextClass?: string };
+	helperProps?: { helperText?: string; helperTextClass?: string };
 	inputProps: {
 		className?: string;
 		placeholder?: string;
@@ -14,14 +14,22 @@ interface InputProps {
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	(props: InputProps, ref) => {
 		const { helperProps, inputProps, ...restProps } = props;
+		const inputClasses = `${inputProps.className} customInputBox`;
+		const helperTextClasses = `${helperProps?.helperTextClass} customInputBoxHelperText`;
 		return (
-			<Fragment>
-				<input {...inputProps} {...restProps} ref={ref} />
-				<br />
-				<small className={helperProps.helperTextClass}>
-					{helperProps.helperText}
-				</small>
-			</Fragment>
+			<div className='customInputWrapper'>
+				<input
+					{...inputProps}
+					{...restProps}
+					className={inputClasses}
+					ref={ref}
+				/>
+				{helperProps?.helperText ? (
+					<small className={helperTextClasses}>{helperProps?.helperText}</small>
+				) : (
+					''
+				)}
+			</div>
 		);
 	},
 );

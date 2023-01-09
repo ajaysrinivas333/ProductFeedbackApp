@@ -5,6 +5,7 @@
 	.inputWrapper {
 		display: flex;
 		flex-direction: column;
+		margin-bottom: 15px;
 
 		label {
 			font-weight: 600;
@@ -43,6 +44,7 @@
 				font-weight: 700;
 			}
 		}
+
 		.inputBoxHelper {
 			font-family: var(--globalFont);
 			letter-spacing: 0.25px;
@@ -58,6 +60,7 @@
 			}
 		}
 	}
+
 	.submitButton {
 		background-color: #ad1fea;
 		border: none;

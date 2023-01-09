@@ -33,6 +33,7 @@ export const Menu: React.FC<MenuProps> = ({
 	open,
 	onBlur,
 	closedWithMenuItem,
+	style,
 }: MenuProps) => {
 	const MENU_CLOSE_CLASS: string = useMemo<string>(
 		() => `custom-menu ${className ?? ''}`,
@@ -57,7 +58,6 @@ export const Menu: React.FC<MenuProps> = ({
 		// *only triggers when the menu is closed by clicking menu item
 		if (closedWithMenuItem) setMenuClass(MENU_CLOSE_CLASS);
 
-
 		// !This was causing problems with menuclick close will be removed after monitoring for while.
 		// return () => {
 		// 	if (open && current) {
@@ -73,7 +73,13 @@ export const Menu: React.FC<MenuProps> = ({
 	};
 
 	return (
-		<div ref={menuRef} onBlur={onBlurFn} tabIndex={0} className={menuClass}>
+		<div
+			ref={menuRef}
+			style={style}
+			onBlur={onBlurFn}
+			tabIndex={0}
+			className={menuClass}
+		>
 			{children}
 		</div>
 	);

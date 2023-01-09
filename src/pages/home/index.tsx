@@ -16,18 +16,7 @@ import { findProductsWithUserDetails } from '@api/helpers';
 import { Product } from '@api/types';
 import { PRODUCT_CATEGORIES } from '@api/constants';
 import { useSession } from 'next-auth/react';
-
-const categories = [
-	'All',
-	'Productivity',
-	'Shopping',
-	'Communication',
-	'Music & Audio',
-	'Entertainment',
-	'Business',
-	'Social',
-	'Finance',
-];
+import { productCategories } from 'lib/constants';
 
 type ProductCategoriesState = 'All' | keyof typeof PRODUCT_CATEGORIES;
 
@@ -37,7 +26,6 @@ type CategoryItemsProps = {
 	activeCategory: ProductCategoriesState;
 };
 
-// This should accept prop to identify the active category and functionlity
 const CategoryItems = (props: CategoryItemsProps) => {
 	return (
 		<Fragment>
@@ -85,7 +73,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 			cp.sort(sortFunc);
 			return cp;
 		});
-	}; 
+	};
 
 	// Filter products when user isn't logged in
 	const filterAllProductsByCategory = useCallback(() => {
@@ -147,7 +135,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 				</Card>
 				<Card className={styles.box}>
 					<CategoryItems
-						categories={categories}
+						categories={productCategories}
 						onClick={changeActiveCategory}
 						activeCategory={activeCategory}
 					/>
@@ -196,7 +184,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 				<h3>Filter by Categories</h3>
 				<Card className={`shadow ${styles.drawerCategoryItems}`}>
 					<CategoryItems
-						categories={categories}
+						categories={productCategories}
 						onClick={changeActiveCategory}
 						activeCategory={activeCategory}
 					/>
