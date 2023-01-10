@@ -10,7 +10,7 @@ import useMenu from './../../hooks/use-menu';
 import Avatar from '../../components/UI/Avatar';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { VscChromeClose } from 'react-icons/vsc';
-import { formatDate } from '../../lib';
+import { formatDate, getUserNameFromEmail } from '../../lib';
 import connectDb from '@api/db/connection';
 import { findProductsWithUserDetails } from '@api/helpers';
 import { Product } from '@api/types';
@@ -116,7 +116,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 						width={45}
 						slug={session?.user?.id as string}
 						username={session?.user?.name as string}
-						subText={`@${session?.user?.name as string}`}
+						subText={`@${getUserNameFromEmail(session?.user?.email as string)}`}
 					/>
 
 					<div className={styles.avatarWithHamburgerMenu}>

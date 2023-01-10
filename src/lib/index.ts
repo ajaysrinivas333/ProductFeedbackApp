@@ -15,3 +15,6 @@ export const formatDate = (date: Date | string) => {
 
 	return [day.replace(',', ''), `${month},`, year].join(' ');
 };
+
+export const getUserNameFromEmail = (email: string) =>
+	email?.split('@')[0]?.toLowerCase();
