@@ -3,22 +3,33 @@ import User from '@api/models/user';
 import bcrypt from 'bcrypt';
 import { EMAIL_REGEX } from '@api/constants';
 import connectDb from '@api/db/connection';
+import { APIResponse } from '@api/types';
+
+type UserData = {
+	id: string;
+	email: string;
+	username: string;
+};
+
+interface UserSignupResponse extends APIResponse {
+	user?: UserData;
+}
 
 export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse,
+	res: NextApiResponse<UserSignupResponse>,
 ) {
 	if (req.method === 'POST') {
 		try {
 			await connectDb();
 
-			if (req.body?.username?.trim().length < 2)
+			if (!req?.body.username || req.body?.username?.trim().length < 2)
 				throw new Error('Username should be atleast 2 characters long');
 
-			if (!EMAIL_REGEX.test(req.body?.email))
+			if (!req?.body.email || !EMAIL_REGEX.test(req.body?.email))
 				throw new Error('Invalid Email entered');
 
-			if (req.body?.password?.trim().length < 8)
+			if (!req?.body.password || req.body?.password?.trim().length < 8)
 				throw new Error('Password should be atleast 8 characters long');
 
 			if (await User.exists({ email: req.body?.email }))
@@ -45,6 +56,6 @@ export default async function handler(
 			res.status(400).json({ ok: false, message: ex?.message });
 		}
 	} else {
-		res.status(400).json({ message: 'Method not allowed' });
+		res.status(400).json({ ok: false, message: 'Method not allowed' });
 	}
 }
