@@ -146,3 +146,17 @@ body {
 ::-webkit-scrollbar{
   display:none;
 }
+
+
+
+
+.loginTextWrapper{
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   gap:10px;
+   font-weight: 400;
+   font-size: 17px !important;
+   text-decoration: none;
+   color:white
+}

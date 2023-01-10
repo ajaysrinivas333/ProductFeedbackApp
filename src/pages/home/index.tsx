@@ -17,6 +17,8 @@ import { Product } from '@api/types';
 import { PRODUCT_CATEGORIES } from '@api/constants';
 import { useSession } from 'next-auth/react';
 import { productCategories } from 'lib/constants';
+import LoginText from 'components/Auth/LoginText';
+import Router from 'next/router';
 
 type ProductCategoriesState = 'All' | keyof typeof PRODUCT_CATEGORIES;
 
@@ -57,7 +59,9 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	const [myProductView, setMyProductView] = useState<boolean>(false);
 	const [activeCategory, setActiveCategory] =
 		useState<ProductCategoriesState>('All');
-	const { data: session } = useSession();
+	const { data: session, status } = useSession();
+
+	const isAuthenticated = status === 'authenticated';
 
 	const changeActiveCategory = (value: ProductCategoriesState) => {
 		setActiveCategory(value);
@@ -106,25 +110,48 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 		filterProductsByUserAndCategory,
 	]);
 
+	const switchToAllProducts = () => setMyProductView(false);
+
+	const switchToMyProducts = () => {
+		isAuthenticated ? setMyProductView(true) : Router.replace('/auth');
+	};
+
 	return (
 		<main className={styles.mainLayout}>
 			<aside className={styles.sideLayout}>
 				<Card className={styles.box}>
-					<UserRunDown
-						className={styles.hiddenUser}
-						height={45}
-						width={45}
-						slug={session?.user?.id as string}
-						username={session?.user?.name as string}
-						subText={`@${getUserNameFromEmail(session?.user?.email as string)}`}
-					/>
+					{isAuthenticated ? (
+						<UserRunDown
+							className={styles.hiddenUser}
+							height={45}
+							width={45}
+							slug={session?.user?.id as string}
+							username={session?.user?.name as string}
+							subText={`@${getUserNameFromEmail(
+								session?.user?.email as string,
+							)}`}
+						/>
+					) : (
+						<LoginText className={styles.hiddenUser} />
+					)}
 
 					<div className={styles.avatarWithHamburgerMenu}>
-						<Avatar height={45} width={45} slug={session?.user?.id as string} />
-						{!open ? (
-							<RxHamburgerMenu onClick={openMenu} />
+						{isAuthenticated ? (
+							<Avatar
+								height={45}
+								width={45}
+								slug={session?.user?.id as string}
+							/>
 						) : (
-							<VscChromeClose />
+							<LoginText />
+						)}
+						{!open ? (
+							<RxHamburgerMenu
+								className={styles.hamburger}
+								onClick={openMenu}
+							/>
+						) : (
+							<VscChromeClose className={styles.hamburger} />
 						)}
 					</div>
 
@@ -147,13 +174,13 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 				<div className={styles.productSwitchTabContainer}>
 					<div className={styles.productSwitchTabWrapper}>
 						<span
-							onClick={() => setMyProductView(true)}
+							onClick={switchToMyProducts}
 							className={`${styles.tab} ${myProductView ? styles.active : ''}`}
 						>
 							My Products
 						</span>
 						<span
-							onClick={() => setMyProductView(false)}
+							onClick={switchToAllProducts}
 							className={`${styles.tab} ${!myProductView ? styles.active : ''}`}
 						>
 							{' '}
@@ -176,7 +203,9 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 						name={product?.name}
 						description={product?.description}
 						category={product?.category}
+						link={product?.link}
 						feedbackCount={390}
+						isProductOwner={product?.userId === session?.user?.id}
 					/>
 				))}
 			</section>

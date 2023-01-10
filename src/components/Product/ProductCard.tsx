@@ -5,12 +5,13 @@ import UserRunDown from './../User/UserRunDown';
 import { AiOutlineMore as OptionIcon } from 'react-icons/ai';
 import { Menu, MenuContainer, MenuItem } from '../UI/Menu';
 import useMenu from './../../hooks/use-menu';
-
+import { FiExternalLink } from 'react-icons/fi';
 interface Product {
 	name: string;
 	description: string;
 	category: string;
 	feedbackCount?: number;
+	link?: string;
 }
 
 interface User {
@@ -30,6 +31,8 @@ interface ProductCardProps {
 	description: Product['description'];
 	category: Product['category'];
 	feedbackCount: Product['feedbackCount'];
+	link?: Product['link'];
+	isProductOwner: boolean;
 }
 
 const ProductDetails = (props: ProductDetailProps) => {
@@ -37,6 +40,16 @@ const ProductDetails = (props: ProductDetailProps) => {
 		<div className={styles.productDetails}>
 			<h4>{props.product.name}</h4>
 			<p>{props.product?.description}</p>
+			{props.product?.link && (
+				<a
+					className={styles.link}
+					href={props.product?.link ?? '#'}
+					target='_blank'
+					rel='noreferrer'
+				>
+					{`${props.product.link}`} <FiExternalLink />
+				</a>
+			)}
 			<span className={styles.category}>{props.product.category}</span>
 			{props.product?.feedbackCount && (
 				<span className={styles.feedbackCount}>
@@ -55,6 +68,8 @@ const ProductCard = ({
 	description,
 	category,
 	feedbackCount,
+	link,
+	isProductOwner,
 }: ProductCardProps) => {
 	const { open, openMenu, closeMenu } = useMenu();
 
@@ -63,6 +78,7 @@ const ProductCard = ({
 		description,
 		category,
 		feedbackCount,
+		link,
 	};
 
 	return (
@@ -82,13 +98,15 @@ const ProductCard = ({
 
 				<ProductDetails product={product} />
 			</div>
-			<MenuContainer className={styles.moreOptionsMenu}>
-				<OptionIcon className={styles.optionIcon} onClick={openMenu} />
-				<Menu open={open} onBlur={closeMenu}>
-					<MenuItem>Edit</MenuItem>
-					<MenuItem>Delete</MenuItem>
-				</Menu>
-			</MenuContainer>
+			{isProductOwner && (
+				<MenuContainer className={styles.moreOptionsMenu}>
+					<OptionIcon className={styles.optionIcon} onClick={openMenu} />
+					<Menu open={open} onBlur={closeMenu}>
+						<MenuItem>Edit</MenuItem>
+						<MenuItem>Delete</MenuItem>
+					</Menu>
+				</MenuContainer>
+			)}
 		</Card>
 	);
 };
