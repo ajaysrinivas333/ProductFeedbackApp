@@ -7,9 +7,7 @@
 	width: 100%;
 	font-weight: 600;
 
-	a {
-		all: unset;
-	}
+
 
 	.listItems {
 		list-style-type: none;
@@ -51,20 +49,25 @@
 			}
 		}
 
-		.addProjectButton {
-			background-color: #ad1fea;
-			padding: 10px;
-			border: none;
-			border-radius: 10px;
-			color: #ffffff;
-			cursor: pointer;
-			font-size: 16px;
-			font-weight: 600;
-			outline: none;
-			transition: background-color 0.2s ease-in-out;
-			// width: 30%;
-			// flex-basis: 30%;
-			font-family: var(--globalFont);
+		a {
+			all: unset;
+			flex-basis: 30%;
+
+			.addProjectButton {
+				background-color: #ad1fea;
+				padding: 10px;
+				border: none;
+				border-radius: 10px;
+				color: #ffffff;
+				cursor: pointer;
+				font-size: 16px;
+				font-weight: 600;
+				outline: none;
+				transition: background-color 0.2s ease-in-out;
+				width: 100%;
+				// flex-basis: 30%;
+				font-family: var(--globalFont);
+			}
 		}
 	}
 }
@@ -89,10 +92,11 @@
 				flex-basis: 64%;
 			}
 
-			.addProjectButton {
-				font-size: 13px;
-				width: 150px;
-				flex-basis: auto;
+			a {
+				.addProjectButton {
+					font-size: 13px;
+					min-width: 110px;
+				}
 			}
 		}
 	}

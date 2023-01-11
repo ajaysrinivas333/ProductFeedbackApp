@@ -48,7 +48,7 @@ const AuthForm = (props: AuthFormProps) => {
 				password: data.password,
 				redirect: false,
 			});
-			!res?.error ? router.replace('/') : console.log(res?.error);
+			!res?.error ? router.replace('/home') : alert(res?.error);
 
 			return;
 		}
@@ -61,7 +61,10 @@ const AuthForm = (props: AuthFormProps) => {
 			body: JSON.stringify(data),
 		});
 
-		console.log(await res.json());
+		const json = await res.json();
+		reset();
+		alert(json?.message);
+
 	};
 
 	return (

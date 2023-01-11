@@ -38,6 +38,11 @@ export const findProductsWithUserDetails = async (
 				'user.updatedAt': 0,
 			},
 		},
+		{
+			$sort: {
+				createdAt: -1,
+			},
+		},
 	]);
 
 	return products;

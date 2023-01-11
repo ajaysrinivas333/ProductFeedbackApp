@@ -1,4 +1,5 @@
 @import './variables';
+
 .mainLayout {
 	height: 100vh;
 	width: max(700px, 940px);
@@ -9,9 +10,11 @@
 	gap: 20px;
 	flex-direction: row;
 	overflow: auto;
+
 	.drawer {
 		display: none;
 	}
+
 	.category {
 		background-color: #f2f4ff;
 		color: #4661e6;
@@ -27,6 +30,7 @@
 		}
 	}
 }
+
 .sideLayout {
 	display: flex;
 	flex-direction: column;
@@ -44,15 +48,14 @@
 		flex-direction: column;
 		padding: 25px;
 		transition: none;
+
 		&:nth-of-type(1) {
 			height: 200px;
 
-			background-image: radial-gradient(
-				ellipse at right top,
-				rgba(232, 77, 112, 1) 0%,
-				rgba(163, 55, 246, 1) 60%,
-				rgba(40, 167, 237, 1) 100%
-			);
+			background-image: radial-gradient(ellipse at right top,
+					rgba(232, 77, 112, 1) 0%,
+					rgba(163, 55, 246, 1) 60%,
+					rgba(40, 167, 237, 1) 100%);
 			color: #fff;
 
 			.avatarWithHamburgerMenu {
@@ -61,6 +64,7 @@
 
 			.boardTitle {
 				margin-top: auto;
+
 				p {
 					opacity: 0.75;
 				}
@@ -81,18 +85,18 @@
 	flex-basis: 80%;
 	margin-top: 60px;
 
-	
+
 
 	.productSwitchTabContainer {
 		position: relative;
 
 
 		hr {
-		margin-top: 7px;
-		border: none;
-		border-top: 5px solid #d1d3e1;
-		opacity: 0.5;
-		border-radius: 5px;
+			margin-top: 7px;
+			border: none;
+			border-top: 5px solid #d1d3e1;
+			opacity: 0.5;
+			border-radius: 5px;
 		}
 
 		.productSwitchTabWrapper {
@@ -115,6 +119,7 @@
 				}
 			}
 		}
+
 		.slider {
 			min-height: 5px;
 			background-color: #ad1fea;
@@ -125,6 +130,7 @@
 			position: absolute;
 			bottom: 0;
 			left: 50%;
+
 			&.myProductView {
 				left: 0;
 			}
@@ -141,14 +147,18 @@
 		padding: 20px;
 		width: auto;
 	}
+
 	.sideLayout {
 		display: flex;
 		flex-direction: row;
 		position: static;
+
 		.box {
 			flex-basis: 50%;
+
 			&:nth-of-type(2) {
 				width: 100%;
+
 				.category {
 					height: max-content;
 					font-size: 15px;
@@ -156,6 +166,7 @@
 			}
 		}
 	}
+
 	.contentLayout {
 		margin-top: 0;
 		width: auto;
@@ -178,6 +189,7 @@
 				flex-wrap: wrap;
 				gap: 14px;
 				margin-top: 20px;
+
 				.category {
 					font-size: 16px;
 				}
@@ -190,6 +202,7 @@
 			position: relative;
 			top: 0;
 			flex-basis: unset;
+
 			.box {
 				&:nth-of-type(1) {
 					position: fixed;
@@ -204,20 +217,26 @@
 					* {
 						margin: 0;
 					}
+
 					.hiddenUser {
 						display: none;
 					}
+
 					.avatarWithHamburgerMenu {
 						display: flex;
 						align-items: center;
 						gap: 10px;
+
 						svg {
 							cursor: pointer;
-							font-size: 35px;
 							transition: 0.2s;
+							&.hamburger {
+								font-size: 35px;
+							}
 						}
 					}
 				}
+
 				&:nth-of-type(2) {
 					display: none;
 				}
