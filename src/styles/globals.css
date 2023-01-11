@@ -7,13 +7,13 @@
   margin: 0;
 }
 
-:root{
-  --globalFont :  "Jost",
-      sans-serif,
-      Helvetica,
-      Arial,
-      sans-serif;
-      
+:root {
+  --globalFont: "Jost",
+    sans-serif,
+    Helvetica,
+    Arial,
+    sans-serif;
+
 }
 
 html,
@@ -25,7 +25,8 @@ body {
 }
 
 
-.card , .custom-menu{
+.card,
+.custom-menu {
   padding: 10px;
   background-color: white;
   width: max-content;
@@ -34,16 +35,16 @@ body {
   transition: all 0.2s ease-in;
 }
 
-.custom-menu{
+.custom-menu {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
 
 }
 
-.shadow{
+.shadow {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2)
 }
 
-.avatar{  
+.avatar {
   margin: auto;
   border-radius: 50%;
 }
@@ -57,23 +58,24 @@ body {
   align-items: center;
   gap: 5px;
 }
- .userRunDownDetails  img {
-   margin: 0;
- }
+
+.userRunDownDetails img {
+  margin: 0;
+}
 
 .userRunDownDetails .userTextDetails {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
-   
+
 .userRunDownDetails .userTextDetails span {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.15px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15px;
 }
-     
+
 .userRunDownDetails .userTextDetails span:nth-of-type(2) {
-        color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 
@@ -97,7 +99,7 @@ body {
   transition: transform 0.2s ease-in, opacity 0.2s ease-in;
   translate: -50%;
   text-align: left;
-  z-index:2;
+  z-index: 2;
 }
 
 .custom-menu span {
@@ -105,16 +107,19 @@ body {
   padding: 4px 22px;
 }
 
-.custom-menu span.icon{
-  margin-left:30px;
+.custom-menu span.icon {
+  margin-left: 30px;
   padding: 0;
 }
+
 .custom-menu span:last-child {
   border-bottom: none;
 }
-.custom-menu:focus-visible , .custom-drawer:focus-visible{
+
+.custom-menu:focus-visible,
+.custom-drawer:focus-visible {
   border: none;
-  outline:none;
+  outline: none;
 }
 
 
@@ -139,6 +144,36 @@ body {
 
 .custom-drawer.open {
   right: 0;
+}
+
+.custom-nothingHereScreen {
+  text-align: center;
+  color: #3a4374;
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+  align-items: center;
+
+}
+
+.custom-nothingHereScreen .custom-nothingHereImage {
+  transform: scale(1.2);
+  margin-top: 60px;
+
+}
+
+.custom-nothingHereScreen span:nth-of-type(1) {
+  font-size: 14px;
+  margin-top: 20px;
+
+  font-weight: bold;
+}
+
+.custom-nothingHereScreen span:nth-of-type(2) {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 5px;
+
 }
 
 
