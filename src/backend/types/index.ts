@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
-import { PRODUCT_CATEGORIES } from '@api/constants';
+import {
+	FEEDBACK_CATEGORIES,
+	FEEDBACK_STATUS,
+	PRODUCT_CATEGORIES,
+} from '@api/constants';
 
 export interface APIResponse {
 	ok: boolean;
@@ -24,7 +28,29 @@ export interface Product {
 	user: User[];
 }
 
+export interface Feedback {
+	_id: string | mongoose.Types.ObjectId;
+	title: string;
+	description: string;
+	category: keyof typeof FEEDBACK_CATEGORIES;
+	userId: string;
+	productId: string | mongoose.Types.ObjectId;
+	upvotedUsers: string[] | mongoose.Types.ObjectId[];
+	upvotesCount: number;
+	commentsCount: number;
+	position?: number;
+	status?: keyof typeof FEEDBACK_STATUS;
+	createdAt: string | Date;
+	updatedAt: string | Date;
+	user?: User[];
+}
+
 export interface ProductResponse extends APIResponse {
 	product?: Product;
 	products?: Product[];
+}
+
+export interface FeedbackResponse extends APIResponse {
+	feedback?: Feedback;
+	feedbacks?: Feedback[];
 }

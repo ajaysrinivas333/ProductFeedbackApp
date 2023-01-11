@@ -11,3 +11,17 @@ export enum PRODUCT_CATEGORIES {
 	'Social' = 'Social',
 	'Finance' = 'Finance',
 }
+
+export enum FEEDBACK_STATUS {
+	PLANNED = 'Planned',
+	INPROGRESS = 'In-Progress',
+	LIVE = 'Live',
+	REQUESTED = 'Requested',
+}
+export enum FEEDBACK_CATEGORIES {
+	'UI' = 'UI',
+	'UX' = 'UX',
+	'Enhancement' = 'Enhancement',
+	'Bug' = 'Bug',
+	'Feature' = 'Feature',
+}
