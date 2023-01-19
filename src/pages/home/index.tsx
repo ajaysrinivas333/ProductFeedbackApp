@@ -171,7 +171,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
       </aside>
 
       <section className={styles.contentLayout}>
-        <Navbar onSortBy={handleSort} />
+        <Navbar onSortBy={handleSort} productCount={productData.length} />
         <div className={styles.productSwitchTabContainer}>
           <div className={styles.productSwitchTabWrapper}>
             <span
