@@ -21,6 +21,7 @@ const feedbackSchema = new Schema(
 		upvotesCount: {
 			type: Number,
 			default: 0,
+			min: 0,
 		},
 		upvotedUsers: {
 			type: [mongoose.Schema.Types.ObjectId],
