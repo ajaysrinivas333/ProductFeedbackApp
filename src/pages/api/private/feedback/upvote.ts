@@ -33,7 +33,7 @@ export default async function handler(
 
 				if (
 					feedback.upvotedUsers.includes(userId) &&
-					feedback.upvotesCount >= 0
+					feedback.upvotesCount > 0
 				) {
 					feedback.upvotesCount -= 1;
 					feedback.upvotedUsers.pull(userId);
