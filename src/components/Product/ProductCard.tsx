@@ -6,6 +6,7 @@ import { AiOutlineMore as OptionIcon } from 'react-icons/ai';
 import { Menu, MenuContainer, MenuItem } from '../UI/Menu';
 import useMenu from './../../hooks/use-menu';
 import { FiExternalLink } from 'react-icons/fi';
+import Router from 'next/router';
 interface Product {
 	name: string;
 	description: string;
@@ -33,6 +34,7 @@ interface ProductCardProps {
 	feedbackCount: Product['feedbackCount'];
 	link?: Product['link'];
 	isProductOwner: boolean;
+	id: string;
 }
 
 const ProductDetails = (props: ProductDetailProps) => {
@@ -70,6 +72,7 @@ const ProductCard = ({
 	feedbackCount,
 	link,
 	isProductOwner,
+	id,
 }: ProductCardProps) => {
 	const { open, openMenu, closeMenu } = useMenu();
 
@@ -102,7 +105,11 @@ const ProductCard = ({
 				<MenuContainer className={styles.moreOptionsMenu}>
 					<OptionIcon className={styles.optionIcon} onClick={openMenu} />
 					<Menu open={open} onBlur={closeMenu}>
-						<MenuItem>Edit</MenuItem>
+						<MenuItem
+							onClick={() => Router.push(`/edit-product?productId=${id}`)}
+						>
+							Edit
+						</MenuItem>
 						<MenuItem>Delete</MenuItem>
 					</Menu>
 				</MenuContainer>
