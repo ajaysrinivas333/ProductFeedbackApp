@@ -12,11 +12,12 @@ import styles from '../../styles/product-form.module.scss';
 import router from 'next/router';
 import Link from 'next/link';
 
-type FormData = {
+export type FormData = {
 	name: string;
 	category: keyof typeof PRODUCT_CATEGORIES | null;
 	link?: string;
 	description: string;
+	_id?: string;
 };
 
 type ProductFormProps = {
@@ -61,8 +62,10 @@ const ProductForm = (props: ProductFormProps) => {
 
 	const formSubmit = async (data: FormData) => {
 		setLoader(true);
-		const res = await fetch('/api/private/product', {
-			method: 'POST',
+		const baseUrl = '/api/private/product/';
+		const apiUrl = isCreateMode ? baseUrl : baseUrl + props.formData?._id;
+		const res = await fetch(apiUrl, {
+			method: isCreateMode ? 'POST' : 'PATCH',
 			headers: {
 				'content-type': 'application/json',
 			},
@@ -76,7 +79,9 @@ const ProductForm = (props: ProductFormProps) => {
 	return (
 		<form onSubmit={handleSubmit(formSubmit, console.log)}>
 			<div className={styles.wrapper}>
-				<header className={styles.formHeader}>Create New Product</header>
+				<header className={styles.formHeader}>
+					{isCreateMode ? 'Create New Product' : 'Edit Product'}
+				</header>
 				<div className={styles.formControl}>
 					<span className={styles.fieldName}>Product Name</span>
 					<label>Add a short, descriptive headline</label>
@@ -156,7 +161,7 @@ const ProductForm = (props: ProductFormProps) => {
 						{...register('link', {})}
 						inputProps={{
 							type: 'text',
-							placeholder: 'Product name',
+							placeholder: 'Product link',
 							className: styles.inputBox,
 						}}
 					/>
@@ -201,7 +206,15 @@ const ProductForm = (props: ProductFormProps) => {
 						type='submit'
 						disabled={loader}
 						className={styles.submitButton}
-						text={loader ? 'Adding...' : 'Add Product'}
+						text={
+							loader
+								? isCreateMode
+									? 'Adding...'
+									: 'Updating...'
+								: isCreateMode
+								? 'Add Product'
+								: 'Update Product'
+						}
 					/>
 				</div>
 			</div>

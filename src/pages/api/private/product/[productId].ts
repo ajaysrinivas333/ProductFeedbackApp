@@ -31,9 +31,12 @@ export default async function handler(
 
 				await connectDb();
 
-				await Product.findByIdAndUpdate(req.query.productId, {
-					...req.body,
-				});
+				await Product.findOneAndUpdate(
+					{ _id: req.query.productId, userId },
+					{
+						...req.body,
+					},
+				);
 
 				res
 					.status(200)

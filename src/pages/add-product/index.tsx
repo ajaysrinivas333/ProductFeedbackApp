@@ -3,7 +3,7 @@ import React from 'react';
 import styles from '../../styles/addproduct.module.scss';
 import Button from 'components/UI/Button';
 import { BiChevronLeft } from 'react-icons/bi';
-import { BsPlusCircleFill } from 'react-icons/bs';
+import { BsPlus } from 'react-icons/bs';
 import ProductForm from 'components/Product/ProductForm';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
@@ -20,7 +20,7 @@ const AddProductPage = () => {
 					</Link>
 				</div>
 				<Card className={styles.addProductCard}>
-					<BsPlusCircleFill className={styles.plusButton} />
+					<BsPlus className={styles.plusButton} />
 					<ProductForm mode='create' />
 				</Card>
 			</div>
