@@ -9,8 +9,8 @@ import { useForm } from 'react-hook-form';
 import { BsChevronDown } from 'react-icons/bs';
 import { TiTick } from 'react-icons/ti';
 import styles from '../../styles/product-form.module.scss';
-import router from 'next/router';
 import Link from 'next/link';
+import { revalidatePage } from 'lib';
 
 export type FormData = {
 	name: string;
@@ -73,7 +73,11 @@ const ProductForm = (props: ProductFormProps) => {
 		});
 		const json = await res.json();
 		setLoader(false);
-		json.ok ? router.push('/home') : alert(json?.message);
+		if (json.ok) {
+			await revalidatePage('/home');
+			// !done on purpose to trigger revalidation for homepage
+			window.location.href = '/home';
+		} else alert(json?.message);
 	};
 
 	return (
