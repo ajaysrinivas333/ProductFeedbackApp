@@ -4,11 +4,11 @@ import { PRODUCT_CATEGORIES } from '@api/constants';
 import connectDb from '@api/db/connection';
 import { hasKey, isEmpty, isAuthenticated } from '@api/helpers';
 import Product from '@api/models/product';
-import { APIResponse } from '@api/types';
+import { ProductResponse } from '@api/types';
 
 export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse<APIResponse>,
+	res: NextApiResponse<ProductResponse>,
 ) {
 	switch (req.method) {
 		case 'PATCH': {
@@ -46,5 +46,30 @@ export default async function handler(
 			}
 			break;
 		}
+
+		case 'GET':
+			try {
+				if (!req.query?.productId)
+					throw new Error('Product Id cannot be empty');
+
+				const userId = await isAuthenticated(req);
+
+				if (!userId) throw new Error('Authentication Failed');
+
+				await connectDb();
+				const productDetails = await Product.findOne({
+					_id: req.query?.productId,
+					userId,
+				});
+				if (!productDetails) throw new Error('No product found');
+
+				res.status(200).json({ ok: true, product: productDetails });
+			} catch (err: any) {
+				res.status(400).json({ ok: false, message: err.message });
+			}
+			break;
+
+		default:
+			res.status(405).json({ ok: false, message: 'Method not allowed' });
 	}
 }
