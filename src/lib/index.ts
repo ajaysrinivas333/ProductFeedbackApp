@@ -18,3 +18,11 @@ export const formatDate = (date: Date | string) => {
 
 export const getUserNameFromEmail = (email: string) =>
 	email?.split('@')[0]?.toLowerCase();
+
+export const revalidatePage = async (url: string) =>
+	fetch(`/api/revalidate?url=${url}`);
+
+export const makeUrl = (url: string = '') =>
+	url.startsWith('https://') || url.startsWith('http://')
+		? url
+		: `http://${url}`;

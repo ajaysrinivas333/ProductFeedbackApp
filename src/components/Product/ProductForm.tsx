@@ -4,13 +4,13 @@ import Input from 'components/UI/Input';
 import { MenuContainer, Menu, MenuItem } from 'components/UI/Menu';
 import useMenu from 'hooks/use-menu';
 import { productCategories } from 'lib/constants';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsChevronDown } from 'react-icons/bs';
 import { TiTick } from 'react-icons/ti';
 import styles from '../../styles/product-form.module.scss';
-import router from 'next/router';
 import Link from 'next/link';
+import { revalidatePage } from 'lib';
 
 export type FormData = {
 	name: string;
@@ -25,9 +25,11 @@ type ProductFormProps = {
 	formData?: FormData;
 };
 
+type CategoryMenuProps = 'Select' | FormData['category'];
+
 const ProductForm = (props: ProductFormProps) => {
 	const { open, openMenu, closeMenu } = useMenu();
-	const [category, setCategory] = useState<'Select' | FormData['category']>(
+	const [category, setCategory] = useState<CategoryMenuProps>(
 		props.formData?.category ?? 'Select',
 	);
 	const [closedWithMenuItem, setClosedWithMenuItem] = useState<boolean>(false);
@@ -39,6 +41,7 @@ const ProductForm = (props: ProductFormProps) => {
 		formState: { errors },
 		handleSubmit,
 		setValue,
+		reset,
 	} = useForm<FormData>({
 		defaultValues: props.formData ?? {
 			name: '',
@@ -73,8 +76,17 @@ const ProductForm = (props: ProductFormProps) => {
 		});
 		const json = await res.json();
 		setLoader(false);
-		json.ok ? router.push('/home') : alert(json?.message);
+		if (json.ok) {
+			await revalidatePage('/home');
+			// !done on purpose to trigger revalidation for homepage
+			window.location.href = '/home';
+		} else alert(json?.message);
 	};
+
+	useEffect(() => {
+		reset(props.formData);
+		setCategory((props.formData?.category as CategoryMenuProps) ?? 'Select');
+	}, [props.formData, reset]);
 
 	return (
 		<form onSubmit={handleSubmit(formSubmit, console.log)}>

@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useCallback } from 'react';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import styles from '../../styles/home.module.scss';
 import Card from '../../components/UI/Card';
 import ProductCard from '../../components/Product/ProductCard';
@@ -229,20 +229,38 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+// 	try {
+// 		await connectDb();
+// 		const products = await findProductsWithUserDetails();
+// 		return {
+// 			props: {
+// 				products: JSON.parse(JSON.stringify(products)),
+// 			},
+// 		};
+// 	} catch (e) {
+// 		return {
+// 			props: {
+// 				products: [],
+// 			},
+// 		};
+// 	}
+// };
+
+// *Experimental ISR
+export const getStaticProps: GetStaticProps = async (context) => {
+	let products = [];
 	try {
 		await connectDb();
-		const products = await findProductsWithUserDetails();
+		products = await findProductsWithUserDetails();
+	} catch (error: any) {
+		console.log(error.message);
+	} finally {
 		return {
 			props: {
 				products: JSON.parse(JSON.stringify(products)),
 			},
-		};
-	} catch (e) {
-		return {
-			props: {
-				products: [],
-			},
+			revalidate: 5,
 		};
 	}
 };

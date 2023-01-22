@@ -7,6 +7,7 @@ import { Menu, MenuContainer, MenuItem } from '../UI/Menu';
 import useMenu from './../../hooks/use-menu';
 import { FiExternalLink } from 'react-icons/fi';
 import Router from 'next/router';
+import { makeUrl } from 'lib';
 interface Product {
 	name: string;
 	description: string;
@@ -45,11 +46,11 @@ const ProductDetails = (props: ProductDetailProps) => {
 			{props.product?.link && (
 				<a
 					className={styles.link}
-					href={props.product?.link ?? '#'}
+					href={makeUrl(props.product?.link) ?? '#'}
 					target='_blank'
 					rel='noreferrer'
 				>
-					{`${props.product.link}`} <FiExternalLink />
+					{`${makeUrl(props.product.link)}`} <FiExternalLink />
 				</a>
 			)}
 			<span className={styles.category}>{props.product.category}</span>
