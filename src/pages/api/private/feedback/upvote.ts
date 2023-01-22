@@ -15,15 +15,13 @@ export default async function handler(
 
 				if (!userId) throw new Error(`Authentication failed`);
 
-				const productId = req?.query?.productId;
-				const feedbackId = req?.query?.feedbackId;
+				const { id: feedbackId } = req?.query;
 
-				if (!productId || !feedbackId)
-					throw new Error('Product Id and Feedback Id should not be empty');
+				if (!feedbackId) throw new Error('Feedback Id should not be empty');
 
 				await connectDb();
 
-				const feedback = await Feedback.findOne({ _id: feedbackId, productId });
+				const feedback = await Feedback.findOne({ _id: feedbackId });
 
 				if (!feedback) throw new Error('Feedback not found');
 
