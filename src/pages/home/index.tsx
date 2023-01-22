@@ -247,7 +247,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 // 	}
 // };
 
-// *Experimental SSG
+// *Experimental ISR
 export const getStaticProps: GetStaticProps = async (context) => {
 	let products = [];
 	try {
@@ -260,6 +260,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 			props: {
 				products: JSON.parse(JSON.stringify(products)),
 			},
+			revalidate: 5,
 		};
 	}
 };
