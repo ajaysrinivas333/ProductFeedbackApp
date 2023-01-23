@@ -1,2 +1,13 @@
 $tabletScreenWidth: 1024px;
 $mobileScreenWidth: 768px;
+
+@mixin categoryStyles {
+  margin-top: 15px;
+  background-color: #f2f4ff;
+  color: #4661e6;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-weight: 500;
+  font-size: 13px;
+  display: inline-block;
+}
