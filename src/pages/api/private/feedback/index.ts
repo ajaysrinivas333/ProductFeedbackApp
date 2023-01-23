@@ -41,6 +41,11 @@ export default async function handler(
 				const { title, description, category } = req?.body;
 				const productId = req?.query?.productId;
 
+				const productOwner = await Product.exists({ _id: productId, userId });
+
+				if (productOwner)
+					throw new Error('Cannot add feedback to your own product');
+
 				if (!(await Product.exists({ _id: productId })))
 					throw new Error("Product doesn't exist");
 
