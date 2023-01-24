@@ -43,6 +43,7 @@ const feedbackSchema = new Schema(
 		},
 		position: {
 			type: Number,
+			default: null,
 		},
 		status: {
 			type: String,
