@@ -3,6 +3,8 @@
 .feedbackCard {
 	@extend .productCard;
 	font-family: var(--globalFont);
+	display: grid;
+	grid-template-columns: 7% 83% 10%;
 	.detailsWrapper {
 		margin: 0 10px;
 	}
@@ -21,6 +23,8 @@
 		align-self: flex-start;
 		margin: 0;
 		height: 56px;
+		max-height: 56px;
+		min-width: 20px;
 		padding: 10px;
 		padding-top: 3px;
 	}
@@ -35,6 +39,32 @@
 		.commentsIcon {
 			font-size: 20px;
 			color: #cdd2ee;
+		}
+	}
+}
+
+//Mobile Screen styles
+@media screen and (max-width: $mobileScreenWidth) {
+	.feedbackCard {
+		display: grid;
+		grid-template-columns: auto;
+		.detailsWrapper {
+			grid-row: 1;
+			margin: auto;
+		}
+		.upvoteButton {
+			grid-row: 2;
+			width: 50px;
+			margin-left: 5px;
+			flex-direction: row;
+			padding: 0;
+			height: 40px;
+			width: 80px;
+			align-items: center;
+			justify-content: space-evenly;
+		}
+		.comments {
+			grid-row: 2;
 		}
 	}
 }
