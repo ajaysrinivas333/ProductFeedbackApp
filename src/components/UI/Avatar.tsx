@@ -7,6 +7,7 @@ export interface AvatarProps {
 	slug: string;
 	height: number;
 	width: number;
+	onClick?: () => void;
 }
 
 const Avatar = (props: AvatarProps) => {
@@ -18,6 +19,7 @@ const Avatar = (props: AvatarProps) => {
 			height={props.height}
 			width={props.width}
 			priority
+			onClick={props?.onClick}
 		/>
 	);
 };
