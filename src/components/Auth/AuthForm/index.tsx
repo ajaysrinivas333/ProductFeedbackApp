@@ -96,6 +96,7 @@ const AuthForm = (props: AuthFormProps) => {
 			<Button
 				text={isLogin ? 'Login' : 'Sign Up'}
 				className={styles.submitButton}
+				type='submit'
 			/>
 		</form>
 	);
