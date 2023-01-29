@@ -7,11 +7,12 @@ interface UserRunDownProps extends AvatarProps {
 	className?: string;
 	usernameStyles?: React.CSSProperties;
 	subTextStyles?: React.CSSProperties;
+	onClick?: () => void;
 }
 const UserRunDown = (props: UserRunDownProps) => {
 	const classes = `userRunDownDetails ${props.className}`;
 	return (
-		<div className={classes}>
+		<div className={classes} onClick={props?.onClick}>
 			<Avatar height={props.height} width={props.width} slug={props.slug} />
 			<div className={'userTextDetails'}>
 				<span style={props.usernameStyles}>{props.username}</span>

@@ -15,13 +15,40 @@ import connectDb from '@api/db/connection';
 import { findProductsWithUserDetails } from '@api/helpers';
 import { Product } from '@api/types';
 import { PRODUCT_CATEGORIES } from '@api/constants';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { productCategories } from 'lib/constants';
 import LoginText from 'components/Auth/LoginText';
 import Router from 'next/router';
 import NoProductsScreen from 'components/UI/NoProductsScreen';
+import { Menu, MenuContainer, MenuItem } from 'components/UI/Menu';
+import { BiLogOut } from 'react-icons/bi';
 
 type ProductCategoriesState = 'All' | keyof typeof PRODUCT_CATEGORIES;
+
+type SignoutMenuProps = {
+	children: React.ReactNode;
+	open: boolean;
+	closeMenu: () => void;
+	className?: string;
+};
+
+const SignOutMenuContainer = (props: SignoutMenuProps) => {
+	return (
+		<MenuContainer className={props.className}>
+			{props.children}
+			<Menu
+				open={props.open}
+				className={styles.logOutMenu}
+				onBlur={props.closeMenu}
+			>
+				<MenuItem className={styles.menuItem} onClick={signOut}>
+					<BiLogOut />
+					<span>Sign out</span>
+				</MenuItem>
+			</Menu>
+		</MenuContainer>
+	);
+};
 
 type CategoryItemsProps = {
 	categories: string[];
@@ -117,32 +144,51 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 		isAuthenticated ? setMyProductView(true) : Router.replace('/auth');
 	};
 
+	const {
+		open: logoutOpen,
+		openMenu: openLogoutMenu,
+		closeMenu: closeLogoutMenu,
+	} = useMenu();
+
 	return (
 		<main className={styles.mainLayout}>
 			<aside className={styles.sideLayout}>
 				<Card className={styles.box}>
 					{isAuthenticated ? (
-						<UserRunDown
+						<SignOutMenuContainer
+							open={logoutOpen}
+							closeMenu={closeLogoutMenu}
 							className={styles.hiddenUser}
-							height={45}
-							width={45}
-							slug={session?.user?.id as string}
-							username={session?.user?.name as string}
-							subText={`@${getUserNameFromEmail(
-								session?.user?.email as string,
-							)}`}
-						/>
+						>
+							<UserRunDown
+								className={styles.userDetails}
+								onClick={openLogoutMenu}
+								height={45}
+								width={45}
+								slug={session?.user?.id as string}
+								username={session?.user?.name as string}
+								subText={`@${getUserNameFromEmail(
+									session?.user?.email as string,
+								)}`}
+							/>
+						</SignOutMenuContainer>
 					) : (
 						<LoginText className={styles.hiddenUser} />
 					)}
 
 					<div className={styles.avatarWithHamburgerMenu}>
 						{isAuthenticated ? (
-							<Avatar
-								height={45}
-								width={45}
-								slug={session?.user?.id as string}
-							/>
+							<SignOutMenuContainer
+								open={logoutOpen}
+								closeMenu={closeLogoutMenu}
+							>
+								<Avatar
+									onClick={openLogoutMenu}
+									height={45}
+									width={45}
+									slug={session?.user?.id as string}
+								/>
+							</SignOutMenuContainer>
 						) : (
 							<LoginText />
 						)}

@@ -1,5 +1,7 @@
 @import './variables';
 
+
+
 .mainLayout {
 	height: 100vh;
 	width: max(700px, 940px);
@@ -57,6 +59,30 @@
 					rgba(163, 55, 246, 1) 60%,
 					rgba(40, 167, 237, 1) 100%);
 			color: #fff;
+
+			.userDetails {
+				cursor: pointer;
+			}
+
+			.logOutMenu {
+
+				.menuItem {
+					color: black;
+					display: flex;
+					align-items: center;
+					gap: 14px;
+
+					span {
+						padding: 0;
+					}
+
+					&:hover {
+						color: red;
+					}
+				}
+			}
+
+
 
 			.avatarWithHamburgerMenu {
 				display: none;
@@ -214,22 +240,27 @@
 					justify-content: space-between;
 					z-index: 4;
 
+
+
 					* {
 						margin: 0;
 					}
 
 					.hiddenUser {
 						display: none;
+
 					}
 
 					.avatarWithHamburgerMenu {
 						display: flex;
 						align-items: center;
 						gap: 10px;
+						cursor: pointer;
 
 						svg {
 							cursor: pointer;
 							transition: 0.2s;
+
 							&.hamburger {
 								font-size: 35px;
 							}
