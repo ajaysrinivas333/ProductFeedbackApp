@@ -1,0 +1,77 @@
+@import './variables';
+
+.mainLayout {
+    height: 100vh;
+    width: max(700px, 940px);
+    margin: auto;
+    padding: 10px;
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    overflow: auto;
+}
+
+.contentLayout {
+    flex-basis: 80%;
+    margin-top: 60px;
+}
+
+
+.sideLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    flex-basis: 20%;
+    position: sticky;
+    top: 59px;
+    align-self: start;
+}
+
+// Tablet styles
+
+@media screen and (max-width: $tabletScreenWidth) {
+    .mainLayout {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        width: auto;
+    }
+
+
+    .contentLayout {
+        margin-top: 0;
+        width: auto;
+    }
+
+    .sideLayout {
+        display: flex;
+        flex-direction: row;
+        position: static;
+    }
+
+
+}
+
+// Mobile styles
+
+@media screen and (max-width: $mobileScreenWidth) {
+    .mainLayout {
+        width: auto;
+        padding: 0;
+    }
+
+    .contentLayout {
+        margin: 0;
+        margin-top: 80px;
+        // padding: 10px;
+    }
+
+
+    .sideLayout {
+        width: 100%;
+        position: relative;
+        top: 0;
+        flex-basis: unset;
+
+    }
+}

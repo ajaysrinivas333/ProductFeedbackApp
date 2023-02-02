@@ -22,8 +22,10 @@ import Router from 'next/router';
 import NoProductsScreen from 'components/UI/NoProductsScreen';
 import { Menu, MenuContainer, MenuItem } from 'components/UI/Menu';
 import { BiLogOut } from 'react-icons/bi';
-
-type ProductCategoriesState = 'All' | keyof typeof PRODUCT_CATEGORIES;
+import Categories from 'components/Layout/Categories';
+import { ProductCategoriesState } from 'types';
+import useAuth from 'hooks/use-auth';
+import { ContentLayout, MainLayout, SideLayout } from 'components/Layout/HomeLayout';
 
 type SignoutMenuProps = {
 	children: React.ReactNode;
@@ -32,6 +34,7 @@ type SignoutMenuProps = {
 	className?: string;
 };
 
+// TODO: Fix signout-menu popup on resize
 const SignOutMenuContainer = (props: SignoutMenuProps) => {
 	return (
 		<MenuContainer className={props.className}>
@@ -50,32 +53,6 @@ const SignOutMenuContainer = (props: SignoutMenuProps) => {
 	);
 };
 
-type CategoryItemsProps = {
-	categories: string[];
-	onClick: (v: ProductCategoriesState) => void;
-	activeCategory: ProductCategoriesState;
-};
-
-const CategoryItems = (props: CategoryItemsProps) => {
-	return (
-		<Fragment>
-			{props.categories?.map((category, i) => {
-				return (
-					<span
-						onClick={() => props.onClick(category as ProductCategoriesState)}
-						className={`${styles.category} ${
-							category === props.activeCategory ? styles.active : ''
-						}`}
-						key={category}
-					>
-						{category}
-					</span>
-				);
-			})}
-		</Fragment>
-	);
-};
-
 type HomePageProps = {
 	products: Product[];
 };
@@ -89,7 +66,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 		useState<ProductCategoriesState>('All');
 	const { data: session, status } = useSession();
 
-	const isAuthenticated = status === 'authenticated';
+	const { isAuthenticated, isLoading } = useAuth();
 
 	const changeActiveCategory = (value: ProductCategoriesState) => {
 		setActiveCategory(value);
@@ -151,9 +128,9 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	} = useMenu();
 
 	return (
-		<main className={styles.mainLayout}>
-			<aside className={styles.sideLayout}>
-				<Card className={styles.box}>
+		<MainLayout>
+			<SideLayout>
+				<Card className={`${styles.sideCard} ${styles.profileCard}`}>
 					{isAuthenticated ? (
 						<SignOutMenuContainer
 							open={logoutOpen}
@@ -207,16 +184,16 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 						<p>Feedback board</p>
 					</div>
 				</Card>
-				<Card className={styles.box}>
-					<CategoryItems
-						categories={productCategories}
-						onClick={changeActiveCategory}
-						activeCategory={activeCategory}
-					/>
-				</Card>
-			</aside>
+				<Categories
+					className={styles.categoryCard}
+					styles={styles}
+					categories={productCategories}
+					onClick={changeActiveCategory}
+					activeCategory={activeCategory}
+				/>
+			</SideLayout>
 
-			<section className={styles.contentLayout}>
+			<ContentLayout>
 				<Navbar onSortBy={handleSort} productCount={productData.length} />
 				<div className={styles.productSwitchTabContainer}>
 					<div className={styles.productSwitchTabWrapper}>
@@ -260,18 +237,20 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 						/>
 					))
 				)}
-			</section>
+			</ContentLayout>
 			<Drawer className={styles.drawer} open={open} onBlur={closeMenu}>
 				<h3>Filter by Categories</h3>
-				<Card className={`shadow ${styles.drawerCategoryItems}`}>
-					<CategoryItems
-						categories={productCategories}
-						onClick={changeActiveCategory}
-						activeCategory={activeCategory}
-					/>
-				</Card>
+				<Categories
+					className={`shadow ${styles.drawerCategoryItems} 
+					${styles.categoryCard}
+					`}
+					styles={styles}
+					categories={productCategories}
+					onClick={changeActiveCategory}
+					activeCategory={activeCategory}
+				/>
 			</Drawer>
-		</main>
+		</MainLayout>
 	);
 };
 
