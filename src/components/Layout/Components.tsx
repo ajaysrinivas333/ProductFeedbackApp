@@ -42,6 +42,7 @@ export const SignOutMenuContainer = (props: SignoutMenuProps) => {
 type ProfileCardProps = {
 	hamburgerMenuOpen: boolean;
 	openHamburgerMenu: () => void;
+	className?: string;
 };
 
 export const ProfileCard = React.memo((props: ProfileCardProps) => {
@@ -59,8 +60,12 @@ export const ProfileCard = React.memo((props: ProfileCardProps) => {
 		closeMenu: closeMobileSignoutMenu,
 	} = useMenu();
 
+	const classes = `${styles.sideCard} ${styles.profileCard} ${
+		props?.className ?? ''
+	}`;
+
 	return (
-		<Card className={`${styles.sideCard} ${styles.profileCard}`}>
+		<Card className={classes}>
 			{isAuthenticated ? (
 				<SignOutMenuContainer
 					open={signoutLargeMenuOpen}
@@ -121,7 +126,7 @@ type CategoryType = ProductCategoriesState | FeedbackCategoriesState;
 
 type CategoryProps = {
 	categories: string[];
-	onClick: React.Dispatch<React.SetStateAction<ProductCategoriesState>>;
+	onClick: React.Dispatch<React.SetStateAction<any>>;
 	activeCategory: CategoryType;
 	className?: string;
 };

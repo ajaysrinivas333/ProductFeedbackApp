@@ -9,3 +9,12 @@ export const productCategories = [
 	'Social',
 	'Finance',
 ];
+
+export const feedbackCategories = [
+	'All',
+	'UI',
+	'UX',
+	'Bug',
+	'Feature',
+	'Enhancement',
+];
