@@ -11,7 +11,7 @@ import connectDb from '@api/db/connection';
 import { findProductsWithUserDetails } from '@api/helpers';
 import { Product } from '@api/types';
 import { useSession } from 'next-auth/react';
-import { productCategories } from 'lib/constants';
+import { productCategories, productSortOptions } from 'lib/constants';
 import Router from 'next/router';
 import NoProductsScreen from 'components/UI/NoProductsScreen';
 import { Categories } from 'components/Layout/Components';
@@ -100,7 +100,14 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 			</SideLayout>
 
 			<ContentLayout>
-				<Navbar onSortBy={handleSort} productCount={productData.length} />
+				<Navbar
+					onSortBy={handleSort}
+					itemCount={productData.length}
+					sortOptions={productSortOptions}
+					buttonLink={'/add-product'}
+					buttonInnerText={'Add Product'}
+					itemType={'Products'}
+				/>
 				<div className={styles.productSwitchTabContainer}>
 					<div className={styles.productSwitchTabWrapper}>
 						<span
