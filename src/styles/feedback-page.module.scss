@@ -1,10 +1,9 @@
 @import './variables.scss';
 
-
 @media screen and (max-width: $tabletScreenWidth) {
-
-    .feedbackProfileCard,
-    .feedbackCategories {
-        flex-basis: 35%;
-    }
+	.feedbackProfileCard,
+	.feedbackCategories,
+	.roadMapCard {
+		flex-basis: 35%;
+	}
 }

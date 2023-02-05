@@ -40,8 +40,7 @@ const FeedbackHomePage = () => {
 					activeCategory={activeCategory}
 					onClick={setActiveCategory}
 				/>
-				<RoadMapCard />
-				{/* <ProfileCard hamburgerMenuOpen={open} openHamburgerMenu={openMenu} /> */}
+				<RoadMapCard className={styles.roadMapCard} />
 			</SideLayout>
 			<ContentLayout>
 				<Navbar
