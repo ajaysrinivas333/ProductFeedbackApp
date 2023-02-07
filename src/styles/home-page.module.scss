@@ -1,8 +1,6 @@
 @import './variables';
 
-.drawer {
-	display: none;
-}
+@include drawerStyles;
 
 .productSwitchTabContainer {
 	position: relative;
@@ -55,25 +53,10 @@
 
 //  Tablet screen styles
 
-@media screen and (max-width: $tabletScreenWidth) {
-}
+@media screen and (max-width: $tabletScreenWidth) {}
 
 // Mobile screen styles
 
 @media screen and (max-width: $mobileScreenWidth) {
-	.drawer {
-		display: block;
-
-		.drawerCategoryItems {
-			width: 100%;
-			display: flex;
-			flex-wrap: wrap;
-			gap: 14px;
-			margin-top: 20px;
-
-			.category {
-				font-size: 16px;
-			}
-		}
-	}
+	@include drawerStylesForMobile;
 }

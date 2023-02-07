@@ -18,9 +18,10 @@ import ProductCard from 'components/Product/ProductCard';
 import { formatDate } from 'lib';
 import { useSession } from 'next-auth/react';
 import FeedbackCard from 'components/Feedback/FeedbackCard';
+import Drawer from 'components/UI/Drawer';
 
 const FeedbackHomePage = () => {
-	const { open, openMenu } = useMenu();
+	const { open, openMenu, closeMenu } = useMenu();
 	const [activeCategory, setActiveCategory] =
 		useState<FeedbackCategoriesState>('All');
 
@@ -56,6 +57,16 @@ const FeedbackHomePage = () => {
 					<FeedbackCard key={i} />
 				))}
 			</ContentLayout>
+			<Drawer className={styles.drawer} open={open} onBlur={closeMenu}>
+				<h4>Filter by Categories</h4>
+				<Categories
+					className={`shadow ${styles.drawerCategoryItems} `}
+					categories={feedbackCategories}
+					onClick={setActiveCategory}
+					activeCategory={activeCategory}
+				/>
+				<RoadMapCard className={`${styles.roadMapCard} shadow`} />
+			</Drawer>
 		</MainLayout>
 	);
 };

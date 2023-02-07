@@ -152,7 +152,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 				)}
 			</ContentLayout>
 			<Drawer className={styles.drawer} open={open} onBlur={closeMenu}>
-				<h3>Filter by Categories</h3>
+				<h4>Filter by Categories</h4>
 				<Categories
 					className={`shadow ${styles.drawerCategoryItems} 
 					${styles.categoryCard}

@@ -11,3 +11,34 @@ $mobileScreenWidth: 768px;
   font-size: 13px;
   display: inline-block;
 }
+
+@mixin drawerStyles {
+  .drawer {
+    display: none;
+  }
+}
+
+@mixin drawerStylesForMobile {
+  .drawer {
+    display: block;
+
+    color: #3a4374;
+
+    .drawerCategoryItems {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 20px;
+
+      .category {
+        font-size: 16px;
+      }
+    }
+
+    .roadMapCard {
+      margin-top: 20px;
+      display: flex;
+    }
+  }
+}
