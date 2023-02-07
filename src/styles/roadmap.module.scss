@@ -1,0 +1,78 @@
+@import './variables.scss';
+
+.roadMapWrapper {
+	color: #3a4374;
+	display: flex;
+	flex-direction: column;
+	cursor: pointer;
+	overflow-wrap: break-word;
+	width: 100%;
+	padding: 20px;
+
+	.roadMap {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 25px;
+	}
+
+	.viewButton {
+		color: #4661ea;
+		border: none;
+		font-family: var(--globalFont);
+		background-color: inherit;
+		font-weight: 600;
+	}
+
+	.roadmapList {
+		width: 100%;
+
+		div {
+			font-size: 16px;
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 10px;
+
+			span:nth-of-type(2) {
+				font-weight: 500;
+			}
+
+			.bulletIcon {
+				font-size: 10px;
+				border-radius: 50%;
+				margin-right: 15px;
+			}
+
+			&:nth-of-type(1) {
+				.bulletIcon {
+					color: #f49f85;
+				}
+			}
+
+			&:nth-of-type(2) {
+				.bulletIcon {
+					color: #ad1fea;
+				}
+			}
+
+			&:nth-of-type(3) {
+				.bulletIcon {
+					color: #62bcfa;
+				}
+			}
+		}
+	}
+}
+
+
+//  Tablet screen styles
+
+@media screen and (max-width: $tabletScreenWidth) {}
+
+// Mobile screen styles
+
+@media screen and (max-width: $mobileScreenWidth) {
+	.roadMapWrapper {
+		display: none;
+
+	}
+}

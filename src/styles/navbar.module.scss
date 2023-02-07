@@ -67,6 +67,11 @@
 				width: 100%;
 				// flex-basis: 30%;
 				font-family: var(--globalFont);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-wrap: nowrap;
+				gap: 0
 			}
 		}
 	}
@@ -94,7 +99,8 @@
 
 			a {
 				.addProjectButton {
-					font-size: 13px;
+					// font-size: 11px;
+					font-size: min(3.6vw, 11px);
 					min-width: 110px;
 				}
 			}

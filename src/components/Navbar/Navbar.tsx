@@ -1,82 +1,131 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
 import useMenu from '../../hooks/use-menu';
 import styles from '../../styles/navbar.module.scss';
-import Button from '../UI/Button';
+import { ButtonWithChild } from '../UI/Button';
 import { MenuContainer, Menu, MenuItem } from '../UI/Menu';
 import { BsChevronDown } from 'react-icons/bs';
 import SuggestionIcon from '../UI/SuggestionIcon';
 import { TiTick } from 'react-icons/ti';
 import Link from 'next/link';
-
-const productSortOptions: string[] = ['Most Feedbacks', 'Least Feedbacks'];
+import { MdAdd } from 'react-icons/md';
 
 type NavbarProps = {
-  onSortBy: (v: string) => void;
-  productCount: number;
+	onSortBy: (v: string) => void;
+	itemCount: number;
+	sortOptions: string[];
+	buttonLink: string;
+	buttonInnerText: React.ReactElement | string;
+	itemType: 'Products' | 'Feedbacks';
 };
 
-const Navbar = ({ onSortBy, productCount }: NavbarProps) => {
-  const { open, openMenu, closeMenu } = useMenu();
-  const [sortByOption, setSortByOption] = useState<string>(
-    productSortOptions[0]
-  );
-  const [closedWithMenuItem, setClosedWithMenuItem] = useState<boolean>(false);
+const Navbar = ({
+	onSortBy,
+	itemCount,
+	sortOptions,
+	buttonLink,
+	buttonInnerText,
+	itemType,
+}: NavbarProps) => {
+	const { open, openMenu, closeMenu } = useMenu();
+	const [sortByOption, setSortByOption] = useState<string>(sortOptions[0]);
+	const [closedWithMenuItem, setClosedWithMenuItem] = useState<boolean>(false);
 
-  const sortProduct = (value: string) => {
-    setSortByOption(value);
-    onSortBy(value);
-    setClosedWithMenuItem(true);
-    closeMenu();
-  };
+	const sortProduct = (value: string) => {
+		setSortByOption(value);
+		onSortBy(value);
+		setClosedWithMenuItem(true);
+		closeMenu();
+	};
 
-  const onDropdownClick = () => {
-    setClosedWithMenuItem(false);
-    openMenu();
-  };
+	const onDropdownClick = () => {
+		setClosedWithMenuItem(false);
+		openMenu();
+	};
 
-  return (
-    <nav className={styles.navbarHome}>
-      <ul className={styles.listItems}>
-        <li>
-          <SuggestionIcon />
-          <>{productCount} Products</>
-        </li>
+	const classes = `${styles.navbarHome} ${
+		itemType === 'Feedbacks' ? styles.feedbackPage : ''
+	}`;
+	return (
+		<nav className={classes}>
+			<ul className={styles.listItems}>
+				<li>
+					<SuggestionIcon />
+					<>
+						{itemCount} {itemType}
+					</>
+				</li>
 
-        <li>
-          <span className={styles.sortBy}>Sort by: </span>
+				<li>
+					<span className={styles.sortBy}>Sort by: </span>
 
-          <MenuContainer className={styles.dropDownMenu}>
-            <span
-              role={'button'}
-              className={styles.dropDownButton}
-              onClick={onDropdownClick}
-            >
-              <span>{sortByOption}</span>
-              <BsChevronDown />
-            </span>
-            <Menu
-              className={styles.menu}
-              open={open}
-              onBlur={closeMenu}
-              closedWithMenuItem={closedWithMenuItem}
-            >
-              {productSortOptions.map((option) => (
-                <MenuItem onClick={() => sortProduct(option)} key={option}>
-                  {option}
-                  <span className={'icon'}>
-                    {sortByOption === option ? <TiTick /> : ''}
-                  </span>
-                </MenuItem>
-              ))}
-            </Menu>
-          </MenuContainer>
-        </li>
-        <Link href={'/add-product'}>
-          <Button className={styles.addProjectButton} text='Add Product' />
-        </Link>
-      </ul>
-    </nav>
-  );
+					<SortByMenu
+						open={open}
+						closedWithMenuItem={closedWithMenuItem}
+						sortByOption={sortByOption}
+						sortOptions={sortOptions}
+						closeMenu={closeMenu}
+						onMenuItemClick={sortProduct}
+						onButtonClick={onDropdownClick}
+					/>
+				</li>
+				<Link href={buttonLink}>
+					<ButtonWithChild className={styles.addProjectButton}>
+						<MdAdd />
+						{buttonInnerText}
+					</ButtonWithChild>
+				</Link>
+			</ul>
+		</nav>
+	);
 };
 
 export default React.memo(Navbar);
+
+type SortByMenuProps = {
+	open: boolean;
+	closedWithMenuItem: boolean;
+	sortByOption: string;
+	sortOptions: string[];
+	closeMenu: () => void;
+	onMenuItemClick: (s: string) => void;
+	onButtonClick: () => void;
+};
+
+export const SortByMenu = (props: SortByMenuProps) => {
+	const {
+		open,
+		sortByOption,
+		closedWithMenuItem,
+		sortOptions,
+		closeMenu,
+		onMenuItemClick,
+		onButtonClick,
+	} = props;
+	return (
+		<MenuContainer className={styles.dropDownMenu}>
+			<span
+				role={'button'}
+				className={styles.dropDownButton}
+				onClick={onButtonClick}
+			>
+				<span>{sortByOption}</span>
+				<BsChevronDown />
+			</span>
+			<Menu
+				className={styles.menu}
+				open={open}
+				onBlur={closeMenu}
+				closedWithMenuItem={closedWithMenuItem}
+			>
+				{sortOptions.map((option) => (
+					<MenuItem onClick={() => onMenuItemClick(option)} key={option}>
+						{option}
+						<span className={'icon'}>
+							{sortByOption === option ? <TiTick /> : ''}
+						</span>
+					</MenuItem>
+				))}
+			</Menu>
+		</MenuContainer>
+	);
+};

@@ -1,0 +1,17 @@
+@import './variables.scss';
+
+@include drawerStyles;
+
+@media screen and (max-width: $tabletScreenWidth) {
+
+	.feedbackProfileCard,
+	.feedbackCategories,
+	.roadMapCard {
+		flex-basis: 35%;
+	}
+}
+
+@media screen and (max-width: $mobileScreenWidth) {
+	@include drawerStylesForMobile;
+	
+}
