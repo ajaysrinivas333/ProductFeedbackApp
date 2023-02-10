@@ -20,6 +20,89 @@ import { useSession } from 'next-auth/react';
 import FeedbackCard from 'components/Feedback/FeedbackCard';
 import Drawer from 'components/UI/Drawer';
 
+const feedbackArray = [
+	{
+		_id: '63befa27395cf14c6c837453',
+		title: 'Make feedback cards dragable on Mobile!',
+		description:
+			"The feedback cards on the Roadmap page are only dragable on tablet/desktop. It'll be nice to have that functionality on Mobile",
+		category: 'Feature',
+		upvotesCount: 40,
+		upvotedUsers: [],
+		commentsCount: 10,
+		userId: '63bdbba7321830e0cf4f7a20',
+		productId: '63bdbe29321830e0cf4f7a24',
+		createdAt: '2023-01-11T18:04:23.586Z',
+		updatedAt: '2023-01-24T17:03:23.034Z',
+		user: {
+			_id: '63bdbba7321830e0cf4f7a20',
+			username: 'Cristiano Ronaldo',
+			email: 'cristiano@cr7.com',
+			__v: 0,
+		},
+	},
+	{
+		_id: '63befe57395cf14c6c83745a',
+		title: 'Make comments editable',
+		description:
+			"Users should be able to edit their comments. This isn't Twitter 😕",
+		category: 'Feature',
+		upvotesCount: 5,
+		upvotedUsers: [],
+		commentsCount: 20,
+		userId: '63bdbba7321830e0cf4f7a20',
+		productId: '63bdbe29321830e0cf4f7a24',
+		createdAt: '2023-01-11T18:22:15.551Z',
+		updatedAt: '2023-01-11T18:22:15.551Z',
+		user: {
+			_id: '63bdbba7321830e0cf4f7a20',
+			username: 'Cristiano Ronaldo',
+			email: 'cristiano@cr7.com',
+			__v: 0,
+		},
+	},
+	{
+		_id: '63beff16395cf14c6c837462',
+		title: 'Make comments editable',
+		description:
+			"Users should be able to edit their comments. This isn't Twitter 😕",
+		category: 'Feature',
+		upvotesCount: 30,
+		upvotedUsers: [],
+		commentsCount: 10,
+		userId: '63bdbba7321830e0cf4f7a20',
+		productId: '63bdbe29321830e0cf4f7a24',
+		createdAt: '2023-01-11T18:25:26.306Z',
+		updatedAt: '2023-01-11T18:25:26.306Z',
+		user: {
+			_id: '63bdbba7321830e0cf4f7a20',
+			username: 'Cristiano Ronaldo',
+			email: 'cristiano@cr7.com',
+			__v: 0,
+		},
+	},
+	{
+		_id: '63c973e3b3ec4e81af4c9c73',
+		title: 'Make comments editable',
+		description:
+			"Users should be able to edit their comments. This isn't Twitter 😕",
+		category: 'Feature',
+		upvotesCount: 1,
+		upvotedUsers: ['63bdaebb321830e0cf4f79fc'],
+		commentsCount: 0,
+		userId: '63bdaebb321830e0cf4f79fc',
+		productId: '63bdbe29321830e0cf4f7a24',
+		createdAt: '2023-01-19T16:46:27.869Z',
+		updatedAt: '2023-01-24T16:56:47.328Z',
+		user: {
+			_id: '63bdaebb321830e0cf4f79fc',
+			username: 'Varadarajan M',
+			email: 'varad2k12@gmail.com',
+			__v: 0,
+		},
+	},
+];
+
 const FeedbackHomePage = () => {
 	const { open, openMenu, closeMenu } = useMenu();
 	const [activeCategory, setActiveCategory] =
@@ -53,8 +136,8 @@ const FeedbackHomePage = () => {
 					itemType={'Feedbacks'}
 				/>
 
-				{[...new Array(10)].map((_, i) => (
-					<FeedbackCard key={i} />
+				{feedbackArray.map((feedback, i) => (
+					<FeedbackCard key={i} feedback={feedback} />
 				))}
 			</ContentLayout>
 			<Drawer className={styles.drawer} open={open} onBlur={closeMenu}>
