@@ -21,6 +21,7 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import mongoose from 'mongoose';
 import styles from '../../styles/feedback-page.module.scss';
+import connectDb from '@api/db/connection';
 
 type FeedbackHomePageProps = {
 	feedbacks: Feedback[];
@@ -69,8 +70,8 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 				{feedbacks.length === 0 ? (
 					<NoProductsScreen />
 				) : (
-					feedbackData?.map((feedback: Feedback, i: number) => (
-						<FeedbackCard key={i} feedback={feedback} />
+					feedbackData?.map((feedback: Feedback) => (
+						<FeedbackCard key={feedback._id} feedback={feedback} />
 					))
 				)}
 			</ContentLayout>
@@ -97,6 +98,7 @@ export const getStaticPaths: GetStaticPaths = (ctx) => {
 export const getStaticProps: GetStaticProps = async (context) => {
 	let feedbacks = [];
 	try {
+		await connectDb();
 		feedbacks = await findFeedbacksWithUserDetails({
 			productId: new mongoose.Types.ObjectId(
 				context.params?.productId as string,
