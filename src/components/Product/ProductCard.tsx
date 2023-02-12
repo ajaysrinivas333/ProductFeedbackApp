@@ -8,12 +8,14 @@ import useMenu from './../../hooks/use-menu';
 import { FiExternalLink } from 'react-icons/fi';
 import Router from 'next/router';
 import { makeUrl } from 'lib';
+import Link from 'next/link';
 interface Product {
 	name: string;
 	description: string;
 	category: string;
 	feedbackCount?: number;
 	link?: string;
+	id: string;
 }
 
 interface User {
@@ -41,8 +43,14 @@ interface ProductCardProps {
 const ProductDetails = (props: ProductDetailProps) => {
 	return (
 		<div className={styles.productDetails}>
-			<h4>{props.product.name}</h4>
-			<p>{props.product?.description}</p>
+			<Link
+				href={`/feedbacks/${props.product?.id}`}
+				className={styles.feedbackPageLink}
+				prefetch
+			>
+				<h4>{props.product.name}</h4>
+				<p>{props.product?.description}</p>
+			</Link>
 			{props.product?.link && (
 				<a
 					className={styles.link}
@@ -83,6 +91,7 @@ const ProductCard = ({
 		category,
 		feedbackCount,
 		link,
+		id,
 	};
 
 	return (
