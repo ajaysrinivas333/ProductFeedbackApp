@@ -46,7 +46,6 @@ const ProductDetails = (props: ProductDetailProps) => {
 			<Link
 				href={`/feedbacks/${props.product?.id}`}
 				className={styles.feedbackPageLink}
-				prefetch
 			>
 				<h4>{props.product.name}</h4>
 				<p>{props.product?.description}</p>

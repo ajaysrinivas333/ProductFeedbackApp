@@ -26,3 +26,11 @@ export const makeUrl = (url: string = '') =>
 	url.startsWith('https://') || url.startsWith('http://')
 		? url
 		: `http://${url}`;
+
+export const debounce = <T>(fn: Function, delay: number) => {
+	let timer: NodeJS.Timeout | null;
+	return (...args: T[]) => {
+		timer && clearTimeout(timer);
+		timer = setTimeout(() => fn(...args), delay);
+	};
+};

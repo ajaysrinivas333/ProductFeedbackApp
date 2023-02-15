@@ -29,13 +29,17 @@ export interface Feedback {
 
 interface FeedbackDetailProps {
 	feedback: Feedback;
+	onUpvote: (id: string) => void;
 }
 
 const FeedbackCard = (props: FeedbackDetailProps) => {
-	const { feedback } = props;
+	const { feedback, onUpvote } = props;
 	return (
 		<Card className={styles.feedbackCard}>
-			<ButtonWithChild className={styles.upvoteButton}>
+			<ButtonWithChild
+				className={styles.upvoteButton}
+				onClick={() => onUpvote(feedback?._id)}
+			>
 				<BiChevronUp className={styles.upIcon} />
 				<span>{feedback.upvotesCount}</span>
 			</ButtonWithChild>
