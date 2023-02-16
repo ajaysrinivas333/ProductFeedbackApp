@@ -13,7 +13,7 @@ import { Product } from '@api/types';
 import { useSession } from 'next-auth/react';
 import { productCategories, productSortOptions } from 'lib/constants';
 import Router from 'next/router';
-import NoProductsScreen from 'components/UI/NoProductsScreen';
+import EmptyMessageScreen from 'components/UI/EmptyMessageScreen';
 import { Categories } from 'components/Layout/Components';
 import { ProductCategoriesState } from 'types';
 import useAuth from 'hooks/use-auth';
@@ -27,6 +27,15 @@ import { ProfileCard } from 'components/Layout/Components';
 type HomePageProps = {
 	products: Product[];
 };
+
+const ShowText = () => (
+	<div className={styles.noproductsScreen}>
+		<span>There is nothing here.</span>
+		<span>
+			Get started by clicking on <strong>Add Product</strong>
+		</span>
+	</div>
+);
 
 const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	const { products } = props;
@@ -132,7 +141,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 					<hr />
 				</div>
 				{productData.length === 0 ? (
-					<NoProductsScreen />
+					<EmptyMessageScreen renderTextBelow={ShowText} />
 				) : (
 					productData?.map((product) => (
 						<ProductCard

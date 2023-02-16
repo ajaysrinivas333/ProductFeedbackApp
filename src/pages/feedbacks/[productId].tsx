@@ -9,7 +9,7 @@ import {
 import { Categories } from 'components/Layout/Components';
 import RoadMapCard from 'components/RoadMap/RoadMapCard';
 import Navbar from 'components/Navbar/Navbar';
-import NoProductsScreen from 'components/UI/NoProductsScreen';
+import EmptyMessageScreen from 'components/UI/EmptyMessageScreen';
 import FeedbackCard, { Feedback } from 'components/Feedback/FeedbackCard';
 import GlobalLoader from 'components/UI/GlobalLoader';
 import Drawer from 'components/UI/Drawer';
@@ -28,6 +28,12 @@ import useAuth from 'hooks/use-auth';
 type FeedbackHomePageProps = {
 	feedbacks: Feedback[];
 };
+
+const ShowText = () => (
+	<div className={styles.nofeedbacksScreen}>
+		<span>There are no feedbacks available.</span>
+	</div>
+);
 
 const upvoteApi = async (feedbackId: string, productId: string) => {
 	const res = await fetch(`/api/private/feedback/upvote?id=${feedbackId}`, {
@@ -146,13 +152,19 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 				/>
 
 				{feedbackData?.length === 0 ? (
-					<NoProductsScreen />
+					<EmptyMessageScreen
+						className={styles.nofeedbackWrapper}
+						renderTextBelow={ShowText}
+					/>
 				) : (
 					feedbackData?.map((feedback: Feedback) => (
 						<FeedbackCard
 							key={feedback._id}
 							feedback={feedback}
 							onUpvote={onUpvote}
+							isUpvoted={feedback.upvotedUsers.includes(
+								session?.user?.id as string,
+							)}
 						/>
 					))
 				)}
