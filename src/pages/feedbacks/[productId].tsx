@@ -63,6 +63,16 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 	const [feedbackData, setFeedbackData] = useState(feedbacks);
 	const { isAuthenticated } = useAuth();
 
+	const filterFeedbacksByCategory = useCallback(() => {
+		return activeCategory === 'All'
+			? feedbacks
+			: feedbacks?.filter((feedback) => feedback?.category === activeCategory);
+	}, [activeCategory, feedbacks]);
+
+	useEffect(() => {
+		setFeedbackData(() => filterFeedbacksByCategory());
+	}, [filterFeedbacksByCategory]);
+
 	const isUpvoted = useCallback(
 		(feedbackId: string) =>
 			feedbackData
