@@ -34,3 +34,14 @@ export const debounce = <T>(fn: Function, delay: number) => {
 		timer = setTimeout(() => fn(...args), delay);
 	};
 };
+
+export const getFeedbackText = (count: number) => {
+	switch (count) {
+		case 0:
+			return `No Feedbacks`;
+		case 1:
+			return `${count} Feedback`;
+		default:
+			return `${count} Feedbacks`;
+	}
+};

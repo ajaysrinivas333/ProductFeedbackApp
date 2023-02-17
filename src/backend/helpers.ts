@@ -24,10 +24,28 @@ export const findProductsWithUserDetails = async (
 		},
 		{
 			$lookup: {
+				from: 'feedbacks',
+				as: 'feedbacks',
+				localField: '_id',
+				foreignField: 'productId',
+			},
+		},
+		{
+			$addFields: {
+				feedbacksCount: { $size: '$feedbacks' },
+			},
+		},
+		{
+			$lookup: {
 				from: 'users',
 				as: 'user',
 				localField: 'userId',
 				foreignField: '_id',
+			},
+		},
+		{
+			$unwind: {
+				path: '$user',
 			},
 		},
 		{
@@ -37,15 +55,16 @@ export const findProductsWithUserDetails = async (
 				'user._id': 0,
 				'user.createdAt': 0,
 				'user.updatedAt': 0,
+				feedbacks: 0,
 			},
 		},
 		{
 			$sort: {
-				createdAt: -1,
+				feedbacksCount: -1,
+				updatedAt: -1,
 			},
 		},
 	]);
-
 	return products;
 };
 
@@ -56,7 +75,6 @@ export const findFeedbacksWithUserDetails = async (
 		{
 			$match: findOptions,
 		},
-
 		{
 			$lookup: {
 				from: 'users',

@@ -57,8 +57,8 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	const handleSort = useCallback((filter: string) => {
 		const sortFunc = (a: Record<string, any>, b: Record<string, any>) =>
 			filter === 'Most Feedbacks'
-				? a['name'].localeCompare(b['name'])
-				: b['name'].localeCompare(a['name']);
+				? b['feedbacksCount'] - a['feedbacksCount']
+				: a['feedbacksCount'] - b['feedbacksCount'];
 		setProductData((p) => {
 			const cp = [...p];
 			cp.sort(sortFunc);
@@ -155,12 +155,12 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 							id={product?._id as string}
 							createdAt={formatDate(product?.createdAt)}
 							avatarId={product?.userId}
-							displayName={product?.user[0].username}
+							displayName={product?.user?.username}
 							name={product?.name}
 							description={product?.description}
 							category={product?.category}
 							link={product?.link}
-							feedbackCount={390}
+							feedbacksCount={product?.feedbacksCount}
 							isProductOwner={product?.userId === session?.user?.id}
 						/>
 					))
