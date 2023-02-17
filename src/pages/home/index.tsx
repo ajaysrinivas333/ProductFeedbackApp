@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { GetStaticProps, NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import styles from '../../styles/home-page.module.scss';
 import ProductCard from '../../components/Product/ProductCard';
 import Navbar from '../../components/Navbar/Navbar';
-import { Drawer } from './../../components/UI/Drawer';
+import Drawer from './../../components/UI/Drawer';
 import useMenu from './../../hooks/use-menu';
 
 import { formatDate } from '../../lib';
@@ -13,7 +14,6 @@ import { Product } from '@api/types';
 import { useSession } from 'next-auth/react';
 import { productCategories, productSortOptions } from 'lib/constants';
 import Router from 'next/router';
-import EmptyMessageScreen from 'components/UI/EmptyMessageScreen';
 import { Categories } from 'components/Layout/Components';
 import { ProductCategoriesState } from 'types';
 import useAuth from 'hooks/use-auth';
@@ -23,6 +23,7 @@ import {
 	SideLayout,
 } from 'components/Layout/HomeLayout';
 import { ProfileCard } from 'components/Layout/Components';
+import GlobalLoader from 'components/UI/GlobalLoader';
 
 type HomePageProps = {
 	products: Product[];
@@ -37,6 +38,11 @@ const ShowText = () => (
 	</div>
 );
 
+const EmptyMessageScreen = dynamic(
+	() => import('components/UI/EmptyMessageScreen'),
+	{ loading: () => <GlobalLoader /> },
+);
+
 const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	const { products } = props;
 	const { open, openMenu, closeMenu } = useMenu();
@@ -48,7 +54,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 
 	const { isAuthenticated, isLoading } = useAuth();
 
-	const handleSort = (filter: string) => {
+	const handleSort = useCallback((filter: string) => {
 		const sortFunc = (a: Record<string, any>, b: Record<string, any>) =>
 			filter === 'Most Feedbacks'
 				? a['name'].localeCompare(b['name'])
@@ -58,7 +64,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 			cp.sort(sortFunc);
 			return cp;
 		});
-	};
+	}, []);
 
 	// Filter products when user isn't logged in
 	const filterAllProductsByCategory = useCallback(() => {

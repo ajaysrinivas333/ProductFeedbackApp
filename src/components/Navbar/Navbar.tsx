@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import useMenu from '../../hooks/use-menu';
 import styles from '../../styles/navbar.module.scss';
 import { ButtonWithChild } from '../UI/Button';
@@ -30,17 +30,20 @@ const Navbar = ({
 	const [sortByOption, setSortByOption] = useState<string>(sortOptions[0]);
 	const [closedWithMenuItem, setClosedWithMenuItem] = useState<boolean>(false);
 
-	const sortProduct = (value: string) => {
-		setSortByOption(value);
-		onSortBy(value);
-		setClosedWithMenuItem(true);
-		closeMenu();
-	};
+	const sortProduct = useCallback(
+		(value: string) => {
+			setSortByOption(value);
+			onSortBy(value);
+			setClosedWithMenuItem(true);
+			closeMenu();
+		},
+		[closeMenu, onSortBy],
+	);
 
-	const onDropdownClick = () => {
+	const onDropdownClick = useCallback(() => {
 		setClosedWithMenuItem(false);
 		openMenu();
-	};
+	}, [openMenu]);
 
 	const classes = `${styles.navbarHome} ${
 		itemType === 'Feedbacks' ? styles.feedbackPage : ''
@@ -91,7 +94,7 @@ type SortByMenuProps = {
 	onButtonClick: () => void;
 };
 
-export const SortByMenu = (props: SortByMenuProps) => {
+export const SortByMenu = React.memo((props: SortByMenuProps) => {
 	const {
 		open,
 		sortByOption,
@@ -101,6 +104,7 @@ export const SortByMenu = (props: SortByMenuProps) => {
 		onMenuItemClick,
 		onButtonClick,
 	} = props;
+
 	return (
 		<MenuContainer className={styles.dropDownMenu}>
 			<span
@@ -128,4 +132,5 @@ export const SortByMenu = (props: SortByMenuProps) => {
 			</Menu>
 		</MenuContainer>
 	);
-};
+});
+SortByMenu.displayName = 'SortByMenu';

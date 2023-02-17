@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { GenericProps } from './Menu';
 
 interface DrawerProps extends GenericProps {
@@ -42,4 +42,4 @@ export const Drawer: React.FC<DrawerProps> = ({
 	);
 };
 
-export default Drawer;
+export default React.memo(Drawer);

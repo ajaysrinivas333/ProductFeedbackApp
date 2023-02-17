@@ -9,7 +9,6 @@ import {
 import { Categories } from 'components/Layout/Components';
 import RoadMapCard from 'components/RoadMap/RoadMapCard';
 import Navbar from 'components/Navbar/Navbar';
-import EmptyMessageScreen from 'components/UI/EmptyMessageScreen';
 import FeedbackCard, { Feedback } from 'components/Feedback/FeedbackCard';
 import GlobalLoader from 'components/UI/GlobalLoader';
 import Drawer from 'components/UI/Drawer';
@@ -24,6 +23,12 @@ import styles from '../../styles/feedback-page.module.scss';
 import connectDb from '@api/db/connection';
 import { revalidatePage } from 'lib';
 import useAuth from 'hooks/use-auth';
+import dynamic from 'next/dynamic';
+
+const EmptyMessageScreen = dynamic(
+	() => import('components/UI/EmptyMessageScreen'),
+	{ loading: () => <GlobalLoader /> },
+);
 
 type FeedbackHomePageProps = {
 	feedbacks: Feedback[];
@@ -121,6 +126,10 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 		[downvote, isAuthenticated, isUpvoted, router, upvote],
 	);
 
+	const sortFeedbacks = useCallback((option: string) => {
+		console.log(option);
+	}, []);
+
 	if (router.isFallback) {
 		return <GlobalLoader />;
 	}
@@ -143,8 +152,8 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 			</SideLayout>
 			<ContentLayout>
 				<Navbar
-					onSortBy={(c) => console.log(c)}
-					itemCount={12}
+					onSortBy={sortFeedbacks}
+					itemCount={feedbackData?.length}
 					sortOptions={feedbackSortOptions}
 					buttonLink={'/add-product'}
 					buttonInnerText={'Add Feedback'}
