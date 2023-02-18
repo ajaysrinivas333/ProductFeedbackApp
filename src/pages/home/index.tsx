@@ -55,10 +55,14 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	const { isAuthenticated, isLoading } = useAuth();
 
 	const handleSort = useCallback((filter: string) => {
-		const sortFunc = (a: Record<string, any>, b: Record<string, any>) =>
-			filter === 'Most Feedbacks'
-				? b['feedbacksCount'] - a['feedbacksCount']
-				: a['feedbacksCount'] - b['feedbacksCount'];
+		const sortFunc = (a: Product, b: Product) => {
+			switch (filter) {
+				case 'Most Feedbacks':
+					return (b?.feedbacksCount ?? 0) - (a?.feedbacksCount ?? 0);
+				default:
+					return (a?.feedbacksCount ?? 0) - (b?.feedbacksCount ?? 0);
+			}
+		};
 		setProductData((p) => {
 			const cp = [...p];
 			cp.sort(sortFunc);
