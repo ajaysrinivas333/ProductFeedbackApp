@@ -136,8 +136,27 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 		[downvote, isAuthenticated, isUpvoted, router, upvote],
 	);
 
-	const sortFeedbacks = useCallback((option: string) => {
-		console.log(option);
+	const handleSort = useCallback((filter: string) => {
+		const sortFunc = (a: Feedback, b: Feedback) => {
+			switch (filter) {
+				case 'Most Upvotes':
+					return b['upvotesCount'] - a['upvotesCount'];
+				case 'Least Upvotes':
+					return a['upvotesCount'] - b['upvotesCount'];
+				case 'Most Comments':
+					return 1;
+				case 'Least Comments':
+					return 1;
+
+				default:
+					return a['upvotesCount'] - b['upvotesCount'];
+			}
+		};
+		setFeedbackData((feedback) => {
+			const cp = [...feedback];
+			cp.sort(sortFunc);
+			return cp;
+		});
 	}, []);
 
 	if (router.isFallback) {
@@ -162,7 +181,7 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 			</SideLayout>
 			<ContentLayout>
 				<Navbar
-					onSortBy={sortFeedbacks}
+					onSortBy={handleSort}
 					itemCount={feedbackData?.length}
 					sortOptions={feedbackSortOptions}
 					buttonLink={'/add-product'}
