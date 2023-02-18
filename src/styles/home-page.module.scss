@@ -51,9 +51,31 @@
 	}
 }
 
+.noproductsScreen {
+	text-align: center;
+	color: #3a4374;
+	display: flex;
+	flex-direction: column;
+	margin-top: 5px;
+	align-items: center;
+}
+
+.noproductsScreen span:nth-of-type(1) {
+	font-size: 14px;
+	margin-top: 20px;
+	font-weight: bold;
+}
+
+.noproductsScreen span:nth-of-type(2) {
+	font-size: 18px;
+	text-align: center;
+	margin-top: 5px;
+}
+
 //  Tablet screen styles
 
-@media screen and (max-width: $tabletScreenWidth) {}
+@media screen and (max-width: $tabletScreenWidth) {
+}
 
 // Mobile screen styles
 

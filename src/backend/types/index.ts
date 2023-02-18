@@ -25,7 +25,8 @@ export interface Product {
 	updatedAt: string | Date;
 	link?: string;
 	category: keyof typeof PRODUCT_CATEGORIES;
-	user: User[];
+	user: User;
+	feedbacksCount?: number;
 }
 
 export interface Feedback {

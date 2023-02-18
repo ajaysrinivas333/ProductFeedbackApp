@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { GetStaticProps, NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import styles from '../../styles/home-page.module.scss';
 import ProductCard from '../../components/Product/ProductCard';
 import Navbar from '../../components/Navbar/Navbar';
-import { Drawer } from './../../components/UI/Drawer';
+import Drawer from './../../components/UI/Drawer';
 import useMenu from './../../hooks/use-menu';
 
 import { formatDate } from '../../lib';
@@ -13,7 +14,6 @@ import { Product } from '@api/types';
 import { useSession } from 'next-auth/react';
 import { productCategories, productSortOptions } from 'lib/constants';
 import Router from 'next/router';
-import NoProductsScreen from 'components/UI/NoProductsScreen';
 import { Categories } from 'components/Layout/Components';
 import { ProductCategoriesState } from 'types';
 import useAuth from 'hooks/use-auth';
@@ -23,10 +23,25 @@ import {
 	SideLayout,
 } from 'components/Layout/HomeLayout';
 import { ProfileCard } from 'components/Layout/Components';
+import GlobalLoader from 'components/UI/GlobalLoader';
 
 type HomePageProps = {
 	products: Product[];
 };
+
+const ShowText = () => (
+	<div className={styles.noproductsScreen}>
+		<span>There is nothing here.</span>
+		<span>
+			Get started by clicking on <strong>Add Product</strong>
+		</span>
+	</div>
+);
+
+const EmptyMessageScreen = dynamic(
+	() => import('components/UI/EmptyMessageScreen'),
+	{ loading: () => <GlobalLoader /> },
+);
 
 const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	const { products } = props;
@@ -39,17 +54,21 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 
 	const { isAuthenticated, isLoading } = useAuth();
 
-	const handleSort = (filter: string) => {
-		const sortFunc = (a: Record<string, any>, b: Record<string, any>) =>
-			filter === 'Most Feedbacks'
-				? a['name'].localeCompare(b['name'])
-				: b['name'].localeCompare(a['name']);
+	const handleSort = useCallback((filter: string) => {
+		const sortFunc = (a: Product, b: Product) => {
+			switch (filter) {
+				case 'Most Feedbacks':
+					return (b?.feedbacksCount ?? 0) - (a?.feedbacksCount ?? 0);
+				default:
+					return (a?.feedbacksCount ?? 0) - (b?.feedbacksCount ?? 0);
+			}
+		};
 		setProductData((p) => {
 			const cp = [...p];
 			cp.sort(sortFunc);
 			return cp;
 		});
-	};
+	}, []);
 
 	// Filter products when user isn't logged in
 	const filterAllProductsByCategory = useCallback(() => {
@@ -132,7 +151,7 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 					<hr />
 				</div>
 				{productData.length === 0 ? (
-					<NoProductsScreen />
+					<EmptyMessageScreen renderTextBelow={ShowText} />
 				) : (
 					productData?.map((product) => (
 						<ProductCard
@@ -140,12 +159,12 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 							id={product?._id as string}
 							createdAt={formatDate(product?.createdAt)}
 							avatarId={product?.userId}
-							displayName={product?.user[0].username}
+							displayName={product?.user?.username}
 							name={product?.name}
 							description={product?.description}
 							category={product?.category}
 							link={product?.link}
-							feedbackCount={390}
+							feedbacksCount={product?.feedbacksCount}
 							isProductOwner={product?.userId === session?.user?.id}
 						/>
 					))

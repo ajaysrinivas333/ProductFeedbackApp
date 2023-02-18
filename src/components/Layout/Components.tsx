@@ -21,7 +21,7 @@ type SignoutMenuProps = {
 	className?: string;
 };
 
-export const SignOutMenuContainer = (props: SignoutMenuProps) => {
+export const SignOutMenuContainer = React.memo((props: SignoutMenuProps) => {
 	return (
 		<MenuContainer className={props.className}>
 			{props.children}
@@ -37,7 +37,8 @@ export const SignOutMenuContainer = (props: SignoutMenuProps) => {
 			</Menu>
 		</MenuContainer>
 	);
-};
+});
+SignOutMenuContainer.displayName = 'SignOutMenuContainer';
 
 type ProfileCardProps = {
 	hamburgerMenuOpen: boolean;
@@ -151,7 +152,8 @@ const CategoryItems = (props: CategoryProps) => {
 	);
 };
 
-export const Categories = (props: CategoryProps) => {
+export const Categories = React.memo((props: CategoryProps) => {
+
 	const cardClasses = `${styles.sideCard} ${styles.categoryCard} ${
 		props?.className ?? ''
 	}`;
@@ -164,4 +166,6 @@ export const Categories = (props: CategoryProps) => {
 			/>
 		</Card>
 	);
-};
+});
+
+Categories.displayName = 'Categories';

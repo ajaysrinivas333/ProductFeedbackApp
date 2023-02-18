@@ -13,7 +13,7 @@ interface User {
 	username: string;
 }
 
-interface Feedback {
+export interface Feedback {
 	user: User;
 	_id: string;
 	title: string;
@@ -29,46 +29,45 @@ interface Feedback {
 
 interface FeedbackDetailProps {
 	feedback: Feedback;
+	onUpvote: (id: string) => void;
+	isUpvoted: boolean;
 }
 
 const FeedbackCard = (props: FeedbackDetailProps) => {
+	const { feedback, onUpvote, isUpvoted } = props;
 	return (
 		<Card className={styles.feedbackCard}>
-			<ButtonWithChild className={styles.upvoteButton}>
+			<ButtonWithChild
+				className={styles.upvoteButton}
+				style={{
+					backgroundColor: isUpvoted ? '#cfd7ff' : '',
+				}}
+				onClick={() => onUpvote(feedback?._id)}
+			>
 				<BiChevronUp className={styles.upIcon} />
-
-				<span>{props.feedback.upvotesCount}</span>
+				<span>{feedback.upvotesCount}</span>
 			</ButtonWithChild>
 			<div className={styles.detailsWrapper}>
 				<UserRunDown
 					height={45}
 					width={45}
-					slug={props.feedback.user._id}
-					username={props.feedback.user.username}
-					subText={formatDate(props.feedback.createdAt)}
+					slug={feedback.user._id}
+					username={feedback.user.username}
+					subText={formatDate(feedback.createdAt)}
 					subTextStyles={{
 						color: 'grey',
 						fontWeight: 400,
 					}}
 				/>
 				<div className={styles.productDetails}>
-					<h4>{props.feedback.title}</h4>
-					<p>{props.feedback.description}</p>
-					<span className={styles.category}>{props.feedback.category}</span>
+					<h4>{feedback.title}</h4>
+					<p>{feedback.description}</p>
+					<span className={styles.category}>{feedback.category}</span>
 				</div>
-
-				{/* <div className={styles.productDetails}>
-					<h4>Product 123</h4>
-					<p>
-						Give us a roadmap to something, idk, buying a razer Help us choose
-						the right razer for us.
-					</p>
-					<span className={styles.category}>{'Music & Audio'}</span>
-				</div> */}
 			</div>
 			<div className={styles.comments}>
 				<FaComment className={styles.commentsIcon} />
-				<h4>{props.feedback.commentsCount}</h4>
+				<h4>{feedback.commentsCount}</h4>
 			</div>
 		</Card>
 	);

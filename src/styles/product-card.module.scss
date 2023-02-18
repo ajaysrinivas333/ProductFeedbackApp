@@ -1,5 +1,6 @@
 @import './variables';
 
+
 .productCard {
 	color: #3a4374;
 	width: 100%;
@@ -17,6 +18,14 @@
 			width: 100%;
 			word-break: break-word;
 			overflow-wrap: break-word;
+
+			.feedbackPageLink {
+				text-decoration: none;
+				color: initial;
+
+
+			}
+
 			.link {
 				display: flex;
 				margin-top: 6px;

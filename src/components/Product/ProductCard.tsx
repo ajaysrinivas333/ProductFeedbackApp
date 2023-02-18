@@ -7,13 +7,15 @@ import { Menu, MenuContainer, MenuItem } from '../UI/Menu';
 import useMenu from './../../hooks/use-menu';
 import { FiExternalLink } from 'react-icons/fi';
 import Router from 'next/router';
-import { makeUrl } from 'lib';
+import { getFeedbackText, makeUrl } from 'lib';
+import Link from 'next/link';
 interface Product {
 	name: string;
 	description: string;
 	category: string;
-	feedbackCount?: number;
+	feedbacksCount?: number;
 	link?: string;
+	id: string;
 }
 
 interface User {
@@ -32,7 +34,7 @@ interface ProductCardProps {
 	name: Product['name'];
 	description: Product['description'];
 	category: Product['category'];
-	feedbackCount: Product['feedbackCount'];
+	feedbacksCount: Product['feedbacksCount'];
 	link?: Product['link'];
 	isProductOwner: boolean;
 	id: string;
@@ -41,8 +43,13 @@ interface ProductCardProps {
 const ProductDetails = (props: ProductDetailProps) => {
 	return (
 		<div className={styles.productDetails}>
-			<h4>{props.product.name}</h4>
-			<p>{props.product?.description}</p>
+			<Link
+				href={`/feedbacks/${props.product?.id}`}
+				className={styles.feedbackPageLink}
+			>
+				<h4>{props.product.name}</h4>
+				<p>{props.product?.description}</p>
+			</Link>
 			{props.product?.link && (
 				<a
 					className={styles.link}
@@ -50,15 +57,13 @@ const ProductDetails = (props: ProductDetailProps) => {
 					target='_blank'
 					rel='noreferrer'
 				>
-					{`${makeUrl(props.product.link)}`} <FiExternalLink />
+					{`${makeUrl(props.product?.link)}`} <FiExternalLink />
 				</a>
 			)}
-			<span className={styles.category}>{props.product.category}</span>
-			{props.product?.feedbackCount && (
-				<span className={styles.feedbackCount}>
-					{props.product?.feedbackCount} Feedbacks!
-				</span>
-			)}
+			<span className={styles.category}>{props.product?.category}</span>
+			<span className={styles.feedbackCount}>
+				{getFeedbackText(props.product?.feedbacksCount ?? 0)}
+			</span>
 		</div>
 	);
 };
@@ -70,7 +75,7 @@ const ProductCard = ({
 	name,
 	description,
 	category,
-	feedbackCount,
+	feedbacksCount,
 	link,
 	isProductOwner,
 	id,
@@ -81,8 +86,9 @@ const ProductCard = ({
 		name,
 		description,
 		category,
-		feedbackCount,
+		feedbacksCount,
 		link,
+		id,
 	};
 
 	return (
