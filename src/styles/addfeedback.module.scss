@@ -1,0 +1,74 @@
+.addFeedbackContainer {
+	height: 100vh;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+
+	align-items: center;
+	justify-content: center;
+
+	.innerContainer {
+		max-width: min(90vw, 600px);
+		min-width: 290px;
+		height: 100%;
+	}
+
+	.addFeedbackCard {
+		position: relative;
+		width: 100%;
+		margin-top: 50px;
+		margin-bottom: 7%;
+		border-radius: 10px;
+
+		.plusButton,
+		.editButton {
+			background-image: radial-gradient(
+				ellipse at right top,
+				rgb(232, 77, 112) 0%,
+				rgb(163, 55, 246) 60%,
+				rgb(40, 167, 237) 100%
+			);
+			color: white;
+			font-size: 40px;
+			position: absolute;
+			top: -22px;
+			left: 38px;
+			border-radius: 36px;
+			padding: 7px;
+		}
+
+		.plusButton {
+			padding: 0;
+		}
+	}
+
+	.backButtonWrapper {
+		display: flex;
+		align-items: center;
+		margin-top: 7%;
+
+		.backButton {
+			text-align: left;
+			width: 100%;
+			padding: 0;
+
+			background-color: inherit;
+			padding: 10px 0px;
+			border: none;
+			border-radius: 10px;
+			color: #3a4374;
+			cursor: pointer;
+			font-size: 16px;
+			font-weight: 600;
+			outline: none;
+			transition: background-color 0.2s ease-in-out;
+			width: 30%;
+			font-family: var(--globalFont);
+		}
+
+		.backIcon {
+			font-size: 25px;
+			color: #4661e6;
+		}
+	}
+}

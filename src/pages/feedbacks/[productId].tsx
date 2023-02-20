@@ -184,7 +184,7 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 					onSortBy={handleSort}
 					itemCount={feedbackData?.length}
 					sortOptions={feedbackSortOptions}
-					buttonLink={'/add-product'}
+					buttonLink={`/add-feedback?productId=${router.query?.productId}`}
 					buttonInnerText={'Add Feedback'}
 					itemType={'Feedbacks'}
 				/>
