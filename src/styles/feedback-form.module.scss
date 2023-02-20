@@ -1,0 +1,177 @@
+.wrapper {
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+
+	.formControl {
+		display: grid;
+		grid-row-gap: 8px;
+		row-gap: 8px;
+
+		* {
+			margin: 0 !important;
+		}
+	}
+
+	* {
+		font-family: var(--globalFont) !important;
+		color: #3a4374;
+	}
+
+	label {
+		color: #3a4374;
+	}
+
+	.fieldName,
+	.inputBox,
+	.menuContainer,
+	.menu,
+	.dropdown,
+	.textArea {
+		width: 100%;
+	}
+
+	.inputBoxHelper {
+		font-family: var(--globalFont);
+		letter-spacing: 0.25px;
+		font-weight: 600;
+		font-size: 12px;
+		color: #ad1fea;
+
+		&.error {
+			color: red;
+		}
+	}
+
+	.formHeader,
+	.fieldName {
+		color: #3a4374;
+		font-weight: 800;
+	}
+
+	.formHeader {
+		font-size: 20px;
+	}
+
+	.fieldName {
+		font-size: 16px;
+	}
+
+	.inputBox {
+		font-size: 14px;
+		font-weight: 400;
+		height: 40px;
+		background-color: #f7f8fd;
+		padding: 7px;
+		border-radius: 6px;
+		border: 2px solid #f7f8fd;
+		outline: none;
+		padding: 0 10px;
+		transition: all 0.2s ease-in-out;
+
+		&:focus {
+			border: 2px solid #7589ec;
+		}
+
+		&::placeholder {
+			color: gray;
+			opacity: 0.8;
+			font-size: 14px;
+			font-weight: 400;
+		}
+	}
+
+	.menuContainer {
+		.dropdown {
+			color: #3a4374;
+			font-size: 14px;
+			font-weight: 400;
+			height: 40px;
+			background-color: #f7f8fd;
+			border-radius: 6px;
+			border: 2px solid #f7f8fd;
+			outline: none;
+			padding: 0 10px;
+			transition: all 0.2s ease-in-out;
+
+			&:focus {
+				border: 2px solid #7589ec;
+			}
+
+			&::placeholder {
+				color: gray;
+				opacity: 0.8;
+				font-size: 14px;
+				font-weight: 400;
+			}
+		}
+
+		.menu {
+			border-radius: 7px;
+			top: 0;
+			--tw-ring-offset-shadow: 0 0 #0000;
+			--tw-ring-shadow: 0 0 #0000;
+			--tw-shadow: 0px 10px 40px -7px rgba(55, 63, 104, 0.350492);
+			box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+				var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+			transition: all 0.15s ease-in;
+		}
+
+		.menuItem:hover {
+			color: #ad1fea;
+		}
+	}
+
+	.dropdown,
+	.menu .menuItem {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		transition: all 0.2s linear;
+	}
+}
+
+.textArea {
+	resize: vertical;
+	font-size: 14px;
+	font-weight: 400;
+	min-height: 80px;
+	height: 80px;
+	background-color: #f7f8fd;
+	padding: 7px;
+	border-radius: 6px;
+	border: 2px solid #f7f8fd;
+	outline: none;
+	padding: 5 10px;
+
+	&:focus {
+		border: 2px solid #7589ec;
+	}
+}
+
+.buttonLayout {
+	display: flex;
+	gap: 10px;
+	width: 100%;
+	margin-top: 40px;
+	justify-content: flex-end;
+
+	.submitButton {
+		background-color: #ad1fea;
+		padding: 10px;
+		border: none;
+		border-radius: 10px;
+		color: #ffffff;
+		cursor: pointer;
+		font-size: 16px;
+		font-weight: 600;
+		outline: none;
+		transition: background-color 0.2s ease-in-out;
+	}
+
+	.cancelButton {
+		@extend .submitButton;
+		background-color: #3a4374;
+	}
+}
