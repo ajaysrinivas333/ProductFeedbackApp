@@ -1,0 +1,21 @@
+@import './variables';
+
+.commentSectionWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px 24px;
+    color: #3a4374;
+}
+
+@media screen and (max-width: $mobileScreenWidth) {
+    .commentSectionWrapper {
+        width: 94%;
+        margin: 20px 0;
+        margin-left: 3%;
+
+
+
+    }
+}

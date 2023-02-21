@@ -2,6 +2,7 @@ import { ButtonWithChild } from 'components/UI/Button';
 import Card from 'components/UI/Card';
 import UserRunDown from 'components/User/UserRunDown';
 import { formatDate } from 'lib';
+import Link from 'next/link';
 import React from 'react';
 import { BiChevronUp } from 'react-icons/bi';
 import { FaComment } from 'react-icons/fa';
@@ -45,29 +46,33 @@ const FeedbackCard = (props: FeedbackDetailProps) => {
 				onClick={() => onUpvote(feedback?._id)}
 			>
 				<BiChevronUp className={styles.upIcon} />
-				<span>{feedback.upvotesCount}</span>
+				<span>{feedback?.upvotesCount}</span>
 			</ButtonWithChild>
 			<div className={styles.detailsWrapper}>
 				<UserRunDown
 					height={45}
 					width={45}
-					slug={feedback.user._id}
-					username={feedback.user.username}
-					subText={formatDate(feedback.createdAt)}
+					slug={feedback?.user?._id}
+					username={feedback?.user?.username}
+					subText={formatDate(feedback?.createdAt)}
 					subTextStyles={{
 						color: 'grey',
 						fontWeight: 400,
 					}}
 				/>
-				<div className={styles.productDetails}>
-					<h4>{feedback.title}</h4>
-					<p>{feedback.description}</p>
-					<span className={styles.category}>{feedback.category}</span>
-				</div>
+				<Link
+					href={`/discussion/${feedback._id}?productId=${feedback.productId}`}
+				>
+					<div className={styles.productDetails}>
+						<h4>{feedback?.title}</h4>
+						<p>{feedback?.description}</p>
+						<span className={styles.category}>{feedback?.category}</span>
+					</div>
+				</Link>
 			</div>
 			<div className={styles.comments}>
 				<FaComment className={styles.commentsIcon} />
-				<h4>{feedback.commentsCount}</h4>
+				<h4>{feedback?.commentsCount}</h4>
 			</div>
 		</Card>
 	);

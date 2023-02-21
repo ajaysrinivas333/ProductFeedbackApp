@@ -22,6 +22,8 @@ export const feedbackCategories = [
 export const productSortOptions: string[] = [
 	'Most Feedbacks',
 	'Least Feedbacks',
+	'Newest First',
+	'Oldest First',
 ];
 
 export const feedbackSortOptions: string[] = [
@@ -29,4 +31,6 @@ export const feedbackSortOptions: string[] = [
 	'Least Comments',
 	'Most Upvotes',
 	'Least Upvotes',
+	'Newest First',
+	'Oldest First',
 ];

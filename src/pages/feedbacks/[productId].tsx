@@ -24,6 +24,7 @@ import connectDb from '@api/db/connection';
 import { revalidatePage } from 'lib';
 import useAuth from 'hooks/use-auth';
 import dynamic from 'next/dynamic';
+import useUpvote from 'hooks/use-upvote';
 
 const EmptyMessageScreen = dynamic(
 	() => import('components/UI/EmptyMessageScreen'),
@@ -39,18 +40,6 @@ const ShowText = () => (
 		<span>There are no feedbacks available.</span>
 	</div>
 );
-
-const upvoteApi = async (feedbackId: string, productId: string) => {
-	const res = await fetch(`/api/private/feedback/upvote?id=${feedbackId}`, {
-		method: 'PATCH',
-		headers: {
-			'content-type': 'application/json',
-		},
-	});
-	const data = await res.json();
-	await revalidatePage(`/feedbacks/${productId}`);
-	return data;
-};
 
 const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 	feedbacks,
@@ -73,67 +62,32 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 		setFeedbackData(() => filterFeedbacksByCategory());
 	}, [filterFeedbacksByCategory]);
 
-	const isUpvoted = useCallback(
-		(feedbackId: string) =>
-			feedbackData
-				?.find((f) => f._id === feedbackId)
-				?.upvotedUsers.includes(session?.user.id ?? ''),
-		[feedbackData, session?.user.id],
+	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvote(
+		feedbackData,
+		setFeedbackData,
 	);
 
-	const upvote = useCallback(
-		(_id: string) => {
-			setFeedbackData((prevData) =>
-				prevData.map((feedback) =>
-					feedback._id === _id
-						? {
-								...feedback,
-								upvotesCount: feedback.upvotesCount + 1,
-								upvotedUsers: [
-									session?.user?.id as string,
-									...feedback.upvotedUsers,
-								],
-						  }
-						: feedback,
-				),
-			);
-		},
-		[session?.user?.id],
-	);
-
-	const downvote = useCallback(
-		(_id: string) => {
-			setFeedbackData((prevData) =>
-				prevData.map((feedback) =>
-					feedback._id === _id
-						? {
-								...feedback,
-								upvotesCount: feedback.upvotesCount - 1,
-								upvotedUsers: feedback.upvotedUsers.filter(
-									(f) => f !== session?.user.id,
-								),
-						  }
-						: feedback,
-				),
-			);
-		},
-		[session?.user.id],
-	);
+	const { productId } = router?.query ?? '';
 
 	const onUpvote = useCallback(
 		async (feedbackId: string) => {
 			if (isAuthenticated) {
 				isUpvoted(feedbackId) ? downvote(feedbackId) : upvote(feedbackId);
-				const res = await upvoteApi(
-					feedbackId,
-					router.query?.productId as string,
-				);
+				const res = await upvoteApi(feedbackId, productId as string);
 				return;
 			}
 
 			router.replace('/auth');
 		},
-		[downvote, isAuthenticated, isUpvoted, router, upvote],
+		[
+			downvote,
+			isAuthenticated,
+			isUpvoted,
+			productId,
+			router,
+			upvote,
+			upvoteApi,
+		],
 	);
 
 	const handleSort = useCallback((filter: string) => {
@@ -147,6 +101,16 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 					return 1;
 				case 'Least Comments':
 					return 1;
+
+				case 'Newest First':
+					return b?.createdAt
+						?.toString()
+						.localeCompare(a?.createdAt?.toString());
+
+				case 'Oldest First':
+					return a?.createdAt
+						?.toString()
+						.localeCompare(b.createdAt?.toString());
 
 				default:
 					return a['upvotesCount'] - b['upvotesCount'];

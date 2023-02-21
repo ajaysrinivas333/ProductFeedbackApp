@@ -11,6 +11,7 @@ import { TiTick } from 'react-icons/ti';
 import styles from '../../styles/product-form.module.scss';
 import Link from 'next/link';
 import { revalidatePage } from 'lib';
+import { useRouter } from 'next/router';
 
 export type FormData = {
 	name: string;
@@ -35,6 +36,7 @@ const ProductForm = (props: ProductFormProps) => {
 	const [closedWithMenuItem, setClosedWithMenuItem] = useState<boolean>(false);
 	const [loader, setLoader] = useState<boolean>(false);
 	const isCreateMode = props.mode === 'create';
+	const router = useRouter();
 
 	const {
 		register,
@@ -76,11 +78,7 @@ const ProductForm = (props: ProductFormProps) => {
 		});
 		const json = await res.json();
 		setLoader(false);
-		if (json.ok) {
-			await revalidatePage('/home');
-			// !done on purpose to trigger revalidation for homepage
-			window.location.href = '/home';
-		} else alert(json?.message);
+		json.ok ? router.push('/home') : alert(json?.message);
 	};
 
 	useEffect(() => {
