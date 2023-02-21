@@ -8,12 +8,41 @@ import { isAuthenticated, isEmpty } from '@api/helpers';
 import { FeedbackResponse } from '@api/types';
 import Feedback from '@api/models/feedback';
 import Product from '@api/models/product';
+import { isValidObjectId } from 'mongoose';
 
 export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<FeedbackResponse>,
 ) {
 	switch (req.method) {
+		case 'GET':
+			try {
+				// Extract this as function
+				const userId = await isAuthenticated(req);
+
+				if (!userId) throw new Error(`Authentication failed`);
+
+				if (!req.query?.id || !isValidObjectId(req.query?.id))
+					throw new Error('Invalid feedback id');
+
+				await connectDb();
+
+				const feedback = await Feedback.findOne(
+					{ _id: req.query.id },
+					{
+						title: 1,
+						description: 1,
+						category: 1,
+						userId: 1,
+					},
+				);
+
+				res.status(200).json({ ok: true, feedback });
+			} catch (error: any) {
+				res.status(400).json({ ok: false, message: error.message });
+			}
+			break;
+
 		case 'POST': {
 			try {
 				const userId = await isAuthenticated(req);
