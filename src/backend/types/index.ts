@@ -55,3 +55,15 @@ export interface FeedbackResponse extends APIResponse {
 	feedback?: Feedback;
 	feedbacks?: Feedback[];
 }
+
+export interface Comment {
+	comment: string;
+	parentId: mongoose.Types.ObjectId | string | null;
+	userId: mongoose.Types.ObjectId | string;
+	feedbackId: mongoose.Types.ObjectId | string;
+}
+
+export interface CommentResponse extends APIResponse {
+	comment?: Comment;
+	comments?: Comment[];
+}
