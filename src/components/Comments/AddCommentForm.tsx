@@ -65,7 +65,7 @@ const AddCommentForm = (props: CommentFormProps) => {
 				/>
 				{errors.comment ? (
 					<span className={styles.commentError}>
-						{errors?.comment?.message! ?? '12'}
+						{errors?.comment?.message! ?? ''}
 					</span>
 				) : (
 					''
