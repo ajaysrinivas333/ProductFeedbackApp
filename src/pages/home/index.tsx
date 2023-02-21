@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { GetStaticProps, NextPage } from 'next';
+import React, { useState, useEffect, useCallback, Fragment } from 'react';
+import { GetServerSideProps, GetStaticProps, NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import styles from '../../styles/home-page.module.scss';
 import ProductCard from '../../components/Product/ProductCard';
@@ -24,6 +24,7 @@ import {
 } from 'components/Layout/HomeLayout';
 import { ProfileCard } from 'components/Layout/Components';
 import GlobalLoader from 'components/UI/GlobalLoader';
+import Head from 'next/head';
 
 type HomePageProps = {
 	products: Product[];
@@ -108,85 +109,128 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 	};
 
 	return (
-		<MainLayout>
-			<SideLayout>
-				<ProfileCard hamburgerMenuOpen={open} openHamburgerMenu={openMenu} />
-				<Categories
-					categories={productCategories}
-					onClick={setActiveCategory}
-					activeCategory={activeCategory}
+		<Fragment>
+			<Head>
+				<meta name='title' content='Product Feedback Board' />
+				<title>Product Feedback Board</title>
+				<meta
+					name='keywords'
+					content='Products, feedbacks, SDLC, Software development, customer management, '
 				/>
-			</SideLayout>
+				{products?.map((p) => (
+					<meta
+						name='description'
+						key={Date.now() + p.name}
+						content={`${p.name} | ${p.description}`}
+					/>
+				))}
+				<meta name='robots' content='index, follow' />
+				<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+				<meta name='language' content='English' />
+				<meta name='author' content='Varadarajan M, Ajay Srinivas' />
+			</Head>
+			<MainLayout>
+				<SideLayout>
+					<ProfileCard hamburgerMenuOpen={open} openHamburgerMenu={openMenu} />
+					<Categories
+						categories={productCategories}
+						onClick={setActiveCategory}
+						activeCategory={activeCategory}
+					/>
+				</SideLayout>
 
-			<ContentLayout>
-				<Navbar
-					onSortBy={handleSort}
-					itemCount={productData.length}
-					sortOptions={productSortOptions}
-					buttonLink={'/add-product'}
-					buttonInnerText={'Add Product'}
-					itemType={'Products'}
-				/>
-				<div className={styles.productSwitchTabContainer}>
-					<div className={styles.productSwitchTabWrapper}>
+				<ContentLayout>
+					<Navbar
+						onSortBy={handleSort}
+						itemCount={productData.length}
+						sortOptions={productSortOptions}
+						buttonLink={'/add-product'}
+						buttonInnerText={'Add Product'}
+						itemType={'Products'}
+					/>
+					<div className={styles.productSwitchTabContainer}>
+						<div className={styles.productSwitchTabWrapper}>
+							<span
+								onClick={switchToMyProducts}
+								className={`${styles.tab} ${
+									myProductView ? styles.active : ''
+								}`}
+							>
+								My Products
+							</span>
+							<span
+								onClick={switchToAllProducts}
+								className={`${styles.tab} ${
+									!myProductView ? styles.active : ''
+								}`}
+							>
+								{' '}
+								All Products
+							</span>
+						</div>
 						<span
-							onClick={switchToMyProducts}
-							className={`${styles.tab} ${myProductView ? styles.active : ''}`}
-						>
-							My Products
-						</span>
-						<span
-							onClick={switchToAllProducts}
-							className={`${styles.tab} ${!myProductView ? styles.active : ''}`}
-						>
-							{' '}
-							All Products
-						</span>
+							className={`${styles.slider} ${
+								myProductView ? styles.myProductView : ''
+							}`}
+						></span>
+						<hr />
 					</div>
-					<span
-						className={`${styles.slider} ${
-							myProductView ? styles.myProductView : ''
-						}`}
-					></span>
-					<hr />
-				</div>
-				{productData.length === 0 ? (
-					<EmptyMessageScreen renderTextBelow={ShowText} />
-				) : (
-					productData?.map((product) => (
-						<ProductCard
-							key={product?._id as string}
-							id={product?._id as string}
-							createdAt={formatDate(product?.createdAt)}
-							avatarId={product?.userId}
-							displayName={product?.user?.username}
-							name={product?.name}
-							description={product?.description}
-							category={product?.category}
-							link={product?.link}
-							feedbacksCount={product?.feedbacksCount}
-							isProductOwner={product?.userId === session?.user?.id}
-						/>
-					))
-				)}
-			</ContentLayout>
-			<Drawer className={styles.drawer} open={open} onBlur={closeMenu}>
-				<h4>Filter by Categories</h4>
-				<Categories
-					className={`shadow ${styles.drawerCategoryItems} 
+					{productData.length === 0 ? (
+						<EmptyMessageScreen renderTextBelow={ShowText} />
+					) : (
+						productData?.map((product) => (
+							<ProductCard
+								key={product?._id as string}
+								id={product?._id as string}
+								createdAt={formatDate(product?.createdAt)}
+								avatarId={product?.userId}
+								displayName={product?.user?.username}
+								name={product?.name}
+								description={product?.description}
+								category={product?.category}
+								link={product?.link}
+								feedbacksCount={product?.feedbacksCount}
+								isProductOwner={product?.userId === session?.user?.id}
+							/>
+						))
+					)}
+				</ContentLayout>
+				<Drawer className={styles.drawer} open={open} onBlur={closeMenu}>
+					<h4>Filter by Categories</h4>
+					<Categories
+						className={`shadow ${styles.drawerCategoryItems} 
 					${styles.categoryCard}
 					`}
-					categories={productCategories}
-					onClick={setActiveCategory}
-					activeCategory={activeCategory}
-				/>
-			</Drawer>
-		</MainLayout>
+						categories={productCategories}
+						onClick={setActiveCategory}
+						activeCategory={activeCategory}
+					/>
+				</Drawer>
+			</MainLayout>
+		</Fragment>
 	);
 };
 
-// *Experimental ISR
-export const getStaticProps: GetStaticProps = async (context) => {
+// // *Experimental ISR
+// export const getStaticProps: GetStaticProps = async (context) => {
+// 	let products = [];
+// 	try {
+// 		await connectDb();
+// 		products = await findProductsWithUserDetails();
+// 	} catch (error: any) {
+// 		console.log(error.message);
+// 	} finally {
+// 		return {
+// 			props: {
+// 				products: JSON.parse(JSON.stringify(products)),
+// 			},
+// 			revalidate: 5,
+// 		};
+// 	}
+// };
+
+// SSR
+export const getServerSideProps: GetServerSideProps = async (context) => {
 	let products = [];
 	try {
 		await connectDb();
@@ -198,7 +242,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 			props: {
 				products: JSON.parse(JSON.stringify(products)),
 			},
-			revalidate: 5,
 		};
 	}
 };
