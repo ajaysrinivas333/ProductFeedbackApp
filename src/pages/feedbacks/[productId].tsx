@@ -102,6 +102,16 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 				case 'Least Comments':
 					return 1;
 
+				case 'Newest First':
+					return b?.createdAt
+						?.toString()
+						.localeCompare(a?.createdAt?.toString());
+
+				case 'Oldest First':
+					return a?.createdAt
+						?.toString()
+						.localeCompare(b.createdAt?.toString());
+
 				default:
 					return a['upvotesCount'] - b['upvotesCount'];
 			}

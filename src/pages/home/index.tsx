@@ -60,6 +60,18 @@ const HomePage: NextPage<HomePageProps> = (props: HomePageProps) => {
 			switch (filter) {
 				case 'Most Feedbacks':
 					return (b?.feedbacksCount ?? 0) - (a?.feedbacksCount ?? 0);
+				case 'Least Feedbacks':
+					return (a?.feedbacksCount ?? 0) - (b?.feedbacksCount ?? 0);
+				case 'Newest First':
+					return b?.createdAt
+						?.toString()
+						.localeCompare(a?.createdAt?.toString());
+
+				case 'Oldest First':
+					return a?.createdAt
+						?.toString()
+						.localeCompare(b.createdAt?.toString());
+
 				default:
 					return (a?.feedbacksCount ?? 0) - (b?.feedbacksCount ?? 0);
 			}
