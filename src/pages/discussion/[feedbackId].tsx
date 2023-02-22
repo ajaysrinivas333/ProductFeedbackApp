@@ -4,6 +4,7 @@ import AddCommentForm from 'components/Comments/AddCommentForm';
 import CommentSection from 'components/Comments/CommentSection';
 import FeedbackCard, { Feedback } from 'components/Feedback/FeedbackCard';
 import Button from 'components/UI/Button';
+import EmptyMessageScreen from 'components/UI/EmptyMessageScreen';
 import GlobalLoader from 'components/UI/GlobalLoader';
 import useAuth from 'hooks/use-auth';
 import useUpvote from 'hooks/use-upvote';
@@ -12,10 +13,9 @@ import { GetStaticProps } from 'next';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, Fragment } from 'react';
 import { BiChevronLeft } from 'react-icons/bi';
 import styles from '../../styles/discussion-page.module.scss';
-
 
 type DiscussionPageProps = {
 	feedback: Feedback[];
@@ -69,19 +69,27 @@ const DiscussionPage = (props: DiscussionPageProps) => {
 						<Button className={styles.backButton} text='Go Back' />
 					</Link>
 				</div>
-				{feedbackData && (
-					<FeedbackCard
-						feedback={feedbackData[0] ?? {}}
-						isUpvoted={feedbackData[0]?.upvotedUsers?.includes(
-							session?.user?.id as string,
+				{feedbackData.length > 0 ? (
+					<Fragment>
+						<FeedbackCard
+							feedback={feedbackData[0] ?? {}}
+							isUpvoted={feedbackData[0]?.upvotedUsers?.includes(
+								session?.user?.id as string,
+							)}
+							onUpvote={onUpvote}
+						/>
+
+						<AddCommentForm className={styles.commentForm} />
+
+						<CommentSection />
+					</Fragment>
+				) : (
+					<EmptyMessageScreen
+						renderTextBelow={() => (
+							<p style={{ marginTop: 30 }}>Nothing here</p>
 						)}
-						onUpvote={onUpvote}
 					/>
 				)}
-
-				<AddCommentForm className={styles.commentForm} />
-
-				<CommentSection />
 			</div>
 		</div>
 	);
@@ -95,7 +103,7 @@ export const getStaticPaths = () => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-	let feedback;
+	let feedback = [];
 	try {
 		await connectDb();
 		feedback = await findFeedbacksWithUserDetails({
