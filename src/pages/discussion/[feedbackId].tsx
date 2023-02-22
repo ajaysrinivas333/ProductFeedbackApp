@@ -69,7 +69,7 @@ const DiscussionPage = (props: DiscussionPageProps) => {
 						<Button className={styles.backButton} text='Go Back' />
 					</Link>
 				</div>
-				{feedbackData.length > 0 ? (
+				{feedbackData?.length > 0 ? (
 					<Fragment>
 						<FeedbackCard
 							feedback={feedbackData[0] ?? {}}
@@ -79,9 +79,8 @@ const DiscussionPage = (props: DiscussionPageProps) => {
 							onUpvote={onUpvote}
 						/>
 
-						<AddCommentForm className={styles.commentForm} />
-
 						<CommentSection />
+						
 					</Fragment>
 				) : (
 					<EmptyMessageScreen

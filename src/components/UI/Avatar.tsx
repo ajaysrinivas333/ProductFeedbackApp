@@ -8,13 +8,14 @@ export interface AvatarProps {
 	height: number;
 	width: number;
 	onClick?: () => void;
+	className?: string;
 }
 
 const Avatar = (props: AvatarProps) => {
 	return (
 		<Image
 			src={`${avatarUrl}/${props.slug}.svg`}
-			className='avatar'
+			className={`${props.className ?? ''} avatar`}
 			alt='Avatar'
 			height={props.height}
 			width={props.width}

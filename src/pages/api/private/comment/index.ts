@@ -4,6 +4,7 @@ import { CommentResponse } from '@api/types';
 import { isValidObjectId } from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import Comment from '@api/models/comment';
+import User from '@api/models/user';
 
 export default async function handler(
 	req: NextApiRequest,
@@ -29,17 +30,20 @@ export default async function handler(
 
 				const { comment, parentId } = req.body;
 
-				const newComment = await Comment.create({
-					comment,
-					parentId: parentId ?? null,
-					feedbackId: req.query.feedbackId,
-					userId,
-				});
+				const [user, commentDoc] = await Promise.all([
+					User.findOne({ _id: userId }, { password: 0 }),
+					Comment.create({
+						comment,
+						parentId: parentId ?? null,
+						feedbackId: req.query.feedbackId,
+						userId,
+					}),
+				]);
 
 				res.status(201).json({
 					ok: true,
 					message: 'Comment added successfully',
-					comment: newComment,
+					comment: { user, ...commentDoc?._doc },
 				});
 			} catch (error: any) {
 				res.status(400).json({ ok: false, message: error.message });

@@ -112,21 +112,16 @@ export const findFeedbacksWithUserDetails = async (
 export const findCommentsWithUser = async (
 	findOptions: Record<string, any> = {},
 ) => {
-	await Comment.aggregate([
+	const comments = await Comment.aggregate([
 		{
 			$match: findOptions,
 		},
 		{
 			$lookup: {
-				from: 'user',
-				as: 'user',
+				from: 'users',
 				localField: 'userId',
 				foreignField: '_id',
-			},
-		},
-		{
-			$unwind: {
-				path: 'user',
+				as: 'user',
 			},
 		},
 		{
@@ -136,5 +131,12 @@ export const findCommentsWithUser = async (
 				'user.updatedAt': 0,
 			},
 		},
+		{
+			$unwind: {
+				path: '$user',
+			},
+		},
 	]);
+
+	return comments;
 };

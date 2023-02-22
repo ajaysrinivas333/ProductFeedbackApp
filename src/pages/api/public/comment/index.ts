@@ -1,6 +1,6 @@
 import connectDb from '@api/db/connection';
 import { CommentResponse } from '@api/types';
-import { isValidObjectId } from 'mongoose';
+import { isValidObjectId, Types } from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { findCommentsWithUser } from '@api/helpers';
 
@@ -21,7 +21,9 @@ export default async function handler(
 				let response = {};
 
 				if (!req.query.commentId) {
-					response['comments'] = await findCommentsWithUser({ feedbackId });
+					response['comments'] = await findCommentsWithUser({
+						feedbackId: new Types.ObjectId(feedbackId as string),
+					});
 				}
 
 				if (req.query.commentId) {
@@ -30,8 +32,8 @@ export default async function handler(
 
 					response['comment'] =
 						(await findCommentsWithUser({
-							feedbackId,
-							_id: req.query.commentId,
+							feedbackId: new Types.ObjectId(feedbackId as string),
+							_id: new Types.ObjectId(req.query.commentId as string),
 						})[0]) ?? {};
 				}
 				res.status(200).json({ ok: true, ...response });
