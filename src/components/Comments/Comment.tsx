@@ -84,6 +84,8 @@ const Comment = React.memo((props: CommentProps) => {
 						<Comment comment={comment} onReply={props.onReply} />
 					</div>
 				))}
+
+			{!data.parentId ? <hr className={styles.divider} /> : ''}
 		</Fragment>
 	);
 });

@@ -1,7 +1,7 @@
 import { Comment } from '@api/types';
 import Button from 'components/UI/Button';
 import Card from 'components/UI/Card';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from '../../styles/add-comment-form.module.scss';
 
@@ -38,6 +38,7 @@ export const CommentForm = (props: CommentFormProps) => {
 		handleSubmit,
 		formState: { errors },
 		watch,
+		reset,
 	} = useForm<CommentFormData>({
 		mode: 'onTouched',
 		defaultValues: props?.formValues ?? {
@@ -55,11 +56,19 @@ export const CommentForm = (props: CommentFormProps) => {
 		}
 	}, [comment]);
 
+	const { onSubmit } = props;
+	const submitHandler = useCallback(
+		(commentDetails: any) => {
+			onSubmit(commentDetails);
+			reset({
+				comment: null,
+			});
+		},
+		[onSubmit, reset],
+	);
+
 	return (
-		<form
-			className={styles.commentForm}
-			onSubmit={handleSubmit(props.onSubmit as (s: CommentFormData) => void)}
-		>
+		<form className={styles.commentForm} onSubmit={handleSubmit(submitHandler)}>
 			<textarea
 				placeholder='Write something nice!'
 				maxLength={250}

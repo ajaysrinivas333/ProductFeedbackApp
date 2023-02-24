@@ -91,10 +91,23 @@
 
     }
 
-    .commentForm {
 
-        .postCommentBtn {
-            font-size: 14px !important;
+    .commentForm {
+        .formFooter {
+            .postCommentBtn {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:400px) {
+    .commentForm {
+        .formFooter {
+            .postCommentBtn {
+                flex-basis: 42%;
+            }
         }
     }
 }
