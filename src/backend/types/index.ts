@@ -4,6 +4,7 @@ import {
 	FEEDBACK_STATUS,
 	PRODUCT_CATEGORIES,
 } from '@api/constants';
+import { CommentDoc } from 'types';
 
 export interface APIResponse {
 	ok: boolean;
@@ -54,4 +55,17 @@ export interface ProductResponse extends APIResponse {
 export interface FeedbackResponse extends APIResponse {
 	feedback?: Feedback;
 	feedbacks?: Feedback[];
+}
+
+export interface Comment {
+	_id: mongoose.Types.ObjectId | string;
+	comment: string;
+	parentId: mongoose.Types.ObjectId | string | null;
+	userId: mongoose.Types.ObjectId | string;
+	feedbackId: mongoose.Types.ObjectId | string;
+}
+
+export interface CommentResponse extends APIResponse {
+	comment?: Comment | CommentDoc;
+	comments?: Comment[];
 }

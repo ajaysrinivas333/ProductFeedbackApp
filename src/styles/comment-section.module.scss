@@ -7,6 +7,14 @@
     gap: 30px;
     padding: 30px 24px;
     color: #3a4374;
+
+    margin-bottom: 97px;
+
+
+}
+
+.commentForm {
+    margin-block: 30px;
 }
 
 @media screen and (max-width: $mobileScreenWidth) {
@@ -14,8 +22,6 @@
         width: 94%;
         margin: 20px 0;
         margin-left: 3%;
-
-
-
+        overflow: auto;
     }
 }

@@ -2,6 +2,7 @@ import { NextApiRequest } from 'next';
 import { getToken } from 'next-auth/jwt';
 import Product from '@api/models/product';
 import Feedback from './models/feedback';
+import Comment from './models/comment';
 
 export const isAuthenticated = async (
 	req: NextApiRequest,
@@ -106,4 +107,36 @@ export const findFeedbacksWithUserDetails = async (
 	]);
 
 	return feedbacks;
+};
+
+export const findCommentsWithUser = async (
+	findOptions: Record<string, any> = {},
+) => {
+	const comments = await Comment.aggregate([
+		{
+			$match: findOptions,
+		},
+		{
+			$lookup: {
+				from: 'users',
+				localField: 'userId',
+				foreignField: '_id',
+				as: 'user',
+			},
+		},
+		{
+			$project: {
+				'user.password': 0,
+				'user.createdAt': 0,
+				'user.updatedAt': 0,
+			},
+		},
+		{
+			$unwind: {
+				path: '$user',
+			},
+		},
+	]);
+
+	return comments;
 };

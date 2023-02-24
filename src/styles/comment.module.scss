@@ -1,0 +1,88 @@
+@import './variables.scss';
+
+.commentWrapper {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    margin-left: -14px;
+    margin-bottom: 20px;
+    position: relative;
+
+
+    .userAvatar {
+        margin: 0;
+        margin-top: -2px;
+        flex-basis: 10%;
+        align-self: flex-start;
+    }
+
+
+    .commentDetails {
+        flex-basis: 82%;
+
+        .userDetails {
+            display: flex;
+            flex-direction: column;
+            line-height: 18px;
+            margin-bottom: 10px;
+
+            .userName {
+                font-weight: 600;
+                font-size: 13px;
+            }
+
+            .userDisplayName {
+                margin-top: -3px;
+                font-size: 12px;
+                color: rgba(136, 107, 107, 0.8);
+            }
+        }
+
+        .comment {
+            color: rgba(100, 113, 150, 1);
+            word-break: break-all;
+
+        }
+    }
+
+
+    .replyBtn {
+        flex-basis: 10%;
+        color: blueviolet;
+        font-weight: 500;
+        font-family: var(--globalFont);
+        border: none;
+        outline: none;
+        margin-top: 7px;
+        background-color: inherit;
+        cursor: pointer;
+    }
+
+
+}
+
+.replyComment {
+    margin-bottom: 10px;
+}
+
+.divider {
+    margin: 0 25px;
+    border: none;
+    border-top: 1px solid #e7e7e7;
+    margin-top: -20px;
+}
+
+@media screen and (max-width:645px) {
+    .commentWrapper {
+        margin-left: -5px;
+        margin-bottom: 30px;
+
+        .userAvatar {
+            margin-right: 5px;
+        }
+    }
+
+
+}
+
+@media screen and (max-width:$mobileScreenWidth) and (min-width:450px) {}

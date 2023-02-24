@@ -9,6 +9,13 @@
         font-family: var(--globalFont) !important;
         color: #3a4374;
     }
+}
+
+.commentForm {
+    * {
+        font-family: var(--globalFont) !important;
+        color: #3a4374;
+    }
 
     textarea {
         margin-top: 30px;
@@ -80,9 +87,27 @@
         margin: 20px 0;
         margin-left: 3%;
 
-        .postCommentBtn {
-            font-size: 14px !important;
-        }
 
+
+    }
+
+
+    .commentForm {
+        .formFooter {
+            .postCommentBtn {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:400px) {
+    .commentForm {
+        .formFooter {
+            .postCommentBtn {
+                flex-basis: 42%;
+            }
+        }
     }
 }

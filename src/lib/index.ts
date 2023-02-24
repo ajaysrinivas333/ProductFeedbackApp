@@ -1,3 +1,5 @@
+import { CommentDoc } from 'types';
+
 export const withDelay = (fn: () => void, delay: number = 200) => {
 	const timer = setTimeout(() => fn(), delay);
 	return timer;
@@ -44,4 +46,21 @@ export const getFeedbackText = (count: number) => {
 		default:
 			return `${count} Feedbacks`;
 	}
+};
+
+export const makeCommentTree = (comments: CommentDoc[]) => {
+	comments
+		.filter((c) => c.parentId)
+		.forEach((comment) => {
+			const parent = comments.find((c) => c._id === comment.parentId);
+
+			if (parent && parent['replies']) {
+				parent['replies'].push(comment);
+			}
+
+			if (parent && !parent['replies']) {
+				parent['replies'] = [comment];
+			}
+		});
+	return comments.filter((c) => !c.parentId);
 };
