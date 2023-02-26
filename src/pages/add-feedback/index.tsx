@@ -21,7 +21,7 @@ const AddFeedbackPage = () => {
 					</div>
 					<Card className={styles.addFeedbackCard}>
 						<BsPlus className={styles.plusButton} />
-						<FeedbackForm />
+						<FeedbackForm mode='create' />
 					</Card>
 				</div>
 			</div>
