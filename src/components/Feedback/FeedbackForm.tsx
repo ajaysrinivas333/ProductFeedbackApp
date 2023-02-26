@@ -21,6 +21,7 @@ export type FormData = {
 };
 
 type FeedbackFormProps = {
+	mode: 'create' | 'edit';
 	formData?: FormData;
 };
 
@@ -33,6 +34,7 @@ const FeedbackForm = (props: FeedbackFormProps) => {
 	);
 	const [closedWithMenuItem, setClosedWithMenuItem] = useState<boolean>(false);
 	const [loader, setLoader] = useState<boolean>(false);
+	const isCreateMode = props.mode === 'create';
 
 	const {
 		register,
@@ -62,10 +64,14 @@ const FeedbackForm = (props: FeedbackFormProps) => {
 
 	const formSubmit = async (data: FormData) => {
 		setLoader(true);
-		const baseUrl = '/api/private/feedback?productId=';
-		const apiUrl = baseUrl + `${router.query?.productId}`;
+		const baseUrl = '/api/private/feedback';
+		const addFeedbackUrl = `?productId=${router.query?.productId}`;
+		const editFeedbackUrl = `?id=${router.query?.id}`;
+		const apiUrl = isCreateMode
+			? baseUrl + addFeedbackUrl
+			: baseUrl + editFeedbackUrl;
 		const res = await fetch(apiUrl, {
-			method: 'POST',
+			method: isCreateMode ? 'POST' : 'PATCH',
 			headers: {
 				'content-type': 'application/json',
 			},
@@ -73,10 +79,14 @@ const FeedbackForm = (props: FeedbackFormProps) => {
 		});
 		const json = await res.json();
 		setLoader(false);
+
 		if (json.ok) {
-			await revalidatePage(`/feedbacks/${router.query.productId}`);
-			// !done on purpose to trigger revalidation for homepage
-			window.location.href = `/feedbacks/${router.query.productId}`;
+			await revalidatePage(
+				`/discussion/${router.query?.id}?productId=${router.query?.productId}`,
+			);
+			// !done on purpose to trigger revalidation for discussion page router.push
+
+			window.location.href = `/discussion/${router.query?.id}?productId=${router.query?.productId}`;
 		} else alert(json?.message);
 	};
 
@@ -88,7 +98,9 @@ const FeedbackForm = (props: FeedbackFormProps) => {
 	return (
 		<form onSubmit={handleSubmit(formSubmit, console.log)}>
 			<div className={styles.wrapper}>
-				<header className={styles.formHeader}>{'Create New Feedback'}</header>
+				<header className={styles.formHeader}>
+					{isCreateMode ? 'Create New Feedback' : 'Edit Feedback'}
+				</header>
 				<div className={styles.formControl}>
 					<span className={styles.fieldName}>Feedback Title</span>
 					<label>Add a short, descriptive headline</label>
@@ -202,7 +214,15 @@ const FeedbackForm = (props: FeedbackFormProps) => {
 						type='submit'
 						disabled={loader}
 						className={styles.submitButton}
-						text={loader ? 'Adding...' : 'Add Feedback'}
+						text={
+							loader
+								? isCreateMode
+									? 'Adding...'
+									: 'Updating...'
+								: isCreateMode
+								? 'Add Feedback'
+								: 'Update Feedback'
+						}
 					/>
 				</div>
 			</div>
