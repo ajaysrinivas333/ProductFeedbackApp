@@ -3,11 +3,16 @@ import {
 	RoadmapFeedbackCard,
 } from 'components/Feedback/FeedbackCard';
 import { RoadmapNavbar } from 'components/Navbar/Navbar';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import styles from 'styles/roadmap-page.module.scss';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import {
+	DragDropContext,
+	Draggable,
+	Droppable,
+	OnDragEndResponder,
+} from 'react-beautiful-dnd';
 import { useRouter } from 'next/router';
-import { formatBoards } from 'lib';
+import { formatBoards, removeAndAdd, reorder } from 'lib';
 
 type BoardId = 'planned' | 'in-progress' | 'live';
 
@@ -23,10 +28,15 @@ type BoardData<T extends BoardId> = {
 	[K in T]: Board;
 };
 
-const BoardsBigScreenView = ({ boards }: { boards: BoardData<BoardId> }) => {
+type BoardViewProps = {
+	boards: BoardData<BoardId>;
+	handleDrag: OnDragEndResponder;
+};
+
+const BoardsBigScreenView = ({ boards, handleDrag }: BoardViewProps) => {
 	return (
 		<section className={styles.boardsContainer}>
-			<DragDropContext onDragEnd={(e) => console.log(e)}>
+			<DragDropContext onDragEnd={handleDrag}>
 				{Object.entries(boards ?? {})?.map(([boardId, board]) => {
 					return (
 						<Droppable key={board.id} droppableId={board.id}>
@@ -98,6 +108,59 @@ const RoadmapPage = () => {
 	const { productId } = router.query;
 
 	useEffect(() => {
+		console.log('BoardData changed', boardData);
+	}, [boardData]);
+
+	const handleDrag: OnDragEndResponder = useCallback(
+		(e) => {
+			const source = e.source;
+			const destination = e.destination;
+			if (!destination) return;
+
+			if (
+				source.droppableId === destination.droppableId &&
+				source.index !== destination.index
+			) {
+				const destId = destination.droppableId;
+				const list = [...boardData[destId]?.feedbacks];
+				setBoardData((prev) => ({
+					...prev,
+					[destId]: {
+						...prev[destId],
+						feedbacks: reorder(list, destination.index, list[source.index]),
+					},
+				}));
+			} else if (source.droppableId !== destination.droppableId) {
+				const sourceIndex = source.index;
+				const destinationIndex = destination.index;
+				const sourceId = source.droppableId;
+				const destId = destination.droppableId;
+				const sourceList = [...boardData[sourceId].feedbacks];
+				const destList = [...boardData[destId].feedbacks];
+				const modifiedList = removeAndAdd(
+					sourceList,
+					destList,
+					destinationIndex,
+					sourceList[sourceIndex],
+				);
+
+				setBoardData((prev) => ({
+					...prev,
+					[sourceId]: {
+						...prev[sourceId],
+						feedbacks: modifiedList.source,
+					},
+					[destId]: {
+						...prev[destId],
+						feedbacks: modifiedList.destination,
+					},
+				}));
+			}
+		},
+		[boardData],
+	);
+
+	useEffect(() => {
 		async function getBoards() {
 			const res = await fetch(`/api/public/roadmap/${productId}`);
 			const json = await res.json();
@@ -115,7 +178,7 @@ const RoadmapPage = () => {
 		<div className={styles.pageWrapper}>
 			<div className={styles.innerContainer}>
 				<RoadmapNavbar />
-				<BoardsBigScreenView boards={boardData} />
+				<BoardsBigScreenView boards={boardData} handleDrag={handleDrag} />
 			</div>
 		</div>
 	);

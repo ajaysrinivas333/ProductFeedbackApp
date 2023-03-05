@@ -101,3 +101,27 @@ export function formatBoards(feedbacks: Feedback[]) {
 
 	return boards;
 }
+
+export const reorderPosition = <T>(list: T[] = []) =>
+	list.map((item, idx) => ({ ...item, position: idx + 1 }));
+
+export const reorder = <T>(list: T[], index: number, item: T) => {
+	list.splice(list.indexOf(item), 1);
+	list.splice(index, 0, item);
+	return reorderPosition(list);
+};
+
+export const removeAndAdd = <T>(
+	sourceList: T[],
+	destinationList: T[],
+	destinationIndex: number,
+	item: T,
+) => {
+	sourceList.splice(sourceList.indexOf(item), 1);
+	destinationList.splice(destinationIndex, 0, item);
+
+	return {
+		source: reorderPosition(sourceList),
+		destination: reorderPosition(destinationList),
+	};
+};
