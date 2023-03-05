@@ -1,3 +1,4 @@
+import { Feedback } from 'components/Feedback/FeedbackCard';
 import { CommentDoc } from 'types';
 
 export const withDelay = (fn: () => void, delay: number = 200) => {
@@ -64,3 +65,39 @@ export const makeCommentTree = (comments: CommentDoc[]) => {
 		});
 	return comments.filter((c) => !c.parentId);
 };
+
+export function formatBoards(feedbacks: Feedback[]) {
+	const boards = {
+		planned: {
+			id: 'planned',
+			name: 'Planned',
+			desc: 'Ideas Prioritized for research',
+			feedbacks: [],
+			color: '#f49f85',
+		},
+		'in-progress': {
+			id: 'in-progress',
+			name: 'In-Progress',
+			desc: 'Currently being developed',
+			feedbacks: [],
+			color: '#ad1fea',
+		},
+
+		live: {
+			id: 'live',
+			name: 'Live',
+			desc: 'Released Features',
+			feedbacks: [],
+			color: '#62bcfa',
+		},
+	};
+
+	Object.keys(boards).forEach(
+		(key) =>
+			(boards[key].feedbacks = feedbacks?.filter(
+				(f) => f.status === boards[key].name,
+			)),
+	);
+
+	return boards;
+}
