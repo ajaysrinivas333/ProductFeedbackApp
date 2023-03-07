@@ -30,14 +30,16 @@ export default async function handler(
 
 				const { comment, parentId } = req.body;
 
+				const newComment = new Comment({
+					comment,
+					parentId: parentId ?? null,
+					feedbackId: req.query.feedbackId,
+					userId,
+				});
+
 				const [user, commentDoc] = await Promise.all([
 					User.findOne({ _id: userId }, { password: 0 }),
-					Comment.create({
-						comment,
-						parentId: parentId ?? null,
-						feedbackId: req.query.feedbackId,
-						userId,
-					}),
+					newComment.save(),
 				]);
 
 				res.status(201).json({

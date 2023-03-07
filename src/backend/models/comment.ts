@@ -1,4 +1,5 @@
 import { model, Schema, models, Types } from 'mongoose';
+import Feedback from './feedback';
 
 const commentSchema = new Schema({
 	comment: {
@@ -23,6 +24,21 @@ const commentSchema = new Schema({
 		type: Types.ObjectId,
 		required: true,
 	},
+});
+
+commentSchema.post('save', async function (doc: any, next: any) {
+	if (doc.parentId == null) {
+		const result = await Feedback.findByIdAndUpdate(
+			doc.feedbackId,
+			{
+				$inc: {
+					commentsCount: 1,
+				},
+			},
+			{ new: true },
+		);
+	}
+	next();
 });
 
 const Comment = models.Comment ?? model('Comment', commentSchema);

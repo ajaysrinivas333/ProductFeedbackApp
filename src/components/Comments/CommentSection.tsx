@@ -34,11 +34,12 @@ const addComment = async (
 	}
 };
 
-const CommentSection = () => {
+const CommentSection = (props: any) => {
 	const [commentsCount, setCommentsCount] = useState<number>(0);
 	const router = useRouter();
 	const [comments, setComments] = useState<CommentDoc[]>([]);
-
+	const { updateCommentCount } = props;
+	
 	const onAddComment = useCallback(
 		async (data: Pick<Comment, 'comment'>) => {
 			const res = await addComment({
@@ -49,11 +50,13 @@ const CommentSection = () => {
 			if (res.ok) {
 				setComments((c) => [...c, { ...res.comment }]);
 				setCommentsCount((c) => c + 1);
+				updateCommentCount(commentsCount + 1);
+
 				return;
 			}
 			alert(res?.message);
 		},
-		[router.query.feedbackId],
+		[commentsCount, router.query.feedbackId, updateCommentCount],
 	);
 
 	useEffect(() => {
