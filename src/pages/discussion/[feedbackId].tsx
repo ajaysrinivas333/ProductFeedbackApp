@@ -37,6 +37,18 @@ const DiscussionPage = (props: DiscussionPageProps) => {
 		setFeedbackData(props.feedback);
 	}, [props.feedback]);
 
+	const updateCommentCount = useCallback(
+		(commentsCount: any) => {
+			console.log(commentsCount);
+			if (feedbackData.length > 0) {
+				setFeedbackData((prevData: any) => {
+					return [{ ...prevData[0], commentsCount }];
+				});
+			}
+		},
+		[feedbackData?.length],
+	);
+
 	const onUpvote = useCallback(
 		async (feedbackId: string) => {
 			if (isAuthenticated) {
@@ -79,8 +91,7 @@ const DiscussionPage = (props: DiscussionPageProps) => {
 							onUpvote={onUpvote}
 						/>
 
-						<CommentSection />
-						
+						<CommentSection updateCommentCount={updateCommentCount} />
 					</Fragment>
 				) : (
 					<EmptyMessageScreen
