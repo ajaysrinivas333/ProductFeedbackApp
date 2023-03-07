@@ -116,12 +116,18 @@ export const removeAndAdd = <T>(
 	destinationList: T[],
 	destinationIndex: number,
 	item: T,
+	destinationBoard: string,
 ) => {
 	sourceList.splice(sourceList.indexOf(item), 1);
-	destinationList.splice(destinationIndex, 0, item);
+	destinationList.splice(destinationIndex, 0, {
+		...item,
+		status: destinationBoard,
+	});
 
 	return {
 		source: reorderPosition(sourceList),
 		destination: reorderPosition(destinationList),
 	};
 };
+
+

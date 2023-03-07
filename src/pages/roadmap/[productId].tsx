@@ -137,11 +137,13 @@ const RoadmapPage = () => {
 				const destId = destination.droppableId;
 				const sourceList = [...boardData[sourceId].feedbacks];
 				const destList = [...boardData[destId].feedbacks];
+				const destinationBoard = boardData[destId]?.name ?? 'In-Progress';
 				const modifiedList = removeAndAdd(
 					sourceList,
 					destList,
 					destinationIndex,
 					sourceList[sourceIndex],
+					destinationBoard,
 				);
 
 				setBoardData((prev) => ({
