@@ -92,11 +92,10 @@ export function formatBoards(feedbacks: Feedback[]) {
 		},
 	};
 
-	Object.keys(boards).forEach(
-		(key) =>
-			(boards[key].feedbacks = feedbacks?.filter(
-				(f) => f.status === boards[key].name,
-			)),
+	Object.keys(boards).forEach((key) =>
+		(boards[key].feedbacks = feedbacks?.filter(
+			(f) => f.status === boards[key].name,
+		)).sort((a, b) => a['position'] - b['position']),
 	);
 
 	return boards;
@@ -130,4 +129,15 @@ export const removeAndAdd = <T>(
 	};
 };
 
+export const getSingleBoardMovePayload = <T>(
+	board: T[],
+	from: number,
+	to: number,
+) => (from < to ? board.slice(from, to + 1) : board.slice(to, from + 1));
 
+export const getMultiBoardMovePayload = <T>(
+	sourceBoard: T[],
+	sourceIndex: number,
+	targetBoard: T[],
+	targetIndex: number,
+) => [...sourceBoard.slice(sourceIndex), ...targetBoard.slice(targetIndex)];

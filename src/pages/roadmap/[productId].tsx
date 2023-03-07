@@ -12,7 +12,17 @@ import {
 	OnDragEndResponder,
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/router';
-import { formatBoards, removeAndAdd, reorder } from 'lib';
+import {
+	formatBoards,
+	getMultiBoardMovePayload,
+	getSingleBoardMovePayload,
+	removeAndAdd,
+	reorder,
+} from 'lib';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { isAuthenticated } from '@api/helpers';
+import connectDb from '@api/db/connection';
+import Product from '@api/models/product';
 
 type BoardId = 'planned' | 'in-progress' | 'live';
 
@@ -44,7 +54,9 @@ const BoardsBigScreenView = ({ boards, handleDrag }: BoardViewProps) => {
 								<div className={styles.boards} key={board.id}>
 									<ul className={styles.boardName}>
 										{' '}
-										<li className={styles.boardName}>{board.name} (11)</li>
+										<li className={styles.boardName}>
+											{board.name} ({board.feedbacks?.length ?? 0})
+										</li>
 										<li className={styles.boardDesc}>{board.desc}</li>
 									</ul>
 									<div
@@ -99,23 +111,28 @@ const BoardsBigScreenView = ({ boards, handleDrag }: BoardViewProps) => {
 	);
 };
 
-const RoadmapPage = () => {
+type RoadmapPageProps = {
+	isProductOwner: boolean;
+	message: string;
+};
+
+const RoadmapPage = (props: RoadmapPageProps) => {
 	const [boardData, setBoardData] = useState<BoardData<BoardId>>(
 		{} as BoardData<BoardId>,
 	);
+
+	const { isProductOwner, message: error } = props;
 	const router = useRouter();
 
 	const { productId } = router.query;
 
-	useEffect(() => {
-		console.log('BoardData changed', boardData);
-	}, [boardData]);
-
 	const handleDrag: OnDragEndResponder = useCallback(
-		(e) => {
+		async (e) => {
 			const source = e.source;
 			const destination = e.destination;
 			if (!destination) return;
+
+			if (!isProductOwner) return alert(error);
 
 			if (
 				source.droppableId === destination.droppableId &&
@@ -123,14 +140,29 @@ const RoadmapPage = () => {
 			) {
 				const destId = destination.droppableId;
 				const list = [...boardData[destId]?.feedbacks];
+
+				const updatedFeedbacks = reorder(
+					list,
+					destination.index,
+					list[source.index],
+				);
+
+				const apiPayload = getSingleBoardMovePayload(
+					updatedFeedbacks,
+					source.index,
+					destination.index,
+				);
+
 				setBoardData((prev) => ({
 					...prev,
 					[destId]: {
 						...prev[destId],
-						feedbacks: reorder(list, destination.index, list[source.index]),
+						feedbacks: updatedFeedbacks,
 					},
 				}));
+				const res = await boardMoveApi(productId as string, apiPayload);
 			} else if (source.droppableId !== destination.droppableId) {
+				let multi = true;
 				const sourceIndex = source.index;
 				const destinationIndex = destination.index;
 				const sourceId = source.droppableId;
@@ -146,6 +178,13 @@ const RoadmapPage = () => {
 					destinationBoard,
 				);
 
+				const apiPayload = getMultiBoardMovePayload(
+					modifiedList.source,
+					sourceIndex,
+					modifiedList.destination,
+					destination.index,
+				);
+
 				setBoardData((prev) => ({
 					...prev,
 					[sourceId]: {
@@ -157,9 +196,12 @@ const RoadmapPage = () => {
 						feedbacks: modifiedList.destination,
 					},
 				}));
+				const res = await boardMoveApi(productId as string, apiPayload, {
+					multi,
+				});
 			}
 		},
-		[boardData],
+		[boardData, error, isProductOwner, productId],
 	);
 
 	useEffect(() => {
@@ -184,6 +226,51 @@ const RoadmapPage = () => {
 			</div>
 		</div>
 	);
+};
+
+async function boardMoveApi<T>(
+	productId: string,
+	docs: T[],
+	options: { multi: boolean } = { multi: false },
+) {
+	const res = await fetch(
+		`/api/private/roadmap/${productId}?operationType=${
+			options.multi ? 'multi_list_move' : 'single_list_move'
+		}`,
+		{
+			method: 'PATCH',
+			headers: {
+				'content-type': 'application/json',
+			},
+			body: JSON.stringify({
+				affectedDocs: docs,
+			}),
+		},
+	);
+	const json = await res.json();
+	return json;
+}
+
+export const getServerSideProps: InferGetServerSidePropsType<
+	GetServerSideProps
+> = async (ctx: any) => {
+	await connectDb();
+
+	let props = {
+		isProductOwner: false,
+		message: "You don't have permissions to do this operation.",
+	};
+
+	const userId = await isAuthenticated(ctx.req);
+
+	const productOwner = await Product.exists({
+		_id: ctx.query.productId,
+		userId,
+	});
+
+	if (productOwner) props.isProductOwner = true;
+
+	return { props };
 };
 
 export default RoadmapPage;
