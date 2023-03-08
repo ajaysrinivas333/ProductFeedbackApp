@@ -14,43 +14,49 @@
 
 		.boardsContainer {
 			display: flex;
-            margin-block: 20px;
+			margin-block: 20px;
 			margin-inline: 3px;
-            gap:11px;
-                transition: all 0.2s ease-in;
-                
+			gap: 20px;
+			transition: all 0.2s ease-in;
+
 			.boards {
 				display: flex;
 				flex-direction: column;
-                gap:30px;
-				min-width: 32%;
+				gap: 30px;
+				min-width: 31.3%;
 				max-width: max-content;
 				min-height: 100vh;
 
 
-					.boardName {
-						list-style: none;
-						.boardName {
-							font-weight: 600;
-							font-size: 15px;
-							color: #373f68;
-						}
+				.boardName {
+					list-style: none;
+					position: sticky;
+					top: 97px;
 
-						.boardDesc {
-							font-weight: 400;
-							font-size: 13px;
-							color: rgb(100, 113, 150);
-						}
+					background-color: #f7f8fd;
+
+					.boardName {
+						font-weight: 600;
+						font-size: 15px;
+						color: #373f68;
 
 					}
 
+					.boardDesc {
+						font-weight: 400;
+						font-size: 13px;
+						color: rgb(100, 113, 150);
+					}
 
-                    .boardItems{
-                        display: flex;
-                        flex-direction: column;
-                        gap:10px;
-						min-height: 500px;
-                    }
+				}
+
+
+				.boardItems {
+					display: flex;
+					flex-direction: column;
+					gap: 20px;
+					min-height: 500px;
+				}
 
 
 

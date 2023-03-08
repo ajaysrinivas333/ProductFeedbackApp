@@ -81,29 +81,41 @@ const FeedbackCard = (props: FeedbackDetailProps) => {
 
 export default FeedbackCard;
 
-export const RoadmapFeedbackCard = (
-	props: FeedbackDetailProps & { style?: React.CSSProperties },
-) => {
+interface RoadmapFeedbackCardProps
+	extends Omit<FeedbackDetailProps, 'onUpvote'> {
+	onUpvote: (boardId: string, feedbackId: string) => void;
+	style?: React.CSSProperties;
+}
+
+export const RoadmapFeedbackCard = (props: RoadmapFeedbackCardProps) => {
 	const { feedback, onUpvote, isUpvoted } = props;
 
 	const classes = `${styles.roadmapFeedbackCard}`;
 
 	return (
 		<Card className={classes} style={props.style}>
-			<div className={styles.roadmapFeedbackDetails}>
-				<h4>{feedback?.title}</h4>
-				<p>{feedback?.description}</p>
-				<span className={styles.category}>{feedback?.category}</span>
-			</div>
+			<Link
+				style={{ textDecoration: 'none' }}
+				href={`/discussion/${feedback._id}?productId=${feedback.productId}`}
+			>
+				<div className={styles.roadmapFeedbackDetails}>
+					<h4>{feedback?.title}</h4>
+					<p>{feedback?.description}</p>
+					<span className={styles.category}>{feedback?.category}</span>
+				</div>
+			</Link>
 			<div className={styles.roadmapFeedbackCardFooter}>
 				<ButtonWithChild
 					className={styles.roadmapUpvoteButton}
 					style={{
 						backgroundColor: isUpvoted ? '#cfd7ff' : '',
 					}}
-					onClick={() => onUpvote(feedback?._id)}
+					onClick={() => onUpvote(feedback?.status as string, feedback?._id)}
 				>
-					<BiChevronUp className={styles.upIcon} />
+					<BiChevronUp
+						style={{ cursor: 'pointer' }}
+						className={styles.upIcon}
+					/>
 					<span>{feedback?.upvotesCount}</span>
 				</ButtonWithChild>
 

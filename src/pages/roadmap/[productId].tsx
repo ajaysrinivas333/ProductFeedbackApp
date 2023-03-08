@@ -23,6 +23,9 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { isAuthenticated } from '@api/helpers';
 import connectDb from '@api/db/connection';
 import Product from '@api/models/product';
+import { useUpvoteRoadmap } from 'hooks/use-upvote';
+import useAuth from 'hooks/use-auth';
+import React from 'react';
 
 type BoardId = 'planned' | 'in-progress' | 'live';
 
@@ -41,75 +44,101 @@ type BoardData<T extends BoardId> = {
 type BoardViewProps = {
 	boards: BoardData<BoardId>;
 	handleDrag: OnDragEndResponder;
+	handleUpvote: (boardId: string, feedbackId: string) => void;
 };
 
-const BoardsBigScreenView = ({ boards, handleDrag }: BoardViewProps) => {
-	return (
-		<section className={styles.boardsContainer}>
-			<DragDropContext onDragEnd={handleDrag}>
-				{Object.entries(boards ?? {})?.map(([boardId, board]) => {
-					return (
-						<Droppable key={board.id} droppableId={board.id}>
-							{(provided, snapshot) => (
-								<div className={styles.boards} key={board.id}>
-									<ul className={styles.boardName}>
-										{' '}
-										<li className={styles.boardName}>
-											{board.name} ({board.feedbacks?.length ?? 0})
-										</li>
-										<li className={styles.boardDesc}>{board.desc}</li>
-									</ul>
-									<div
-										{...provided.droppableProps}
-										ref={provided.innerRef}
-										className={styles.boardItems}
-										style={{
-											background: snapshot.isDraggingOver ? '#373f6808' : '',
-											transition: '0.2s ease-in',
-										}}
-									>
-										{board?.feedbacks?.map((feedback, idx) => (
-											<Draggable
-												key={feedback._id}
-												draggableId={feedback._id}
-												index={idx}
-											>
-												{(provided, _) => (
-													<div
-														ref={provided.innerRef}
-														{...provided.dragHandleProps}
-														{...provided.draggableProps}
-														style={{
-															...provided.draggableProps.style,
-														}}
-													>
-														<RoadmapFeedbackCard
-															style={{
-																borderTop: `4px solid ${board.color}`,
-																borderTopLeftRadius: '8px',
-																borderTopRightRadius: '8px',
-															}}
-															key={feedback._id}
-															isUpvoted={false}
-															onUpvote={console.log}
-															feedback={feedback}
-														/>
-													</div>
-												)}
-											</Draggable>
-										))}
+type DraggableFeedbackProps = {
+	feedback: Feedback;
+	index: number;
+	color: string;
+} & Pick<BoardViewProps, 'handleUpvote'>;
 
-										<div>{provided.placeholder}</div>
+const DraggableFeedback = React.memo(
+	({ feedback, index, color, handleUpvote }: DraggableFeedbackProps) => {
+		const { user } = useAuth();
+		return (
+			<Draggable draggableId={feedback._id} index={index}>
+				{(provided, _) => (
+					<div
+						ref={provided.innerRef}
+						{...provided.dragHandleProps}
+						{...provided.draggableProps}
+						style={{
+							...provided.draggableProps.style,
+						}}
+					>
+						<RoadmapFeedbackCard
+							style={{
+								borderTop: `5px solid ${color}`,
+								borderTopLeftRadius: '8px',
+								borderTopRightRadius: '8px',
+							}}
+							key={feedback._id}
+							isUpvoted={feedback.upvotedUsers.includes(user?.id as string)}
+							onUpvote={handleUpvote}
+							feedback={feedback}
+						/>
+					</div>
+				)}
+			</Draggable>
+		);
+	},
+);
+DraggableFeedback.displayName = 'DraggableFeedback';
+
+const BoardsBigScreenView = React.memo(
+	({ boards, handleDrag, handleUpvote }: BoardViewProps) => {
+		return (
+			<section className={styles.boardsContainer}>
+				<DragDropContext onDragEnd={handleDrag}>
+					{Object.entries(boards ?? {})?.map(([boardId, board]) => {
+						return (
+							<Droppable key={board.id} droppableId={board.id}>
+								{(provided, snapshot) => (
+									<div className={styles.boards} key={board.id}>
+										<ul className={styles.boardName}>
+											{' '}
+											<li className={styles.boardName}>
+												{board.name} ({board.feedbacks?.length ?? 0})
+											</li>
+											<li className={styles.boardDesc}>{board.desc}</li>
+										</ul>
+										<div
+											{...provided.droppableProps}
+											ref={provided.innerRef}
+											className={styles.boardItems}
+											style={{
+												transition: '0.2s ease-in',
+												background: !board.feedbacks.length
+													? 'rgb(122 137 214 / 3%)'
+													: snapshot.isDraggingOver
+													? '#373f6808'
+													: '',
+											}}
+										>
+											{board?.feedbacks?.map((feedback, idx) => (
+												<DraggableFeedback
+													index={idx}
+													key={feedback._id}
+													feedback={feedback}
+													handleUpvote={handleUpvote}
+													color={board.color as string}
+												/>
+											))}
+											<div>{provided.placeholder}</div>
+										</div>
 									</div>
-								</div>
-							)}
-						</Droppable>
-					);
-				})}
-			</DragDropContext>
-		</section>
-	);
-};
+								)}
+							</Droppable>
+						);
+					})}
+				</DragDropContext>
+			</section>
+		);
+	},
+);
+
+BoardsBigScreenView.displayName = 'BoardsBigScreenView';
 
 type RoadmapPageProps = {
 	isProductOwner: boolean;
@@ -125,6 +154,42 @@ const RoadmapPage = (props: RoadmapPageProps) => {
 	const router = useRouter();
 
 	const { productId } = router.query;
+	const { isAuthenticated } = useAuth();
+
+	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvoteRoadmap();
+
+	const handleUpvote = useCallback(
+		async (boardId: string, feedbackId: string) => {
+			if (!isAuthenticated) return router.replace('/auth');
+			boardId = boardId.toLowerCase();
+
+			setBoardData((prev) => {
+				const list = prev[boardId].feedbacks;
+				const updatedFeedbacks = isUpvoted(feedbackId, list)
+					? downvote(feedbackId, list)
+					: upvote(feedbackId, list);
+
+				return {
+					...prev,
+					[boardId]: {
+						...prev[boardId],
+						feedbacks: updatedFeedbacks,
+					},
+				};
+			});
+
+			const res = await upvoteApi(feedbackId, productId as string);
+		},
+		[
+			downvote,
+			isAuthenticated,
+			isUpvoted,
+			productId,
+			router,
+			upvote,
+			upvoteApi,
+		],
+	);
 
 	const handleDrag: OnDragEndResponder = useCallback(
 		async (e) => {
@@ -222,7 +287,11 @@ const RoadmapPage = (props: RoadmapPageProps) => {
 		<div className={styles.pageWrapper}>
 			<div className={styles.innerContainer}>
 				<RoadmapNavbar />
-				<BoardsBigScreenView boards={boardData} handleDrag={handleDrag} />
+				<BoardsBigScreenView
+					boards={boardData}
+					handleDrag={handleDrag}
+					handleUpvote={handleUpvote}
+				/>
 			</div>
 		</div>
 	);
