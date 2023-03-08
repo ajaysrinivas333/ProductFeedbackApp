@@ -23,7 +23,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { isAuthenticated } from '@api/helpers';
 import connectDb from '@api/db/connection';
 import Product from '@api/models/product';
-import { useUpvoteRoadmap } from 'hooks/use-upvote';
+import useUpvote from 'hooks/use-upvote';
 import useAuth from 'hooks/use-auth';
 import React from 'react';
 
@@ -156,7 +156,7 @@ const RoadmapPage = (props: RoadmapPageProps) => {
 	const { productId } = router.query;
 	const { isAuthenticated } = useAuth();
 
-	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvoteRoadmap();
+	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvote();
 
 	const handleUpvote = useCallback(
 		async (boardId: string, feedbackId: string) => {

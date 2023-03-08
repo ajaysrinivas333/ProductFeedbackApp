@@ -62,19 +62,19 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 		setFeedbackData(() => filterFeedbacksByCategory());
 	}, [filterFeedbacksByCategory]);
 
-	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvote(
-		feedbackData,
-		setFeedbackData,
-	);
+	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvote();
 
 	const { productId } = router?.query ?? '';
 
 	const onUpvote = useCallback(
 		async (feedbackId: string) => {
 			if (isAuthenticated) {
-				isUpvoted(feedbackId) ? downvote(feedbackId) : upvote(feedbackId);
-				const res = await upvoteApi(feedbackId, productId as string);
-				return;
+				setFeedbackData((prev) =>
+					isUpvoted(feedbackId, prev)
+						? downvote(feedbackId, prev)
+						: upvote(feedbackId, prev),
+				);
+				return await upvoteApi(feedbackId, productId as string);
 			}
 
 			router.replace('/auth');
