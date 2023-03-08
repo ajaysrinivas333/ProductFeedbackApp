@@ -25,10 +25,7 @@ const DiscussionPage = (props: DiscussionPageProps) => {
 	const router = useRouter();
 	const { isAuthenticated } = useAuth();
 	const [feedbackData, setFeedbackData] = useState(props?.feedback ?? []);
-	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvote(
-		feedbackData,
-		setFeedbackData,
-	);
+	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvote();
 	const { data: session } = useSession();
 
 	const { productId } = router?.query ?? '';
@@ -52,9 +49,12 @@ const DiscussionPage = (props: DiscussionPageProps) => {
 	const onUpvote = useCallback(
 		async (feedbackId: string) => {
 			if (isAuthenticated) {
-				isUpvoted(feedbackId) ? downvote(feedbackId) : upvote(feedbackId);
-				const res = await upvoteApi(feedbackId, productId as string);
-				return;
+				setFeedbackData((prev) =>
+					isUpvoted(feedbackId, prev)
+						? downvote(feedbackId, prev)
+						: upvote(feedbackId, prev),
+				);
+				return await upvoteApi(feedbackId, productId as string);
 			}
 
 			router.replace('/auth');

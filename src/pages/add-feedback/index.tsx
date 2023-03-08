@@ -7,17 +7,21 @@ import { BsPlus } from 'react-icons/bs';
 import Link from 'next/link';
 import ClientAuthGuard from 'components/Auth/AuthGuard';
 import FeedbackForm from 'components/Feedback/FeedbackForm';
+import { useRouter } from 'next/router';
 
 const AddFeedbackPage = () => {
+	const router = useRouter();
 	return (
 		<ClientAuthGuard>
 			<div className={styles.addFeedbackContainer}>
 				<div className={styles.innerContainer}>
 					<div className={styles.backButtonWrapper}>
 						<BiChevronLeft className={styles.backIcon} />
-						<Link style={{ width: '100%' }} href={'/home'}>
-							<Button className={styles.backButton} text='Go Back' />
-						</Link>
+						<Button
+							className={styles.backButton}
+							text='Go Back'
+							onClick={router.back}
+						/>
 					</div>
 					<Card className={styles.addFeedbackCard}>
 						<BsPlus className={styles.plusButton} />

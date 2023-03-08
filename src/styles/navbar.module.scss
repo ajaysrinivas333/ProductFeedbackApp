@@ -1,5 +1,27 @@
 @import './variables.scss';
 
+
+@mixin btnStyles {
+	background-color: #ad1fea;
+	padding: 10px;
+	border: none;
+	border-radius: 10px;
+	color: #ffffff;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 600;
+	outline: none;
+	transition: background-color 0.2s ease-in-out;
+	width: 100%;
+	// flex-basis: 30%;
+	font-family: var(--globalFont);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: nowrap;
+	gap: 0
+}
+
 .navbarHome {
 	border-radius: 10px;
 	color: white;
@@ -54,28 +76,75 @@
 			flex-basis: 30%;
 
 			.addProjectButton {
-				background-color: #ad1fea;
-				padding: 10px;
-				border: none;
-				border-radius: 10px;
-				color: #ffffff;
-				cursor: pointer;
-				font-size: 16px;
-				font-weight: 600;
-				outline: none;
-				transition: background-color 0.2s ease-in-out;
-				width: 100%;
-				// flex-basis: 30%;
-				font-family: var(--globalFont);
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-wrap: nowrap;
-				gap: 0
+				@include btnStyles;
 			}
 		}
 	}
 }
+
+
+.roadmapNavbar {
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 29px;
+	height: 97px;
+	position: sticky;
+	top: 0;
+
+	.leftSide {
+		flex: 1;
+
+		ul {
+			list-style: none;
+
+		}
+	}
+
+	.backButtonWrapper {
+		display: flex;
+		align-items: center;
+		margin-left: -10px;
+
+		.backButton {
+			text-align: left;
+			width: 100%;
+			padding: 0;
+			color: #fff;
+			background-color: inherit;
+			padding: 10px 0px;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+			font-size: 15px;
+			font-weight: 600;
+			outline: none;
+			transition: background-color 0.2s ease-in-out;
+			width: 30%;
+			font-family: var(--globalFont);
+		}
+
+		.backIcon {
+			font-size: min(25px, 6vmin);
+			color: #fff;
+		}
+	}
+
+	a {
+		justify-self: end;
+		all: unset;
+
+		.addFeedback {
+			@include btnStyles;
+			font-size: 15px;
+			max-width: 200px;
+		}
+	}
+}
+
+
+
 
 @media screen and (max-width: $mobileScreenWidth) {
 	.navbarHome {
@@ -103,6 +172,50 @@
 					font-size: min(3.6vw, 11px);
 					min-width: 110px;
 				}
+			}
+		}
+	}
+
+	.roadmapNavbar {
+
+		position: sticky;
+		top:0;
+
+		padding: 12px;
+
+
+		.leftSide {
+			flex: 1;
+
+			ul {
+				list-style: none;
+
+			}
+		}
+
+		.backButtonWrapper {
+
+			.backButton {
+
+
+				font-size: 11px;
+
+			}
+
+			.backIcon {
+				font-size: min(18px, 6vmin);
+				color: #fff;
+			}
+		}
+
+		a {
+			justify-self: end;
+			all: unset;
+
+			.addFeedback {
+				@include btnStyles;
+				font-size: 12px;
+				max-width: 200px;
 			}
 		}
 	}

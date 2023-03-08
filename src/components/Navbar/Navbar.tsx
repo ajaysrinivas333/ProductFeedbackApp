@@ -1,13 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import useMenu from '../../hooks/use-menu';
 import styles from '../../styles/navbar.module.scss';
-import { ButtonWithChild } from '../UI/Button';
+import Button, { ButtonWithChild } from '../UI/Button';
 import { MenuContainer, Menu, MenuItem } from '../UI/Menu';
 import { BsChevronDown } from 'react-icons/bs';
 import SuggestionIcon from '../UI/SuggestionIcon';
 import { TiTick } from 'react-icons/ti';
 import Link from 'next/link';
 import { MdAdd } from 'react-icons/md';
+import { BiChevronLeft } from 'react-icons/bi';
+import { useRouter } from 'next/router';
 
 type NavbarProps = {
 	onSortBy: (v: string) => void;
@@ -134,3 +136,35 @@ export const SortByMenu = React.memo((props: SortByMenuProps) => {
 	);
 });
 SortByMenu.displayName = 'SortByMenu';
+
+export const RoadmapNavbar = (props: { link: string; goBackLink: string }) => {
+	const classes = `${styles.navbarHome} ${styles.roadmapNavbar}`;
+	const router = useRouter();
+	return (
+		<nav className={classes}>
+			<div className={styles.leftSide}>
+				<ul>
+					<li>
+						<div className={styles.backButtonWrapper}>
+							<BiChevronLeft className={styles.backIcon} />
+							<Button
+								className={styles.backButton}
+								text='Go Back'
+								onClick={() => router.push(props.goBackLink)}
+							/>
+						</div>
+					</li>
+					<li>
+						<h4>Roadmap</h4>
+					</li>
+				</ul>
+			</div>
+			<Link href={props.link}>
+				<ButtonWithChild className={styles.addFeedback}>
+					<MdAdd />
+					{'Add Feedback'}
+				</ButtonWithChild>
+			</Link>
+		</nav>
+	);
+};

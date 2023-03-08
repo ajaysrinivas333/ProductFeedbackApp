@@ -1,3 +1,4 @@
+import { Feedback } from 'components/Feedback/FeedbackCard';
 import { CommentDoc } from 'types';
 
 export const withDelay = (fn: () => void, delay: number = 200) => {
@@ -64,3 +65,79 @@ export const makeCommentTree = (comments: CommentDoc[]) => {
 		});
 	return comments.filter((c) => !c.parentId);
 };
+
+export function formatBoards(feedbacks: Feedback[]) {
+	const boards = {
+		planned: {
+			id: 'planned',
+			name: 'Planned',
+			desc: 'Ideas Prioritized for research',
+			feedbacks: [],
+			color: '#f49f85',
+		},
+		'in-progress': {
+			id: 'in-progress',
+			name: 'In-Progress',
+			desc: 'Currently being developed',
+			feedbacks: [],
+			color: '#ad1fea',
+		},
+
+		live: {
+			id: 'live',
+			name: 'Live',
+			desc: 'Released Features',
+			feedbacks: [],
+			color: '#62bcfa',
+		},
+	};
+
+	Object.keys(boards).forEach((key) =>
+		(boards[key].feedbacks = feedbacks?.filter(
+			(f) => f.status === boards[key].name,
+		)).sort((a, b) => a['position'] - b['position']),
+	);
+
+	return boards;
+}
+
+export const reorderPosition = <T>(list: T[] = []) =>
+	list.map((item, idx) => ({ ...item, position: idx + 1 }));
+
+export const reorder = <T>(list: T[], index: number, item: T) => {
+	list.splice(list.indexOf(item), 1);
+	list.splice(index, 0, item);
+	return reorderPosition(list);
+};
+
+export const removeAndAdd = <T>(
+	sourceList: T[],
+	destinationList: T[],
+	destinationIndex: number,
+	item: T,
+	destinationBoard: string,
+) => {
+	sourceList.splice(sourceList.indexOf(item), 1);
+	destinationList.splice(destinationIndex, 0, {
+		...item,
+		status: destinationBoard,
+	});
+
+	return {
+		source: reorderPosition(sourceList),
+		destination: reorderPosition(destinationList),
+	};
+};
+
+export const getSingleBoardMovePayload = <T>(
+	board: T[],
+	from: number,
+	to: number,
+) => (from < to ? board.slice(from, to + 1) : board.slice(to, from + 1));
+
+export const getMultiBoardMovePayload = <T>(
+	sourceBoard: T[],
+	sourceIndex: number,
+	targetBoard: T[],
+	targetIndex: number,
+) => [...sourceBoard.slice(sourceIndex), ...targetBoard.slice(targetIndex)];

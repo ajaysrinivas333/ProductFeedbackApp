@@ -62,19 +62,19 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 		setFeedbackData(() => filterFeedbacksByCategory());
 	}, [filterFeedbacksByCategory]);
 
-	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvote(
-		feedbackData,
-		setFeedbackData,
-	);
+	const { isUpvoted, upvote, downvote, upvoteApi } = useUpvote();
 
 	const { productId } = router?.query ?? '';
 
 	const onUpvote = useCallback(
 		async (feedbackId: string) => {
 			if (isAuthenticated) {
-				isUpvoted(feedbackId) ? downvote(feedbackId) : upvote(feedbackId);
-				const res = await upvoteApi(feedbackId, productId as string);
-				return;
+				setFeedbackData((prev) =>
+					isUpvoted(feedbackId, prev)
+						? downvote(feedbackId, prev)
+						: upvote(feedbackId, prev),
+				);
+				return await upvoteApi(feedbackId, productId as string);
 			}
 
 			router.replace('/auth');
@@ -141,7 +141,10 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 					activeCategory={activeCategory}
 					onClick={setActiveCategory}
 				/>
-				<RoadMapCard className={styles.roadMapCard} />
+				<RoadMapCard
+					className={styles.roadMapCard}
+					productId={productId as string}
+				/>
 			</SideLayout>
 			<ContentLayout>
 				<Navbar
@@ -179,7 +182,10 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 					onClick={setActiveCategory}
 					activeCategory={activeCategory}
 				/>
-				<RoadMapCard className={`${styles.roadMapCard} shadow`} />
+				<RoadMapCard
+					className={`${styles.roadMapCard} shadow`}
+					productId={productId as string}
+				/>
 			</Drawer>
 		</MainLayout>
 	);
