@@ -9,6 +9,7 @@ import { TiTick } from 'react-icons/ti';
 import Link from 'next/link';
 import { MdAdd } from 'react-icons/md';
 import { BiChevronLeft } from 'react-icons/bi';
+import { useRouter } from 'next/router';
 
 type NavbarProps = {
 	onSortBy: (v: string) => void;
@@ -136,8 +137,9 @@ export const SortByMenu = React.memo((props: SortByMenuProps) => {
 });
 SortByMenu.displayName = 'SortByMenu';
 
-export const RoadmapNavbar = () => {
+export const RoadmapNavbar = (props: { link: string; goBackLink: string }) => {
 	const classes = `${styles.navbarHome} ${styles.roadmapNavbar}`;
+	const router = useRouter();
 	return (
 		<nav className={classes}>
 			<div className={styles.leftSide}>
@@ -145,9 +147,11 @@ export const RoadmapNavbar = () => {
 					<li>
 						<div className={styles.backButtonWrapper}>
 							<BiChevronLeft className={styles.backIcon} />
-							<Link style={{ width: '100%' }} href={`/feedbacks/${1}`}>
-								<Button className={styles.backButton} text='Go Back' />
-							</Link>
+							<Button
+								className={styles.backButton}
+								text='Go Back'
+								onClick={() => router.push(props.goBackLink)}
+							/>
 						</div>
 					</li>
 					<li>
@@ -155,7 +159,7 @@ export const RoadmapNavbar = () => {
 					</li>
 				</ul>
 			</div>
-			<Link href={''}>
+			<Link href={props.link}>
 				<ButtonWithChild className={styles.addFeedback}>
 					<MdAdd />
 					{'Add Feedback'}

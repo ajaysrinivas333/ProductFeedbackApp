@@ -286,7 +286,10 @@ const RoadmapPage = (props: RoadmapPageProps) => {
 	return (
 		<div className={styles.pageWrapper}>
 			<div className={styles.innerContainer}>
-				<RoadmapNavbar />
+				<RoadmapNavbar
+					link={`/add-feedback?productId=${productId}`}
+					goBackLink={`/feedbacks/${productId}`}
+				/>
 				<BoardsBigScreenView
 					boards={boardData}
 					handleDrag={handleDrag}

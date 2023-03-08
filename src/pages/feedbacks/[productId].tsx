@@ -141,7 +141,10 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 					activeCategory={activeCategory}
 					onClick={setActiveCategory}
 				/>
-				<RoadMapCard className={styles.roadMapCard} />
+				<RoadMapCard
+					className={styles.roadMapCard}
+					productId={productId as string}
+				/>
 			</SideLayout>
 			<ContentLayout>
 				<Navbar
@@ -179,7 +182,10 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 					onClick={setActiveCategory}
 					activeCategory={activeCategory}
 				/>
-				<RoadMapCard className={`${styles.roadMapCard} shadow`} />
+				<RoadMapCard
+					className={`${styles.roadMapCard} shadow`}
+					productId={productId as string}
+				/>
 			</Drawer>
 		</MainLayout>
 	);
