@@ -35,6 +35,8 @@ const FeedbackForm = (props: FeedbackFormProps) => {
 	const [closedWithMenuItem, setClosedWithMenuItem] = useState<boolean>(false);
 	const [loader, setLoader] = useState<boolean>(false);
 	const isCreateMode = props.mode === 'create';
+	const { productId } = router?.query ?? '';
+	const { id } = router?.query ?? '';
 
 	const {
 		register,
@@ -65,8 +67,8 @@ const FeedbackForm = (props: FeedbackFormProps) => {
 	const formSubmit = async (data: FormData) => {
 		setLoader(true);
 		const baseUrl = '/api/private/feedback';
-		const addFeedbackUrl = `?productId=${router.query?.productId}`;
-		const editFeedbackUrl = `?id=${router.query?.id}`;
+		const addFeedbackUrl = `?productId=${productId}`;
+		const editFeedbackUrl = `?id=${id}`;
 		const apiUrl = isCreateMode
 			? baseUrl + addFeedbackUrl
 			: baseUrl + editFeedbackUrl;
@@ -81,12 +83,10 @@ const FeedbackForm = (props: FeedbackFormProps) => {
 		setLoader(false);
 
 		if (json.ok) {
-			await revalidatePage(
-				`/discussion/${router.query?.id}?productId=${router.query?.productId}`,
-			);
+			await revalidatePage(`/feedbacks/${productId}`);
 			// !done on purpose to trigger revalidation for discussion page router.push
 
-			window.location.href = `/discussion/${router.query?.id}?productId=${router.query?.productId}`;
+			window.location.href = `/feedbacks/${productId}`;
 		} else alert(json?.message);
 	};
 

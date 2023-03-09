@@ -34,12 +34,16 @@ const addComment = async (
 	}
 };
 
-const CommentSection = (props: any) => {
+type CommentSectionProps = {
+	updateCommentCount: (a: number) => void;
+};
+
+const CommentSection = (props: CommentSectionProps) => {
 	const [commentsCount, setCommentsCount] = useState<number>(0);
 	const router = useRouter();
 	const [comments, setComments] = useState<CommentDoc[]>([]);
 	const { updateCommentCount } = props;
-	
+
 	const onAddComment = useCallback(
 		async (data: Pick<Comment, 'comment'>) => {
 			const res = await addComment({

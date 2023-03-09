@@ -35,7 +35,7 @@ const DiscussionPage = (props: DiscussionPageProps) => {
 	}, [props.feedback]);
 
 	const updateCommentCount = useCallback(
-		(commentsCount: any) => {
+		(commentsCount: number) => {
 			console.log(commentsCount);
 			if (feedbackData.length > 0) {
 				setFeedbackData((prevData: any) => {
