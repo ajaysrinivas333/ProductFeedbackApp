@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .pageWrapper {
     height: 100vh;
     width: 100%;
@@ -11,38 +13,64 @@
         width: min(90vw, 680px);
 
 
-        .backButtonWrapper {
+
+        .btnContainer {
+
             display: flex;
+            justify-content: space-between;
             align-items: center;
 
-            .backButton {
-                text-align: left;
-                width: 100%;
-                padding: 0;
+            .backButtonWrapper {
+                display: flex;
+                align-items: center;
 
-                background-color: inherit;
-                padding: 10px 0px;
-                border: none;
-                border-radius: 10px;
-                color: #3a4374;
-                cursor: pointer;
-                font-size: 16px;
-                font-weight: 600;
-                outline: none;
-                transition: background-color 0.2s ease-in-out;
-                width: 30%;
-                font-family: var(--globalFont);
+                .backButton {
+                    text-align: left;
+                    width: 100%;
+                    padding: 0;
+
+                    background-color: inherit;
+                    padding: 10px 0px;
+                    border: none;
+                    border-radius: 10px;
+                    color: #3a4374;
+                    cursor: pointer;
+                    font-size: 17px;
+                    font-weight: 600;
+                    outline: none;
+                    transition: background-color 0.2s ease-in-out;
+                    // width: 30%;
+                    font-family: var(--globalFont);
+                }
+
+                .backIcon {
+                    font-size: 32px;
+                    color: #4661e6;
+                }
             }
 
-            .backIcon {
-                font-size: 25px;
-                color: #4661e6;
+
+
+            .markAsPlannedBtn {
+                @include btnStyles;
+                width: unset;
+                font-size: 12px;
             }
+
         }
-
 
 
     }
 
+
+}
+
+@media screen and (max-width:$mobileScreenWidth) {
+
+
+    .btnContainer {
+        width: 94%;
+        margin-left: 3%;
+    }
 
 }

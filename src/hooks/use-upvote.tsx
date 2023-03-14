@@ -14,10 +14,7 @@ function useUpvote() {
 				},
 			});
 			const data = await res.json();
-			await Promise.all([
-				revalidatePage(`/feedbacks/${productId}`),
-				revalidatePage(`/discussion/${feedbackId}?productId=${productId}`),
-			]);
+			await Promise.all([revalidatePage(`/feedbacks/${productId}`)]);
 
 			return data;
 		},
