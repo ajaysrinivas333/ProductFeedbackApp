@@ -42,3 +42,24 @@ $mobileScreenWidth: 768px;
     }
   }
 }
+
+@mixin btnStyles {
+  background-color: #ad1fea;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
+  // flex-basis: 30%;
+  font-family: var(--globalFont);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 0
+}

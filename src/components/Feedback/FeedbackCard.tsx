@@ -3,7 +3,7 @@ import Card from 'components/UI/Card';
 import UserRunDown from 'components/User/UserRunDown';
 import { formatDate } from 'lib';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiChevronUp } from 'react-icons/bi';
 import { FaComment } from 'react-icons/fa';
 import styles from '../../styles/feedback-card.module.scss';
@@ -37,12 +37,18 @@ interface FeedbackDetailProps {
 
 const FeedbackCard = (props: FeedbackDetailProps) => {
 	const { feedback, onUpvote, isUpvoted } = props;
+	const [color, setColor] = useState('#f2f4ff');
+
+	useEffect(() => {
+		isUpvoted && setColor('#cfd7ff');
+	}, [isUpvoted]);
+
 	return (
 		<Card className={styles.feedbackCard}>
 			<ButtonWithChild
 				className={styles.upvoteButton}
 				style={{
-					backgroundColor: isUpvoted ? '#cfd7ff' : '',
+					backgroundColor: color,
 				}}
 				onClick={() => onUpvote(feedback?._id)}
 			>

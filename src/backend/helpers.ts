@@ -86,8 +86,6 @@ export const findFeedbacksWithUserDetails = async (
 		},
 		{
 			$project: {
-				position: 0,
-				status: 0,
 				'user.password': 0,
 				__v: 0,
 				'user.createdAt': 0,
