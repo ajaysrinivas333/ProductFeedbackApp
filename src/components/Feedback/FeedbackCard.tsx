@@ -1,12 +1,17 @@
 import { ButtonWithChild } from 'components/UI/Button';
 import Card from 'components/UI/Card';
+import { Menu, MenuContainer, MenuItem } from 'components/UI/Menu';
 import UserRunDown from 'components/User/UserRunDown';
 import { formatDate } from 'lib';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import Router from 'next/router';
+import React, { useEffect, useMemo, useState } from 'react';
 import { BiChevronUp } from 'react-icons/bi';
 import { FaComment } from 'react-icons/fa';
 import styles from '../../styles/feedback-card.module.scss';
+import { AiOutlineMore as OptionIcon } from 'react-icons/ai';
+import useMenu from 'hooks/use-menu';
+import useAuth from 'hooks/use-auth';
 
 interface User {
 	_id: string;
@@ -38,6 +43,15 @@ interface FeedbackDetailProps {
 const FeedbackCard = (props: FeedbackDetailProps) => {
 	const { feedback, onUpvote, isUpvoted } = props;
 	const [color, setColor] = useState('#f2f4ff');
+
+	const { open, openMenu, closeMenu } = useMenu();
+
+	const { user } = useAuth();
+
+	const isFeedbackOwner = useMemo(
+		() => feedback?.userId === user?.id,
+		[feedback?.userId, user?.id],
+	);
 
 	useEffect(() => {
 		isUpvoted && setColor('#cfd7ff');
@@ -81,6 +95,26 @@ const FeedbackCard = (props: FeedbackDetailProps) => {
 				<FaComment className={styles.commentsIcon} />
 				<h4>{feedback?.commentsCount}</h4>
 			</div>
+
+			{isFeedbackOwner && (
+				<div className={styles.options}>
+					<MenuContainer className={styles.moreOptionsMenu}>
+						<OptionIcon className={styles.optionIcon} onClick={openMenu} />
+						<Menu open={open} onBlur={closeMenu}>
+							<MenuItem
+								onClick={() =>
+									Router.push(
+										`/edit-feedback/?id=${feedback._id}&productId=${feedback.productId}`,
+									)
+								}
+							>
+								Edit
+							</MenuItem>
+							<MenuItem>Delete</MenuItem>
+						</Menu>
+					</MenuContainer>
+				</div>
+			)}
 		</Card>
 	);
 };
