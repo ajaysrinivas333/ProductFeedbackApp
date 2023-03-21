@@ -78,6 +78,7 @@
 		ul {
 			list-style: none;
 
+
 		}
 	}
 
@@ -143,6 +144,8 @@
 				}
 
 				flex-basis: 64%;
+
+
 			}
 
 			a {
@@ -169,15 +172,22 @@
 			ul {
 				list-style: none;
 
+
+
+				li:nth-of-type(2) {
+					margin-left: 6px;
+				}
 			}
 		}
 
 		.backButtonWrapper {
 
+			margin-left: 0;
+
 			.backButton {
 
 
-				font-size: 11px;
+				font-size: 13px;
 
 			}
 

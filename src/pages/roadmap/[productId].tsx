@@ -86,99 +86,94 @@ const DraggableFeedback = React.memo(
 );
 DraggableFeedback.displayName = 'DraggableFeedback';
 
-const BoardsMobileScreenView = ({
-	boards,
-	handleDrag,
-	handleUpvote,
-}: BoardViewProps) => {
-	const [tabSwitch, setTabSwitch] = useState<string>('Planned');
+const tabList: string[] = ['Planned', 'In-Progress', 'Live'];
 
-	const tabList: string[] = ['Planned', 'In-Progress', 'Live'];
-	const switchTabs = (view: string) => {
-		setTabSwitch(view);
-	};
+const BoardsMobileScreenView = React.memo(
+	({ boards, handleDrag, handleUpvote }: BoardViewProps) => {
+		const [tabSwitch, setTabSwitch] = useState<string>(tabList[0]);
 
-	return (
-		<div className={styles.roadmapMobileScreen}>
-			<div className={styles.statusTabSwitch}>
-				<div className={styles.statusTabSwitchWrapper}>
-					{tabList.map((tab, index) => (
+		const switchTabs = (view: string) => setTabSwitch(view);
+
+		const activeBoard = useMemo(
+			() => boards[tabSwitch?.toLowerCase()],
+			[boards, tabSwitch],
+		);
+
+		return activeBoard ? (
+			<div className={styles.roadmapMobileScreen}>
+				<div className={styles.statusTabSwitch}>
+					<div className={styles.statusTabSwitchWrapper}>
+						{tabList.map((tab) => (
+							<span
+								key={tab}
+								onClick={() => switchTabs(tab)}
+								className={`${styles.tab} ${
+									tabSwitch === tab ? styles.active : ''
+								}`}
+							>
+								{tab}
+							</span>
+						))}
 						<span
-							key={tab}
-							onClick={() => switchTabs(tab)}
-							className={`${styles.tab} ${
-								tabSwitch === tab ? styles.active : ''
+							className={`${styles.slider} ${
+								styles[tabSwitch.toLowerCase() + 'Tab']
 							}`}
-						>
-							{tab}
-						</span>
-					))}
-					<span
-						className={`${styles.slider} ${
-							styles[tabSwitch.toLowerCase() + 'Tab']
-						}`}
-					/>
+						/>
+					</div>
+					<hr />
 				</div>
-				<hr />
-			</div>
-			<DragDropContext onDragEnd={handleDrag}>
-				<div className={styles.boardsMobileScreen}>
-					<div className={styles.boardName}>
-						<h4>
-							{tabSwitch}({boards[tabSwitch?.toLowerCase()]?.feedbacks?.length})
-						</h4>
-					</div>
-
-					<div className={styles.boardDesc}>
-						<p>{boards[tabSwitch.toLowerCase()]?.desc}</p>
-					</div>
-
-					<Droppable
-						key={boards[tabSwitch.toLowerCase()]?.id}
-						droppableId={boards[tabSwitch.toLowerCase()]?.id}
-					>
+				<DragDropContext onDragEnd={handleDrag}>
+					<Droppable droppableId={activeBoard?.id}>
 						{(provided, snapshot) => (
+							<div className={styles.boardsMobileScreen}>
+								<h4 className={styles.boardName}>
+									{tabSwitch}({activeBoard?.feedbacks?.length})
+								</h4>
+
+								<p className={styles.boardDesc}>{activeBoard?.desc}</p>
 								<div
 									{...provided.droppableProps}
 									ref={provided.innerRef}
 									className={styles.boardItems}
 									style={{
 										transition: '0.2s ease-in',
-										background: !boards[tabSwitch.toLowerCase()]?.feedbacks
-											.length
+										background: !activeBoard?.feedbacks.length
 											? 'rgb(122 137 214 / 3%)'
 											: snapshot.isDraggingOver
 											? '#373f6808'
 											: '',
 									}}
 								>
-									{boards[tabSwitch.toLowerCase()]?.feedbacks?.map(
+									{activeBoard?.feedbacks?.map(
 										(feedback: Feedback, idx: number) => (
 											<DraggableFeedback
 												index={idx}
 												key={feedback._id}
 												feedback={feedback}
 												handleUpvote={handleUpvote}
-												color={boards[tabSwitch.toLowerCase()].color as string}
+												color={activeBoard?.color as string}
 											/>
 										),
 									)}
 									<div>{provided.placeholder}</div>
 								</div>
+							</div>
 						)}
 					</Droppable>
-				</div>
-			</DragDropContext>
-		</div>
-	);
-};
+				</DragDropContext>
+			</div>
+		) : null;
+	},
+);
+
+BoardsMobileScreenView.displayName = 'BoardsMobileScreenView';
 
 const BoardsBigScreenView = React.memo(
 	({ boards, handleDrag, handleUpvote }: BoardViewProps) => {
 		return (
 			<section className={styles.boardsContainer}>
 				<DragDropContext onDragEnd={handleDrag}>
-					{Object.entries(boards ?? {})?.map(([boardId, board]) => {
+					{Object.entries(boards ?? {})?.map(([_, board]) => {
 						return (
 							<Droppable key={board.id} droppableId={board.id}>
 								{(provided, snapshot) => (

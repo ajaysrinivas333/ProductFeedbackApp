@@ -127,6 +127,9 @@ interface RoadmapFeedbackCardProps
 	style?: React.CSSProperties;
 }
 
+const trimFeedback = (feedback: string) =>
+	feedback.length > 100 ? feedback.slice(0, 100) + '...' : feedback;
+
 export const RoadmapFeedbackCard = (props: RoadmapFeedbackCardProps) => {
 	const { feedback, onUpvote, isUpvoted } = props;
 
@@ -139,8 +142,8 @@ export const RoadmapFeedbackCard = (props: RoadmapFeedbackCardProps) => {
 				href={`/discussion/${feedback._id}?productId=${feedback.productId}`}
 			>
 				<div className={styles.roadmapFeedbackDetails}>
-					<h4>{feedback?.title}</h4>
-					<p>{feedback?.description}</p>
+					<h4>{trimFeedback(feedback?.title)}</h4>
+					<p>{trimFeedback(feedback?.description)}</p>
 					<span className={styles.category}>{feedback?.category}</span>
 				</div>
 			</Link>
