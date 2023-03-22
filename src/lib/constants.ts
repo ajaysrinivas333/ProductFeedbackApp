@@ -1,3 +1,5 @@
+import { Feedback } from "components/Feedback/FeedbackCard";
+
 export const productCategories = [
 	'All',
 	'Productivity',
@@ -34,3 +36,14 @@ export const feedbackSortOptions: string[] = [
 	'Newest First',
 	'Oldest First',
 ];
+
+export const tabList: string[] = ['Planned', 'In-Progress', 'Live'];
+
+export const statusCount = (feedbacks: Feedback[]) =>
+	tabList.reduce(
+		(ac, cr) => ({
+			...ac,
+			[cr]: feedbacks?.filter((item) => item.status === cr).length,
+		}),
+		{},
+	);

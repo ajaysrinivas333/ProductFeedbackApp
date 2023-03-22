@@ -4,15 +4,17 @@ import React from 'react';
 import styles from '../../styles/roadmap.module.scss';
 import { GiPlainCircle } from 'react-icons/gi';
 import { useRouter } from 'next/router';
-
+import { tabList } from 'lib/constants';
 type RoadMapCardProps = {
 	className: string;
 	productId: string;
+	statusCount: Record<string, number>;
 };
 
 const RoadMapCard = (props: RoadMapCardProps) => {
 	const classes = `${styles.roadMapWrapper} ${props.className}`;
 	const router = useRouter();
+
 	return (
 		<Card className={classes}>
 			<div className={styles.roadMap}>
@@ -25,27 +27,15 @@ const RoadMapCard = (props: RoadMapCardProps) => {
 				/>
 			</div>
 			<div className={styles.roadmapList}>
-				<div>
-					<span>
-						<GiPlainCircle className={styles.bulletIcon} />
-						Planned
-					</span>
-					<span>{12}</span>
-				</div>
-				<div>
-					<span>
-						<GiPlainCircle className={styles.bulletIcon} />
-						In Progress
-					</span>
-					<span>{16}</span>
-				</div>
-				<div>
-					<span>
-						<GiPlainCircle className={styles.bulletIcon} />
-						Live
-					</span>
-					<span>{16}</span>
-				</div>
+				{tabList.map((tab) => (
+					<div key={tab}>
+						<span>
+							<GiPlainCircle className={styles.bulletIcon} />
+							{tab}
+						</span>
+						<span>{props.statusCount[tab]}</span>
+					</div>
+				))}
 			</div>
 		</Card>
 	);

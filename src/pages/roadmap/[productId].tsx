@@ -26,6 +26,7 @@ import Product from '@api/models/product';
 import useUpvote from 'hooks/use-upvote';
 import useAuth from 'hooks/use-auth';
 import React from 'react';
+import { tabList } from 'lib/constants';
 
 type BoardId = 'planned' | 'in-progress' | 'live';
 
@@ -85,8 +86,6 @@ const DraggableFeedback = React.memo(
 	},
 );
 DraggableFeedback.displayName = 'DraggableFeedback';
-
-const tabList: string[] = ['Planned', 'In-Progress', 'Live'];
 
 const BoardsMobileScreenView = React.memo(
 	({ boards, handleDrag, handleUpvote }: BoardViewProps) => {
