@@ -1,4 +1,4 @@
-import {
+import FeedbackCard, {
 	Feedback,
 	RoadmapFeedbackCard,
 } from 'components/Feedback/FeedbackCard';
@@ -26,6 +26,7 @@ import Product from '@api/models/product';
 import useUpvote from 'hooks/use-upvote';
 import useAuth from 'hooks/use-auth';
 import React from 'react';
+import { tabList } from 'lib/constants';
 
 type BoardId = 'planned' | 'in-progress' | 'live';
 
@@ -86,12 +87,92 @@ const DraggableFeedback = React.memo(
 );
 DraggableFeedback.displayName = 'DraggableFeedback';
 
+const BoardsMobileScreenView = React.memo(
+	({ boards, handleDrag, handleUpvote }: BoardViewProps) => {
+		const [tabSwitch, setTabSwitch] = useState<string>(tabList[0]);
+
+		const switchTabs = (view: string) => setTabSwitch(view);
+
+		const activeBoard = useMemo(
+			() => boards[tabSwitch?.toLowerCase()],
+			[boards, tabSwitch],
+		);
+
+		return activeBoard ? (
+			<div className={styles.roadmapMobileScreen}>
+				<div className={styles.statusTabSwitch}>
+					<div className={styles.statusTabSwitchWrapper}>
+						{tabList.map((tab) => (
+							<span
+								key={tab}
+								onClick={() => switchTabs(tab)}
+								className={`${styles.tab} ${
+									tabSwitch === tab ? styles.active : ''
+								}`}
+							>
+								{tab}
+							</span>
+						))}
+						<span
+							className={`${styles.slider} ${
+								styles[tabSwitch.toLowerCase() + 'Tab']
+							}`}
+						/>
+					</div>
+					<hr />
+				</div>
+				<DragDropContext onDragEnd={handleDrag}>
+					<Droppable droppableId={activeBoard?.id}>
+						{(provided, snapshot) => (
+							<div className={styles.boardsMobileScreen}>
+								<h4 className={styles.boardName}>
+									{tabSwitch}({activeBoard?.feedbacks?.length})
+								</h4>
+
+								<p className={styles.boardDesc}>{activeBoard?.desc}</p>
+								<div
+									{...provided.droppableProps}
+									ref={provided.innerRef}
+									className={styles.boardItems}
+									style={{
+										transition: '0.2s ease-in',
+										background: !activeBoard?.feedbacks.length
+											? 'rgb(122 137 214 / 3%)'
+											: snapshot.isDraggingOver
+											? '#373f6808'
+											: '',
+									}}
+								>
+									{activeBoard?.feedbacks?.map(
+										(feedback: Feedback, idx: number) => (
+											<DraggableFeedback
+												index={idx}
+												key={feedback._id}
+												feedback={feedback}
+												handleUpvote={handleUpvote}
+												color={activeBoard?.color as string}
+											/>
+										),
+									)}
+									<div>{provided.placeholder}</div>
+								</div>
+							</div>
+						)}
+					</Droppable>
+				</DragDropContext>
+			</div>
+		) : null;
+	},
+);
+
+BoardsMobileScreenView.displayName = 'BoardsMobileScreenView';
+
 const BoardsBigScreenView = React.memo(
 	({ boards, handleDrag, handleUpvote }: BoardViewProps) => {
 		return (
 			<section className={styles.boardsContainer}>
 				<DragDropContext onDragEnd={handleDrag}>
-					{Object.entries(boards ?? {})?.map(([boardId, board]) => {
+					{Object.entries(boards ?? {})?.map(([_, board]) => {
 						return (
 							<Droppable key={board.id} droppableId={board.id}>
 								{(provided, snapshot) => (
@@ -291,6 +372,11 @@ const RoadmapPage = (props: RoadmapPageProps) => {
 					goBackLink={`/feedbacks/${productId}`}
 				/>
 				<BoardsBigScreenView
+					boards={boardData}
+					handleDrag={handleDrag}
+					handleUpvote={handleUpvote}
+				/>
+				<BoardsMobileScreenView
 					boards={boardData}
 					handleDrag={handleDrag}
 					handleUpvote={handleUpvote}

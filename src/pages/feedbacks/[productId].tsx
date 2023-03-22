@@ -12,7 +12,12 @@ import Navbar from 'components/Navbar/Navbar';
 import FeedbackCard, { Feedback } from 'components/Feedback/FeedbackCard';
 import GlobalLoader from 'components/UI/GlobalLoader';
 import Drawer from 'components/UI/Drawer';
-import { feedbackCategories, feedbackSortOptions } from 'lib/constants';
+import {
+	feedbackCategories,
+	feedbackSortOptions,
+	statusCount,
+	tabList,
+} from 'lib/constants';
 import { FeedbackCategoriesState } from 'types';
 import { findFeedbacksWithUserDetails } from '@api/helpers';
 import useMenu from 'hooks/use-menu';
@@ -144,6 +149,7 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 				<RoadMapCard
 					className={styles.roadMapCard}
 					productId={productId as string}
+					statusCount={statusCount(feedbacks)}
 				/>
 			</SideLayout>
 			<ContentLayout>
@@ -185,6 +191,7 @@ const FeedbackHomePage: NextPage<FeedbackHomePageProps> = ({
 				<RoadMapCard
 					className={`${styles.roadMapCard} shadow`}
 					productId={productId as string}
+					statusCount={statusCount(feedbacks)}
 				/>
 			</Drawer>
 		</MainLayout>

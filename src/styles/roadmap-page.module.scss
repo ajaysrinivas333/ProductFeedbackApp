@@ -27,7 +27,6 @@
 				max-width: max-content;
 				min-height: 100vh;
 
-
 				.boardName {
 					list-style: none;
 					position: sticky;
@@ -39,7 +38,6 @@
 						font-weight: 600;
 						font-size: 15px;
 						color: #373f68;
-
 					}
 
 					.boardDesc {
@@ -47,9 +45,7 @@
 						font-size: 13px;
 						color: rgb(100, 113, 150);
 					}
-
 				}
-
 
 				.boardItems {
 					display: flex;
@@ -57,11 +53,11 @@
 					gap: 20px;
 					min-height: 500px;
 				}
-
-
-
-
 			}
+		}
+
+		.roadmapMobileScreen {
+			display: none;
 		}
 	}
 }
@@ -84,6 +80,99 @@
 
 			.boardsContainer {
 				display: none;
+			}
+		}
+	}
+}
+
+//Mobile Screen Roadmap
+@media screen and (max-width: $mobileScreenWidth) {
+	.pageWrapper {
+		.innerContainer {
+			.roadmapMobileScreen {
+				display: block;
+
+				.statusTabSwitch {
+					position: sticky;
+					top: 97px;
+					z-index: 3;
+					background-color: #f7f8fd;
+
+					hr {
+						margin-top: 7px;
+						border: none;
+						border-top: 5px solid #d1d3e1;
+						opacity: 0.3;
+						border-radius: 5px;
+					}
+
+					.statusTabSwitchWrapper {
+						width: 100%;
+						display: flex;
+						align-items: center;
+						padding: 15px 0;
+
+						.tab {
+							width: 33%;
+							text-align: center;
+							cursor: pointer;
+							font-size: 15px;
+							font-weight: 600;
+							color: #373f68;
+
+							&.active {
+								font-weight: 800;
+							}
+						}
+					}
+
+					.slider {
+						min-height: 5px;
+						background-color: #ad1fea;
+						display: block;
+						border-radius: 5px;
+						width: 33%;
+						transition: left 0.1s ease-in;
+						position: absolute;
+						bottom: 0;
+						z-index: 1;
+
+						&.plannedTab {
+							left: 0;
+						}
+
+						&.in-progressTab {
+							left: 33%;
+						}
+
+						&.liveTab {
+							right: 0;
+						}
+					}
+				}
+
+				.boardsMobileScreen {
+					.boardItems {
+						display: grid;
+						gap: 20px;
+						margin-top: 20px;
+						min-height: 500px;
+					}
+
+					padding: 25px;
+
+					.boardName {
+						font-weight: 600;
+						font-size: 18px;
+						color: #373f68;
+					}
+
+					.boardDesc {
+						font-weight: 400;
+						font-size: 13px;
+						color: rgb(100, 113, 150);
+					}
+				}
 			}
 		}
 	}
