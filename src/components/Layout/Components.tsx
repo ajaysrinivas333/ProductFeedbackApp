@@ -30,7 +30,10 @@ export const SignOutMenuContainer = React.memo((props: SignoutMenuProps) => {
 				className={styles.logOutMenu}
 				onBlur={props.closeMenu}
 			>
-				<MenuItem className={styles.menuItem} onClick={signOut}>
+				<MenuItem
+					className={styles.menuItem}
+					onClick={() => signOut({ redirect: false, callbackUrl: '/home' })}
+				>
 					<BiLogOut />
 					<span>Sign out</span>
 				</MenuItem>
@@ -153,7 +156,6 @@ const CategoryItems = (props: CategoryProps) => {
 };
 
 export const Categories = React.memo((props: CategoryProps) => {
-
 	const cardClasses = `${styles.sideCard} ${styles.categoryCard} ${
 		props?.className ?? ''
 	}`;
